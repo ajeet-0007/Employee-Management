@@ -1,9 +1,13 @@
 const express = require("express");
-
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const app = express();
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(cookieParser());
 
 const userRoutes = require("./routes/userRoutes");
+
 
 app.use("/user", userRoutes);
 
