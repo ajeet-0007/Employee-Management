@@ -1,4 +1,5 @@
 const express = require("express");
+const authorize = require("../middlewares/authorize");
 
 const router = express.Router();
 
@@ -8,7 +9,7 @@ router.post("/signup", userController.postSignUp);
 
 router.post("/login", userController.postLogin);
 
-router.get("/logout", userController.getLogout);
+router.get("/logout", authorize, userController.getLogout);
 
 router.post("/account/add-user-details", userController.postUserProfileDetails);
 
@@ -18,8 +19,9 @@ router.post("/requests/add-request", userController.postUserRequest);
 
 router.post("/check-in", userController.postCheckIn);
 
-router.post("/check-out", userController.postCheckOut);
+router.put("/check-out", userController.postCheckOut);
 
+router.get('/farzi', userController.farzi);
 router.post("/forgotpassword");
 
 module.exports = router;

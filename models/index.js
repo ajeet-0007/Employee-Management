@@ -8,6 +8,9 @@ const sequelize = new Sequelize("organizationdb", "root", "12345", {
   host: "localhost",
   logging: false,
   dialect: "mysql",
+  // define: {
+  //   timestamps: false,
+  // },
 });
 
 try {
