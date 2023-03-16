@@ -9,7 +9,7 @@ router.post("/signup", userController.postSignUp);
 
 router.post("/login", userController.postLogin);
 
-router.get("/logout", authorize, userController.getLogout);
+router.get("/logout",authorize, userController.getLogout);
 
 router.post("/account/add-user-details", userController.postUserProfileDetails);
 
