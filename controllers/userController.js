@@ -138,6 +138,7 @@ exports.postUserRequest = async (req, res) => {
 };
 
 exports.farzi = async (req, res) => {
+  console.log(req.user);
   const userId = req.cookies["employeeManagementCookie"].currentUserId;
   const currentUser = await User.findAll({
     where: {
@@ -153,7 +154,7 @@ exports.farzi = async (req, res) => {
     ],
     where: { id: currentUser[0].dataValues.id },
   });
-  console.log(data[0].dataValues.userRequest);
+  // console.log(data[0].dataValues.userRequest);
 };
 
 exports.postCheckIn = async (req, res) => {
