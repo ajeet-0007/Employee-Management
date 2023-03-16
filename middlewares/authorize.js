@@ -3,12 +3,12 @@ const jwt = require("jsonwebtoken");
 const authorize = async (req, res, next) => {
   try {
     if (req.cookies) {
-      const bearerHeader = req.headers.authorization.split(" ")[1];
+      const bearerHeader = req.cookies.employeeManagementCookie.currentUserToken;
       jwt.verify(bearerHeader, "secret-key", (error, decoded) => {
         if (error) {
           console.log(error);
         } else {
-          console.log(decoded);
+          req.user = decoded;
         }
       });
       next();

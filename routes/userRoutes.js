@@ -9,7 +9,7 @@ router.post("/signup", userController.postSignUp);
 
 router.post("/login", userController.postLogin);
 
-router.get("/logout", authorize, userController.getLogout);
+router.get("/logout",authorize, userController.getLogout);
 
 router.post("/account/add-user-details", userController.postUserProfileDetails);
 
@@ -21,7 +21,7 @@ router.post("/check-in", userController.postCheckIn);
 
 router.put("/check-out", userController.postCheckOut);
 
-router.get('/farzi', userController.farzi);
+router.get('/farzi',authorize, userController.farzi);
 router.post("/forgotpassword");
 
 module.exports = router;
