@@ -4,10 +4,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
     },
     checkInTime: {
-      type: DataTypes.DATE,
+      type: DataTypes.TIME,
     },
     checkOutTime: {
-      type: DataTypes.DATE,
+      type: DataTypes.TIME,
+    },
+    checkInDate: {
+      type: DataTypes.DATEONLY,
+    },
+    checkOutDate: {
+      type: DataTypes.DATEONLY,
     },
   });
   return USERATTENDANCE;
