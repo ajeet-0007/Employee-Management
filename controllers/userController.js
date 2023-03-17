@@ -1,14 +1,14 @@
 const jwt = require("jsonwebtoken");
 const db = require("../models");
+const bcrypt = require("bcrypt");
 const User = db.user;
 const UserProfile = db.userProfile;
 const UserSkills = db.userSkills;
 const UserRequest = db.userRequest;
 const UserAttendance = db.userAttendance;
-const bcrypt = require("bcrypt");
-const { userRequest } = require("../models");
 const SECRET = "secret-key";
 
+//Post-Apis
 
 exports.postLogin = async (req, res) => {
   try {
@@ -35,7 +35,6 @@ exports.postLogin = async (req, res) => {
             console.log(error);
           } else {
             const userToken = {
-              currentUserId: userId,
               currentUserToken: token,
             };
             res.cookie("employeeManagementCookie", userToken);
@@ -85,13 +84,13 @@ exports.getLogout = (req, res) => {
   res.json({ message: "Logged Out Successfully" });
 };
 
-exports.postUserProfileDetails = async (req, res) => {
+exports.postUserProfile = async (req, res) => {
   try {
     const response = req.body;
-    const userId = req.cookies["employeeManagementCookie"].currentUserId;
+    const currentUserEmail = req.user.userEmail;
     const currentUser = await User.findAll({
       where: {
-        id: userId,
+        email: currentUserEmail,
       },
     });
     response.userId = currentUser[0].dataValues.id;
@@ -105,10 +104,10 @@ exports.postUserProfileDetails = async (req, res) => {
 exports.postUserAddSkills = async (req, res) => {
   try {
     const response = req.body;
-    const userId = req.cookies["employeeManagementCookie"].currentUserId;
+    const currentUserEmail = req.user.userEmail;
     const currentUser = await User.findAll({
       where: {
-        id: userId,
+        email: currentUserEmail,
       },
     });
     response.userId = currentUser[0].dataValues.id;
@@ -122,14 +121,14 @@ exports.postUserAddSkills = async (req, res) => {
 exports.postUserRequest = async (req, res) => {
   try {
     const response = req.body;
-    const userId = req.cookies["employeeManagementCookie"].currentUserId;
+    const currentUserEmail = req.user.userEmail;
     const currentUser = await User.findAll({
       where: {
-        id: userId,
+        email: currentUserEmail,
       },
     });
     response.userId = currentUser[0].dataValues.id;
-    addUserId(req, response);
+    // addUserId(req, response);
     const userRequest = await UserRequest.create(response);
     return res.status(200).json(userRequest);
   } catch (error) {
@@ -137,33 +136,13 @@ exports.postUserRequest = async (req, res) => {
   }
 };
 
-exports.farzi = async (req, res) => {
-  console.log(req.user);
-  const userId = req.cookies["employeeManagementCookie"].currentUserId;
-  const currentUser = await User.findAll({
-    where: {
-      id: userId,
-    },
-  });
-  const data = await User.findAll({
-    include: [
-      {
-        model: userRequest,
-        as: "userRequest",
-      },
-    ],
-    where: { id: currentUser[0].dataValues.id },
-  });
-  // console.log(data[0].dataValues.userRequest);
-};
-
 exports.postCheckIn = async (req, res) => {
   try {
     const response = req.body;
-    const userId = req.cookies["employeeManagementCookie"].currentUserId;
+    const currentUserEmail = req.user.userEmail;
     const currentUser = await User.findAll({
       where: {
-        id: userId,
+        email: currentUserEmail,
       },
     });
     response.userId = currentUser[0].dataValues.id;
@@ -174,20 +153,213 @@ exports.postCheckIn = async (req, res) => {
   }
 };
 
+//Get APis
+
+exports.getUserProfile = async (req, res) => {
+  try {
+    const currentUserEmail = req.user.userEmail;
+    const currentUser = await User.findAll({
+      where: {
+        email: currentUserEmail,
+      },
+    });
+    const data = await User.findAll({
+      include: [
+        {
+          model: UserProfile,
+          as: "userProfile",
+        },
+      ],
+      where: { id: currentUser[0].dataValues.id },
+    });
+    res.status(200).json({
+      data: data[0].dataValues.userProfile,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "No data available" });
+  }
+};
+
+exports.getUserRequests = async (req, res) => {
+  try {
+    const currentUserEmail = req.user.userEmail;
+    const currentUser = await User.findAll({
+      where: {
+        email: currentUserEmail,
+      },
+    });
+
+    const data = await User.findAll({
+      include: [
+        {
+          model: UserRequest,
+          as: "userRequest",
+        },
+      ],
+      where: { id: currentUser[0].dataValues.id },
+    });
+    res.status(200).json({
+      data: data[0].dataValues.userRequest,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "No data available" });
+  }
+};
+
+exports.getUserSkills = async (req, res) => {
+  try {
+    const currentUserEmail = req.user.userEmail;
+    const currentUser = await User.findAll({
+      where: {
+        email: currentUserEmail,
+      },
+    });
+
+    const data = await User.findAll({
+      include: [
+        {
+          model: UserSkills,
+          as: "userSkills",
+        },
+      ],
+      where: { id: currentUser[0].dataValues.id },
+    });
+    res.status(200).json({
+      data: data[0].dataValues.userSkills,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "No data available" });
+  }
+};
+
+exports.getUserAttendance = async (req, res) => {
+  try {
+    const currentUserEmail = req.user.userEmail;
+    const currentUser = await User.findAll({
+      where: {
+        email: currentUserEmail,
+      },
+    });
+
+    const data = await User.findAll({
+      include: [
+        {
+          model: UserAttendance,
+          as: "userAttendance",
+        },
+      ],
+      where: { id: currentUser[0].dataValues.id },
+    });
+    res.status(200).json({
+      data: data[0].dataValues.userAttendance,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "No data available" });
+  }
+};
+
+exports.getUser = async (req, res) => {
+  try {
+    const currentUserEmail = req.user.userEmail;
+    const currentUser = await User.findAll({
+      where: {
+        email: currentUserEmail,
+      },
+    });
+    res.status(200).json({
+      data: currentUser,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "No data available" });
+  }
+};
+
+//put Apis
+
 exports.postCheckOut = async (req, res) => {
   try {
     const response = req.body;
-    const userId = req.cookies["employeeManagementCookie"].currentUserId;
+    const currentUserEmail = req.user.userEmail;
     const currentUser = await User.findAll({
       where: {
-        id: userId,
+        email: currentUserEmail,
       },
     });
     let currentDate = new Date().toJSON().slice(0, 10);
-    console.log(currentUser[0].dataValues.id);
     const result = await UserAttendance.update(
-      { checkOutTime: req.body.checkOutTime, checkOutDate: req.body.checkOutDate },
-      { where: { checkInDate: currentDate} }
+      {
+        checkOutTime: req.body.checkOutTime,
+        checkOutDate: req.body.checkOutDate,
+      },
+      {
+        where: {
+          checkInDate: currentDate,
+          userId: currentUser[0].dataValues.id,
+        },
+      }
+    );
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.updateUserSkills = async (req, res) => {
+  try {
+    const response = req.body;
+    const currentUserEmail = req.user.userEmail;
+    const currentUser = await User.findAll({
+      where: {
+        email: currentUserEmail,
+      },
+    });
+
+    const result = await UserSkills.update(
+      {
+        primarySkills: response.primarySkills,
+        secondarySkills: response.secondarySkills,
+        certifications: response.certifications,
+      },
+      {
+        where: {
+          userId: currentUser[0].dataValues.id,
+        },
+      }
+    );
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.updateUserProfile = async (req, res) => {
+  try {
+    const response = req.body;
+    const currentUserEmail = req.user.userEmail;
+    const currentUser = await User.findAll({
+      where: {
+        email: currentUserEmail,
+      },
+    });
+
+    const result = await UserProfile.update(
+      {
+        permanentAddress: response.permanentAddress,
+        city: response.city,
+        state: response.state,
+        country: response.country,
+        emergencyPhone: response.emergencyPhone,
+      },
+      {
+        where: {
+          userId: currentUser[0].dataValues.id,
+        },
+      }
     );
     return res.status(200).json(result);
   } catch (error) {

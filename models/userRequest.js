@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     request: {
       type: DataTypes.STRING,
-    }
+    },
+    status: {
+      type: DataTypes.ENUM("Pending", "Approved"),
+      defaultValue: "Pending",
+    },
   });
   return USERREQUEST;
 };

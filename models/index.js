@@ -1,8 +1,4 @@
 const { Sequelize, DataTypes } = require("sequelize");
-const userProfile = require("./userProfile");
-const userSkills = require("./userSkills");
-const userRequest = require("./userRequest");
-const userAttendance = require("./userAttendance");
 
 const sequelize = new Sequelize("organizationdb", "root", "12345", {
   host: "localhost",
