@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     secondarySkills: {
       type: DataTypes.JSON,
     },
-    certification: {
+    certifications: {
       type: DataTypes.JSON,
     },
   });
