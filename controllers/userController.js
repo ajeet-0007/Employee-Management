@@ -6,6 +6,7 @@ const UserProfile = db.userProfile;
 const UserSkills = db.userSkills;
 const UserRequest = db.userRequest;
 const UserAttendance = db.userAttendance;
+const UserTimesheet = db.userTimesheet;
 const SECRET = "secret-key";
 
 //Post-Apis
@@ -70,7 +71,7 @@ exports.postSignUp = async (req, res) => {
       return res.json({ message: "User already exist" });
     } else {
       const data = await User.create(response);
-      res.status(200).json({
+      res.status(201).json({
         data: data,
       });
     }
@@ -95,7 +96,7 @@ exports.postUserProfile = async (req, res) => {
     });
     response.userId = currentUser[0].dataValues.id;
     const userDetails = await UserProfile.create(response);
-    return res.status(200).json(userDetails);
+    return res.status(201).json(userDetails);
   } catch (error) {
     console.log(error);
   }
@@ -112,7 +113,7 @@ exports.postUserAddSkills = async (req, res) => {
     });
     response.userId = currentUser[0].dataValues.id;
     const userSkills = await UserSkills.create(response);
-    return res.status(200).json(userSkills);
+    return res.status(201).json(userSkills);
   } catch (error) {
     console.log(error);
   }
@@ -130,7 +131,7 @@ exports.postUserRequest = async (req, res) => {
     response.userId = currentUser[0].dataValues.id;
     // addUserId(req, response);
     const userRequest = await UserRequest.create(response);
-    return res.status(200).json(userRequest);
+    return res.status(201).json(userRequest);
   } catch (error) {
     console.log(error);
   }
@@ -147,7 +148,24 @@ exports.postCheckIn = async (req, res) => {
     });
     response.userId = currentUser[0].dataValues.id;
     const userAttendance = await UserAttendance.create(response);
-    return res.status(200).json(userAttendance);
+    return res.status(201).json(userAttendance);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.postUserTimesheet = async (req, res) => {
+  try {
+    const response = req.body;
+    const currentUserEmail = req.user.userEmail;
+    const currentUser = await User.findAll({
+      where: {
+        email: currentUserEmail,
+      },
+    });
+    response.userId = currentUser[0].dataValues.id;
+    const userTimesheet = await UserTimesheet.create(response);
+    return res.status(201).json(userTimesheet);
   } catch (error) {
     console.log(error);
   }
@@ -276,6 +294,31 @@ exports.getUser = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "No data available" });
+  }
+};
+
+exports.getUserTimesheet = async (req, res) => {
+  try {
+    const currentUserEmail = req.user.userEmail;
+    const currentUser = await User.findAll({
+      where: {
+        email: currentUserEmail,
+      },
+    });
+    const data = await User.findAll({
+      include: [
+        {
+          model: UserTimesheet,
+          as: "userTimesheet",
+        },
+      ],
+      where: { id: currentUser[0].dataValues.id },
+    });
+    res.status(200).json({
+      data: data[0].dataValues.userTimesheet,
+    });
+  } catch (error) {
+    console.log(error);
   }
 };
 
