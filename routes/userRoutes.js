@@ -19,6 +19,10 @@ router.post("/requests/add-request", authorize, userController.postUserRequest);
 
 router.post("/check-in", authorize, userController.postCheckIn);
 
+router.post('/add-time-sheet', authorize, userController.postUserTimesheet);
+
+router.get('/get-time-sheet', authorize, userController.getUserTimesheet);
+
 router.get("/account/get-user", authorize, userController.getUser);
 
 router.get("/requests/get-user-requests", authorize, userController.getUserRequests);

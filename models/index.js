@@ -24,6 +24,7 @@ db.userProfile = require("./userProfile")(sequelize, DataTypes);
 db.userSkills = require("./userSkills")(sequelize, DataTypes);
 db.userRequest = require("./userRequest")(sequelize, DataTypes);
 db.userAttendance = require("./userAttendance")(sequelize, DataTypes);
+db.userTimesheet = require("./userTimesheet")(sequelize, DataTypes);
 
 db.user.hasOne(db.userProfile, {
   foreignKey: "userId",
@@ -64,6 +65,16 @@ db.userAttendance.belongsTo(db.user, {
   foreignKey: "userId",
   as: "user",
 });
+
+db.user.hasOne(db.userTimesheet, {
+  foreignKey: "userId",
+  as: "userTimesheet"
+})
+
+db.userTimesheet.belongsTo(db.user, {
+  foreignKey: "userId",
+  as: "userTimesheet"
+})
 
 db.sequelize.sync({ force: false });
 
