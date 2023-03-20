@@ -7,6 +7,7 @@ const UserSkills = db.userSkills;
 const UserRequest = db.userRequest;
 const UserAttendance = db.userAttendance;
 const UserTimesheet = db.userTimesheet;
+const UserProjectList = db.userProjectList;
 const SECRET = "secret-key";
 
 //Post-Apis
@@ -319,6 +320,33 @@ exports.getUserTimesheet = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+  }
+};
+
+exports.getUserProjectList = async (req, res) => {
+  try {
+    const currentUserEmail = req.user.userEmail;
+    const currentUser = await User.findAll({
+      where: {
+        email: currentUserEmail,
+      },
+    });
+
+    const data = await User.findAll({
+      include: [
+        {
+          model: UserProjectList,
+          as: "userProjectList",
+        },
+      ],
+      where: { id: currentUser[0].dataValues.id },
+    });
+    res.status(200).json({
+      data: data[0].dataValues.userProjectList,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "No data available" });
   }
 };
 

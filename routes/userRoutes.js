@@ -15,23 +15,25 @@ router.post("/account/add-user-profile", authorize, userController.postUserProfi
 
 router.post("/skills/add-skills", authorize, userController.postUserAddSkills);
 
-router.post("/requests/add-request", authorize, userController.postUserRequest);
+router.post("/requests/add-user-request", authorize, userController.postUserRequest);
 
 router.post("/check-in", authorize, userController.postCheckIn);
 
 router.post('/add-time-sheet', authorize, userController.postUserTimesheet);
 
-router.get('/get-time-sheet', authorize, userController.getUserTimesheet);
-
 router.get("/account/get-user", authorize, userController.getUser);
 
-router.get("/requests/get-user-requests", authorize, userController.getUserRequests);
-
 router.get("/get-user-profile", authorize, userController.getUserProfile);
+
+router.get("/requests/get-user-requests", authorize, userController.getUserRequests);
 
 router.get("/get-user-attendance", authorize, userController.getUserAttendance);
 
 router.get("/skills/get-user-skills", authorize, userController.getUserSkills);
+
+router.get('/get-time-sheet', authorize, userController.getUserTimesheet);
+
+router.get("/get-user-project-list", authorize, userController.getUserProjectList);
 
 router.put("/check-out", authorize, userController.postCheckOut);
 
