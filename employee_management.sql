@@ -1,3 +1,12 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Generation Time: Mar 21, 2023 at 07:44 AM
+-- Server version: 8.0.31
+-- PHP Version: 7.4.32
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -22,6 +31,21 @@ CREATE TABLE `checkindetail` (
   `user_id` int NOT NULL,
   `checkin_time` json DEFAULT NULL,
   `checkout_time` json DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `project_list`
+--
+
+CREATE TABLE `project_list` (
+  `id` int NOT NULL,
+  `HRML` int NOT NULL,
+  `project_id` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `project_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `department` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -98,6 +122,13 @@ ALTER TABLE `checkindetail`
   ADD PRIMARY KEY (`user_id`);
 
 --
+-- Indexes for table `project_list`
+--
+ALTER TABLE `project_list`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `project_list` (`HRML`);
+
+--
 -- Indexes for table `skills`
 --
 ALTER TABLE `skills`
@@ -128,6 +159,12 @@ ALTER TABLE `user_profile`
 --
 
 --
+-- AUTO_INCREMENT for table `project_list`
+--
+ALTER TABLE `project_list`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -148,6 +185,12 @@ ALTER TABLE `users_request`
 --
 ALTER TABLE `checkindetail`
   ADD CONSTRAINT `id_check` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `project_list`
+--
+ALTER TABLE `project_list`
+  ADD CONSTRAINT `project_list` FOREIGN KEY (`HRML`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `skills`
