@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     joiningDate: {
-      type: DataTypes.STRING,
+      type: DataTypes.DATEONLY,
     },
   });
   return USER;

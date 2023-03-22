@@ -9,6 +9,7 @@ exports.postSignUp = async (req, res) => {
     const employeeData = await User.findAll({
       where: {
         hrmid: response.hrmid,
+        email: response.email
       },
     });
     if (employeeData.length) {
