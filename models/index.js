@@ -1,13 +1,16 @@
+require("dotenv").config();
 const { Sequelize, DataTypes } = require("sequelize");
 
-const sequelize = new Sequelize("organizationdb", "root", "12345", {
-  host: "localhost",
-  logging: false,
-  dialect: "mysql",
-  // define: {
-  //   timestamps: false,
-  // },
-});
+const sequelize = new Sequelize(
+  process.env.DATABASE,
+  process.env.DB_USERNAME,
+  process.env.DB_PASSWORD,
+  {
+    host: "localhost",
+    logging: false,
+    dialect: "mysql",
+  }
+);
 
 try {
   sequelize.authenticate();
@@ -25,7 +28,7 @@ db.userSkills = require("./userSkills")(sequelize, DataTypes);
 db.userRequest = require("./userRequest")(sequelize, DataTypes);
 db.userAttendance = require("./userAttendance")(sequelize, DataTypes);
 db.userTimesheet = require("./userTimesheet")(sequelize, DataTypes);
-db.userProjectList = require('./userProjectList')(sequelize, DataTypes);
+db.userProjectList = require("./userProjectList")(sequelize, DataTypes);
 
 db.user.hasOne(db.userProfile, {
   foreignKey: "userId",
@@ -69,23 +72,23 @@ db.userAttendance.belongsTo(db.user, {
 
 db.user.hasOne(db.userTimesheet, {
   foreignKey: "userId",
-  as: "userTimesheet"
-})
+  as: "userTimesheet",
+});
 
 db.userTimesheet.belongsTo(db.user, {
   foreignKey: "userId",
-  as: "userTimesheet"
-})
+  as: "userTimesheet",
+});
 
 db.user.hasOne(db.userProjectList, {
   foreignKey: "userId",
-  as: "userProjectList"
-})
+  as: "userProjectList",
+});
 
 db.userProjectList.belongsTo(db.user, {
   foreignKey: "userId",
-  as: "userProjectList"
-})
+  as: "userProjectList",
+});
 
 db.sequelize.sync({ force: false });
 
