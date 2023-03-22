@@ -11,9 +11,6 @@ const userSkillsController = require("../controllers/userController/userSkills")
 const userTimesheetController = require("../controllers/userController/userTimesheet");
 const userProjectListController = require("../controllers/userController/userProjectList");
 
-router.post("/signup", userController.postSignUp);
-
-router.post("/login", userLoginController.postLogin);
 
 router.post("/account/add-user-profile", authorize, userProfileController.postUserProfile);
 
@@ -48,7 +45,5 @@ router.put("/check-out", authorize, userAttendanceController.putCheckOut);
 router.put("/skills/update-user-skills", authorize, userSkillsController.updateUserSkills);
 
 router.put("/account/update-user-profile", authorize, userProfileController.updateUserProfile);
-
-// router.post("/forgotpassword");
 
 module.exports = router;
