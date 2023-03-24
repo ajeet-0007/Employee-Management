@@ -2,6 +2,7 @@ const db = require("../../models");
 const User = db.user;
 const UserSkills = db.userSkills;
 const getUserSkillsData = require("../fetchData/userSkills");
+const currentUser = require('../fetchData/currentUser');
 
 exports.postUserAddSkills = async (req, res) => {
   try {
@@ -29,11 +30,10 @@ exports.getUserSkills = async (req, res) => {
     if (userSkillsData == null) {
       return res.status(404).json({ message: "no data found" });
     } else {
-      return res.status(200).json({ data: userSkillsData.dataValues });
+      return res.status(200).json({ data: userSkillsData });
     }
   } catch (error) {
-    console.log(error);
-    res.status(404).json({ message: "No data available" });
+    return res.status(404).json({ message: "No data available" });
   }
 };
 
@@ -41,26 +41,20 @@ exports.updateUserSkills = async (req, res) => {
   try {
     const response = req.body;
     const currentUserEmail = req.user.userEmail;
-    const currentUser = await User.findAll({
-      where: {
-        email: currentUserEmail,
-      },
-    });
-
-    const result = await UserSkills.update(
+    const userId = await currentUser(currentUserEmail);
+    const data = await db.sequelize.query(
+      "EXEC dbo.spusers_updateuserskills :userId, :primarySkills, :secondarySkills, :certifications",
       {
-        primarySkills: response.primarySkills,
-        secondarySkills: response.secondarySkills,
-        certifications: response.certifications,
-      },
-      {
-        where: {
-          userId: currentUser[0].dataValues.id,
+        replacements: {
+          userId: userId,
+          primarySkills: response.primarySkills,
+          secondarySkills: response.secondarySkills,
+          certifications: response.certifications,
         },
       }
     );
-    return res.status(200).json(result);
+    return res.status(200).json({ message: "Data updated successfully" });
   } catch (error) {
-    console.log(error);
+    return res.status(404).json({ message: "No data updated" });
   }
 };

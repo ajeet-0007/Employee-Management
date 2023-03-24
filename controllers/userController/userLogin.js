@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const db = require("../../models");
+const currentUser = require("../fetchData/currentUser");
 const User = db.user;
-require('dotenv').config();
+require("dotenv").config();
 const SECRET = process.env.SECRET_KEY;
 
 exports.postLogin = async (req, res) => {
@@ -11,19 +12,18 @@ exports.postLogin = async (req, res) => {
       email: req.body.email,
       password: req.body.password,
     };
-    const data = await User.findAll({
-      where: {
-        email: response.email,
-      },
+    const userId = await currentUser(response.email);
+    const user = await db.sequelize.query("EXEC dbo.spusers_getuser :userId", {
+      replacements: { userId: userId },
     });
-    if (data[0].dataValues.email) {
+    console.log(user);
+    if (user[0][0].email) {
       const userCheck = await bcrypt.compare(
         response.password,
-        data[0].dataValues.password
+        user[0][0].password
       );
       if (userCheck) {
-        const userEmail = data[0].dataValues.email;
-        const userId = data[0].dataValues.id;
+        const userEmail = user[0][0].email;
         jwt.sign({ userEmail }, SECRET, (error, token) => {
           if (error) {
             console.log(error);
@@ -33,7 +33,7 @@ exports.postLogin = async (req, res) => {
             };
             res.cookie("employeeManagementCookie", userToken);
             res.status(200).json({
-              data: data,
+              data: user[0][0],
               cookie: req.cookies,
             });
           }
@@ -45,7 +45,6 @@ exports.postLogin = async (req, res) => {
       res.status(403).json({
         message: "user doesn't exist",
       });
-      
     }
   } catch (error) {
     console.log(error);

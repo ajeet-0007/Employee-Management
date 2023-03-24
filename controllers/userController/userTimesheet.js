@@ -29,9 +29,9 @@ exports.getUserTimesheet = async (req, res) => {
     if (userTimesheetData == null) {
       return res.status(404).json({ message: "no data found" });
     } else {
-      return res.status(200).json({ data: userTimesheetData.dataValues });
+      return res.status(200).json({ data: userTimesheetData });
     }
   } catch (error) {
-    console.log(error);
+    return res.status(404).json({ message: "No data available" });
   }
 };

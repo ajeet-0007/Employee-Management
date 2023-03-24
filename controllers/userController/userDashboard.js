@@ -10,7 +10,7 @@ const createDashboardData = (dashboard, data, message, location) => {
   if (data == null) {
     dashboard[location] = message;
   } else {
-    dashboard[location] = data.dataValues;
+    dashboard[location] = data;
   }
 };
 

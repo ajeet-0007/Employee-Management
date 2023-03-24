@@ -1,8 +1,8 @@
 const db = require("../../models");
-
 const User = db.user;
 const UserProfile = db.userProfile;
 const getUserProfileData = require("../fetchData/userProfile");
+const currentUser = require("../fetchData/currentUser");
 
 exports.postUserProfile = async (req, res) => {
   try {
@@ -17,7 +17,7 @@ exports.postUserProfile = async (req, res) => {
     const userDetails = await UserProfile.create(response);
     return res.status(201).json(userDetails);
   } catch (error) {
-    console.log(error);
+    return res.status(404).json({ message: "No data available" });
   }
 };
 
@@ -30,11 +30,10 @@ exports.getUserProfile = async (req, res) => {
     if (userProfileData == null) {
       return res.status(404).json({ message: "no data found" });
     } else {
-      return res.status(200).json({ data: userProfileData.dataValues });
+      return res.status(200).json({ data: userProfileData });
     }
   } catch (error) {
-    console.log(error);
-    res.status(404).json({ message: "No data available" });
+    return res.status(404).json({ message: "No data available" });
   }
 };
 
@@ -42,28 +41,22 @@ exports.updateUserProfile = async (req, res) => {
   try {
     const response = req.body;
     const currentUserEmail = req.user.userEmail;
-    const currentUser = await User.findAll({
-      where: {
-        email: currentUserEmail,
-      },
-    });
-
-    const result = await UserProfile.update(
+    const userId = await currentUser(currentUserEmail);
+    const data = await db.sequelize.query(
+      "EXEC dbo.spusers_updateuserprofile :userId, :permanentAddress, :city, :state, :country, :emergencyPhone",
       {
-        permanentAddress: response.permanentAddress,
-        city: response.city,
-        state: response.state,
-        country: response.country,
-        emergencyPhone: response.emergencyPhone,
-      },
-      {
-        where: {
-          userId: currentUser[0].dataValues.id,
+        replacements: {
+          userId: userId,
+          permanentAddress: response.permanentAddress,
+          city: response.city,
+          state: response.state,
+          country: response.country,
+          emergencyPhone: response.emergencyPhone,
         },
       }
     );
-    return res.status(200).json(result);
+    return res.status(200).json({ message: "Data updated successfully"});
   } catch (error) {
-    console.log(error);
+    return res.status(404).json({ message: "No data updated" });
   }
 };

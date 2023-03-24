@@ -1,18 +1,17 @@
 const bcrypt = require("bcrypt");
 const db = require("../../models");
+const currentUser = require("../fetchData/currentUser");
 const User = db.user;
 
 exports.postSignUp = async (req, res) => {
   try {
     let response = req.body;
     response.password = await bcrypt.hash(response.password, 10);
-    const employeeData = await User.findAll({
-      where: {
-        hrmid: response.hrmid,
-        email: response.email
-      },
+    const userId = await currentUser(response.email);
+    const existingData = await db.sequelize.query("EXEC dbo.spusers_getuser :userId", {
+      replacements: { userId: userId },
     });
-    if (employeeData.length) {
+    if (existingData.length) {
       return res.json({ message: "User already exist" });
     } else {
       const data = await User.create(response);
@@ -27,18 +26,15 @@ exports.postSignUp = async (req, res) => {
 
 exports.getUser = async (req, res) => {
   try {
-    const currentUserEmail = req.user.userEmail;
-    const currentUserData = await User.findAll({
-      where: {
-        email: currentUserEmail,
-      },
+    const userEmail = req.user.userEmail;
+    const userId = await currentUser(userEmail);
+    const data = await db.sequelize.query("EXEC dbo.spusers_getuser :userId", {
+      replacements: { userId: userId },
     });
-    res.status(200).json({
-      data: currentUserData,
-    });
+    return res.status(200).json(data[0][0]);
   } catch (error) {
-    console.log(error);
-    res.status(404).json({ message: "No data available" });
+    return res.status(400).json({
+      message: "No data available"
+    });
   }
 };
-

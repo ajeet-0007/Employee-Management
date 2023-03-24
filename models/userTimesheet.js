@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const USERTIMESHEET = sequelize.define("USERTIMESHEET", {
+    const USERTIMESHEET = sequelize.define("userTimesheet", {
       userId: {
         type: DataTypes.INTEGER,
       },
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TIME,
       },
       billableStatus: {
-        type: DataTypes.ENUM("Billable", "Non-Billable"),
+        type: DataTypes.STRING,
         defaultValue: "Non-Billable",
       },
     });

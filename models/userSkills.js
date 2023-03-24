@@ -1,16 +1,16 @@
 module.exports = (sequelize, DataTypes) => {
-  const USERSKILLS = sequelize.define("USERSKILLS", {
+  const USERSKILLS = sequelize.define("userSkills", {
     userId: {
       type: DataTypes.INTEGER,
     },
     primarySkills: {
-      type: DataTypes.JSON,
+      type: DataTypes.STRING,
     },
     secondarySkills: {
-      type: DataTypes.JSON,
+      type: DataTypes.STRING,
     },
     certifications: {
-      type: DataTypes.JSON,
+      type: DataTypes.STRING,
     },
   });
   return USERSKILLS;

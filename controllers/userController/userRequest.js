@@ -29,10 +29,9 @@ exports.getUserRequests = async (req, res) => {
     if (userRequestData == null) {
       return res.status(404).json({ message: "no data found" });
     } else {
-      return res.status(200).json({ data: userRequestData.dataValues });
+      return res.status(200).json({ data: userRequestData });
     }
   } catch (error) {
-    console.log(error);
-    res.status(404).json({ message: "No data available" });
+    return res.status(404).json({ message: "No data available" });
   }
 };

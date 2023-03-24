@@ -1,29 +1,18 @@
 const db = require("../../models");
-const User = db.user;
-const UserAttendance = db.userAttendance;
+const currentUser = require("./currentUser");
 
 const fetchAttendance = async (userEmail) => {
   try {
-    const currentUserEmail = userEmail;
-    const currentUser = await User.findAll({
-      where: {
-        email: currentUserEmail,
-      },
-    });
-
-    const data = await User.findAll({
-      include: [
-        {
-          model: UserAttendance,
-          as: "userAttendance",
-        },
-      ],
-      where: { id: currentUser[0].dataValues.id },
-    });
-    return data[0].dataValues.userAttendance;
+    const userId = await currentUser(userEmail);
+    const data = await db.sequelize.query(
+      "EXEC dbo.spusers_getuserattendance :userId",
+      {
+        replacements: { userId: userId },
+      }
+    );
+    return data[0][0];
   } catch (error) {
-    console.log(error);
-    res.status(404).json({ message: "No data available" });
+    return error;
   }
 };
 

@@ -18,15 +18,15 @@ router.post("/skills/add-user-skills", authorize, userSkillsController.postUserA
 
 router.post("/requests/add-user-request", authorize, userRequestController.postUserRequest);
 
-router.post("/check-in", authorize, userAttendanceController.postCheckIn);
-
 router.post("/add-user-timesheet", authorize, userTimesheetController.postUserTimesheet);
 
-router.put("/check-out", authorize, userAttendanceController.putCheckOut);
+router.post("/check-in", authorize, userAttendanceController.postCheckIn);
 
 router.put("/skills/update-user-skills", authorize, userSkillsController.updateUserSkills);
 
 router.put("/account/update-user-profile", authorize, userProfileController.updateUserProfile);
+
+router.put("/check-out", authorize, userAttendanceController.putCheckOut);
 
 router.get("/dashboard",authorize, userDashboardController.getUserDashboard);
 
