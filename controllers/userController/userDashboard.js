@@ -1,4 +1,3 @@
-const db = require("../../models");
 const getUserSkillsData = require("../fetchData/userSkills");
 const getUserProfileData = require("../fetchData/userProfile");
 const getUserAttendanceData = require("../fetchData/userAttendance");
@@ -6,9 +5,9 @@ const getUserRequestData = require("../fetchData/userRequest");
 const getUserProjectListData = require("../fetchData/userProjectList");
 const getUserTimesheetData = require("../fetchData/userTimesheet");
 
-const createDashboardData = (dashboard, data, message, location) => {
+const createDashboardData = (dashboard, data, location) => {
   if (data == null) {
-    dashboard[location] = message;
+    dashboard[location] = { message: "No data available" };
   } else {
     dashboard[location] = data;
   }
@@ -16,12 +15,14 @@ const createDashboardData = (dashboard, data, message, location) => {
 
 exports.getUserDashboard = async (req, res) => {
   let dashboardData = {};
-  let message = { message: "no data availabe" };
 
   const userSkillsData = await getUserSkillsData.fetchSkills(
     req.user.userEmail
   );
-  createDashboardData(dashboardData, userSkillsData, message, "userSkillsList");
+  createDashboardData(
+    dashboardData,
+    userSkillsData,
+    "userSkills");
 
   const userProfileData = await getUserProfileData.fetchProfile(
     req.user.userEmail
@@ -29,8 +30,7 @@ exports.getUserDashboard = async (req, res) => {
   createDashboardData(
     dashboardData,
     userProfileData,
-    message,
-    "userProfileList"
+    "userProfile"
   );
 
   const userAttendanceData = await getUserAttendanceData.fetchAttendance(
@@ -39,7 +39,6 @@ exports.getUserDashboard = async (req, res) => {
   createDashboardData(
     dashboardData,
     userAttendanceData,
-    message,
     "userAttendanceList"
   );
 
@@ -49,7 +48,6 @@ exports.getUserDashboard = async (req, res) => {
   createDashboardData(
     dashboardData,
     userRequestData,
-    message,
     "userRequestList"
   );
 
@@ -59,7 +57,6 @@ exports.getUserDashboard = async (req, res) => {
   createDashboardData(
     dashboardData,
     userProjectListData,
-    message,
     "userProjectList"
   );
 
@@ -69,8 +66,7 @@ exports.getUserDashboard = async (req, res) => {
   createDashboardData(
     dashboardData,
     userTimesheetData,
-    message,
-    "userTimesheet"
+    "userTimesheetList"
   );
 
   res.status(200).json(dashboardData);
