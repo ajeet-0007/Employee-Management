@@ -2,17 +2,14 @@ const db = require("../../models");
 const User = db.user;
 const UserRequest = db.userRequest;
 const getUserRequestData = require("../fetchData/userRequest");
+const currentUser = require('../fetchData/currentUser');
 
 exports.postUserRequest = async (req, res) => {
   try {
     const response = req.body;
     const currentUserEmail = req.user.userEmail;
-    const currentUser = await User.findAll({
-      where: {
-        email: currentUserEmail,
-      },
-    });
-    response.userId = currentUser[0].dataValues.id;
+    const userId = await currentUser(currentUserEmail);
+    response.userId = userId;
     const userRequest = await UserRequest.create(response);
     return res.status(201).json(userRequest);
   } catch (error) {

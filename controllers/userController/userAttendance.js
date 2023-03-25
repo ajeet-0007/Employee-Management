@@ -8,12 +8,8 @@ exports.postCheckIn = async (req, res) => {
   try {
     const response = req.body;
     const currentUserEmail = req.user.userEmail;
-    const currentUser = await User.findAll({
-      where: {
-        email: currentUserEmail,
-      },
-    });
-    response.userId = currentUser[0].dataValues.id;
+    const userId = await currentUser(currentUserEmail);
+    response.userId = userId;
     const userAttendance = await UserAttendance.create(response);
     return res.status(201).json(userAttendance);
   } catch (error) {

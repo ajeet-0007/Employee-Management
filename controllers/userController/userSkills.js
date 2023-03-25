@@ -8,12 +8,8 @@ exports.postUserAddSkills = async (req, res) => {
   try {
     const response = req.body;
     const currentUserEmail = req.user.userEmail;
-    const currentUser = await User.findAll({
-      where: {
-        email: currentUserEmail,
-      },
-    });
-    response.userId = currentUser[0].dataValues.id;
+    const userId = await currentUser(currentUserEmail);
+    response.userId = userId;
     const userSkills = await UserSkills.create(response);
     return res.status(201).json(userSkills);
   } catch (error) {

@@ -2,17 +2,14 @@ const db = require("../../models");
 const User = db.user;
 const UserTimesheet = db.userTimesheet;
 const getUserTimesheetData = require("../fetchData/userTimesheet");
+const currentUser = require('../fetchData/currentUser');
 
 exports.postUserTimesheet = async (req, res) => {
   try {
     const response = req.body;
     const currentUserEmail = req.user.userEmail;
-    const currentUser = await User.findAll({
-      where: {
-        email: currentUserEmail,
-      },
-    });
-    response.userId = currentUser[0].dataValues.id;
+    const userId = await currentUser(currentUserEmail);
+    response.userId = userId;
     const userTimesheet = await UserTimesheet.create(response);
     return res.status(201).json(userTimesheet);
   } catch (error) {

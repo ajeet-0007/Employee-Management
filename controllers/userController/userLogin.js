@@ -16,7 +16,6 @@ exports.postLogin = async (req, res) => {
     const user = await db.sequelize.query("EXEC dbo.spusers_getuser :userId", {
       replacements: { userId: userId },
     });
-    console.log(user);
     if (user[0][0].email) {
       const userCheck = await bcrypt.compare(
         response.password,
