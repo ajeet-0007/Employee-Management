@@ -1,20 +1,20 @@
 require("dotenv").config();
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize("organizationdb", "root", "12345", {
-  host: "localhost",
-  dialect: "mssql",
-  port: "1433",
-  logging: false,
-  define: {
-    timestamps: false,
-  },
+    host: "localhost",
+    dialect: "mssql",
+    port: "1433",
+    logging: false,
+    define: {
+        timestamps: false,
+    },
 });
 
 try {
-  sequelize.authenticate();
+    sequelize.authenticate();
 } catch (e) {
-  console.log(e);
+    console.log(e);
 }
 
 db = {};
