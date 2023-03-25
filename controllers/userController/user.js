@@ -8,19 +8,33 @@ exports.postSignUp = async (req, res) => {
     let response = req.body;
     response.password = await bcrypt.hash(response.password, 10);
     const userId = await currentUser(response.email);
-    const existingData = await db.sequelize.query("EXEC dbo.spusers_getuser :userId", {
-      replacements: { userId: userId },
-    });
-    if (existingData.length) {
-      return res.json({ message: "User already exist" });
+    if (!userId ) {
+      const data = await db.sequelize.query(
+        "EXEC dbo.spusers_postsignup :hrmid, :name, :email, :password, :phone, :image, :role, :reportingManager, :allocation, :joiningDate",
+        {
+          replacements: {
+            hrmid: response.hrmid,
+            name: response.name,
+            email: response.email,
+            password: response.password,
+            phone: response.phone,
+            image: response.image,
+            role: response.role,
+            reportingManager: response.reportingManager,
+            allocation: response.allocation,
+            joiningDate: response.joiningDate,
+          },
+        }
+      );
+      return res.status(201).json({ message: "User created successfully" });
     } else {
-      const data = await User.create(response);
-      res.status(201).json({
-        data: data,
-      });
+      return res.json({ message: "User already exist" });
     }
   } catch (error) {
     console.log(error);
+    return res.status(400).json({
+      message: "No data available",
+    });
   }
 };
 
@@ -33,8 +47,9 @@ exports.getUser = async (req, res) => {
     });
     return res.status(200).json(data[0][0]);
   } catch (error) {
+    console.log(error);
     return res.status(400).json({
-      message: "No data available"
+      message: "No data available",
     });
   }
 };

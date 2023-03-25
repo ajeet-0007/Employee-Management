@@ -1,19 +1,34 @@
 const db = require("../../models");
-const User = db.user;
-const UserTimesheet = db.userTimesheet;
 const getUserTimesheetData = require("../fetchData/userTimesheet");
-const currentUser = require('../fetchData/currentUser');
+const currentUser = require("../fetchData/currentUser");
 
 exports.postUserTimesheet = async (req, res) => {
   try {
     const response = req.body;
     const currentUserEmail = req.user.userEmail;
     const userId = await currentUser(currentUserEmail);
-    response.userId = userId;
-    const userTimesheet = await UserTimesheet.create(response);
-    return res.status(201).json(userTimesheet);
+    const data = await db.sequelize.query(
+      "EXEC dbo.spusers_postusertimesheet :userId, :clientName, :projectName, :jobName, :workItem, :date, :description, :startTime, :endTime, :billableStatus",
+      {
+        replacements: {
+          userId: userId,
+          clientName: response.clientName,
+          projectName: response.projectName,
+          jobName: response.jobName,
+          workItem: response.workItem,
+          date: response.date,
+          description: response.description,
+          startTime: response.startTime,
+          endTime: response.endTime,
+          billableStatus: response.billableStatus,
+        },
+      }
+    );
+    return res
+      .status(201)
+      .json({ message: "User timesheet created successfully" });
   } catch (error) {
-    console.log(error);
+    return res.status(201).json({ message: "User timesheet creation failed" });
   }
 };
 

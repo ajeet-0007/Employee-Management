@@ -9,11 +9,20 @@ exports.postCheckIn = async (req, res) => {
     const response = req.body;
     const currentUserEmail = req.user.userEmail;
     const userId = await currentUser(currentUserEmail);
-    response.userId = userId;
-    const userAttendance = await UserAttendance.create(response);
-    return res.status(201).json(userAttendance);
+    const data = await db.sequelize.query(
+      "EXEC dbo.spusers_postcheckin :userId, :checkInTime, :checkInDate, :location",
+      {
+        replacements: {
+          userId: userId,
+          checkInTime: response.checkInTime,
+          checkInDate: response.checkInDate,
+          location: response.location,
+        },
+      }
+    );
+    return res.status(201).json({ message: "User checked-in successfully" });
   } catch (error) {
-    console.log(error);
+    return res.status(201).json({ message: "User check-in failed" });
   }
 };
 

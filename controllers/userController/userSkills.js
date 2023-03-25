@@ -1,6 +1,4 @@
 const db = require("../../models");
-const User = db.user;
-const UserSkills = db.userSkills;
 const getUserSkillsData = require("../fetchData/userSkills");
 const currentUser = require('../fetchData/currentUser');
 
@@ -9,11 +7,22 @@ exports.postUserAddSkills = async (req, res) => {
     const response = req.body;
     const currentUserEmail = req.user.userEmail;
     const userId = await currentUser(currentUserEmail);
-    response.userId = userId;
-    const userSkills = await UserSkills.create(response);
-    return res.status(201).json(userSkills);
+    const data = await db.sequelize.query(
+      "EXEC dbo.spusers_postuserskills :userId, :primarySkills, :secondarySkills, :certifications",
+      {
+        replacements: {
+          userId: userId,
+          primarySkills: response.primarySkills,
+          secondarySkills: response.secondarySkills,
+          certifications: response.certifications,
+        },
+      }
+    );
+    return res
+      .status(201)
+      .json({ message: "User skills created successfully" });
   } catch (error) {
-    console.log(error);
+    return res.status(201).json({ message: "User skills creation failed" });
   }
 };
 

@@ -16,11 +16,12 @@ exports.postLogin = async (req, res) => {
     const user = await db.sequelize.query("EXEC dbo.spusers_getuser :userId", {
       replacements: { userId: userId },
     });
-    if (user[0][0].email) {
+    if (user[1] != 0) {
       const userCheck = await bcrypt.compare(
         response.password,
         user[0][0].password
       );
+
       if (userCheck) {
         const userEmail = user[0][0].email;
         jwt.sign({ userEmail }, SECRET, (error, token) => {
@@ -42,11 +43,12 @@ exports.postLogin = async (req, res) => {
       }
     } else {
       res.status(403).json({
-        message: "user doesn't exist",
+        message: "User doesn't exist",
       });
     }
   } catch (error) {
     console.log(error);
+    res.json({ message: "No data available" });
   }
 };
 

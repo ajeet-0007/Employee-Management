@@ -6,6 +6,9 @@ const sequelize = new Sequelize("organizationdb", "root", "12345", {
   dialect: "mssql",
   port: "1433",
   logging: false,
+  define: {
+    timestamps: false,
+  },
 });
 
 try {

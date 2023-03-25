@@ -8,7 +8,12 @@ const currentUser = async (userEmail) => {
         replacements: { email: userEmail },
       }
     );
-    return currentUser[0][0].id;
+    if(currentUser[1]==0){
+    return false;
+    }
+    else{
+      return currentUser[0][0].id;
+    }
   } catch (error) {
     return error;
   }

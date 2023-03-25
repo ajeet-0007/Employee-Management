@@ -1,6 +1,4 @@
 const db = require("../../models");
-const User = db.user;
-const UserProfile = db.userProfile;
 const getUserProfileData = require("../fetchData/userProfile");
 const currentUser = require("../fetchData/currentUser");
 
@@ -9,11 +7,24 @@ exports.postUserProfile = async (req, res) => {
     const response = req.body;
     const currentUserEmail = req.user.userEmail;
     const userId = await currentUser(currentUserEmail);
-    response.userId = userId;
-    const userDetails = await UserProfile.create(response);
-    return res.status(201).json(userDetails);
+    const data = await db.sequelize.query(
+      "EXEC dbo.spusers_postuserprofile :userId, :permanentAddress, :city, :state, :country, :emergencyPhone",
+      {
+        replacements: {
+          userId: userId,
+          permanentAddress: response.permanentAddress,
+          city: response.city,
+          state: response.state,
+          country: response.country,
+          emergencyPhone: response.emergencyPhone,
+        },
+      }
+    );
+    return res
+      .status(201)
+      .json({ message: "User profile created successfully" });
   } catch (error) {
-    return res.status(404).json({ message: "No data available" });
+    return res.status(201).json({ message: "User profile creation failed" });
   }
 };
 
@@ -51,7 +62,7 @@ exports.updateUserProfile = async (req, res) => {
         },
       }
     );
-    return res.status(200).json({ message: "Data updated successfully"});
+    return res.status(200).json({ message: "Data updated successfully" });
   } catch (error) {
     return res.status(404).json({ message: "No data updated" });
   }

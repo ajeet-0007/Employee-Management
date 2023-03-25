@@ -29,7 +29,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       billableStatus: {
         type: DataTypes.STRING,
-        defaultValue: "Non-Billable",
       },
     });
     return USERTIMESHEET;
