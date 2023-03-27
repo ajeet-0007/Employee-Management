@@ -69,5 +69,5 @@ exports.getUserDashboard = async (req, res) => {
     "userTimesheetList"
   );
 
-  res.status(200).json(dashboardData);
+  res.status(200).json({data: dashboardData, cookie: req.cookies});
 };
