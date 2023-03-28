@@ -30,11 +30,12 @@ exports.postLogin = async (req, res) => {
                     if (error) {
                         console.log(error);
                     } else {
-                        res.cookie("userToken", token, {
+                        res.status(202).cookie("userToken", token, {
                             sameSite: "none",
                             secure: true,
                             expires: false,
                             maxAge: 1000 * 60 * 60 * 24 * 30,
+                            httpOnly: true,
                         });
                         res.status(201).json({ data: user[0][0] });
                     }
