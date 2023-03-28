@@ -36,24 +36,24 @@ exports.postLogin = async (req, res) => {
                             expires: false,
                             maxAge: 1000 * 60 * 60 * 24 * 30,
                         });
-                        res.status(200).json({ data: user[0][0] });
+                        res.status(201).json({ data: user[0][0] });
                     }
                 });
             } else {
-                res.json({ message: "Invalid Password" });
+                res.status(401).json({ message: "Invalid Password" });
             }
         } else {
-            res.status(403).json({
+            res.status(404).json({
                 message: "User doesn't exist",
             });
         }
     } catch (error) {
         console.log(error);
-        res.json({ message: "No data available" });
+        res.status(500).json({ message: "No data available" });
     }
 };
 
 exports.getLogout = (req, res) => {
     res.clearCookie("userToken");
-    res.json({ message: "Logged Out Successfully" });
+    res.status(200).json({ message: "Logged Out Successfully" });
 };

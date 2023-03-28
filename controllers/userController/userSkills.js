@@ -23,7 +23,7 @@ exports.postUserAddSkills = async (req, res) => {
             .json({ message: "User skills created successfully" });
     } catch (error) {
         console.log(error);
-        return res.status(201).json({ message: "User skills creation failed" });
+        return res.status(500).json({ message: "User skills creation failed" });
     }
 };
 
@@ -34,13 +34,13 @@ exports.getUserSkills = async (req, res) => {
             currentUserEmail
         );
         if (userSkillsData == null) {
-            return res.status(404).json({ message: "no data found" });
+            return res.status(404).json({ message: "No data available" });
         } else {
             return res.status(200).json({ data: userSkillsData });
         }
     } catch (error) {
         console.log(error);
-        return res.status(404).json({ message: "No data available" });
+        return res.status(500).json({ message: "No data available" });
     }
 };
 
@@ -61,10 +61,10 @@ exports.updateUserSkills = async (req, res) => {
             }
         );
         return res
-            .status(200)
+            .status(201)
             .json({ message: "User skills updated successfully" });
     } catch (error) {
         console.log(error);
-        return res.status(404).json({ message: "User skills updation failed" });
+        return res.status(500).json({ message: "User skills updation failed" });
     }
 };

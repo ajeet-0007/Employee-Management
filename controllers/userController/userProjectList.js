@@ -7,7 +7,7 @@ exports.getUserProjectList = async (req, res) => {
         const userProjectListData =
             await getUserProjectListData.fetchProjectList(currentUserEmail);
         if (userProjectListData == null) {
-            return res.status(404).json({ message: "no data found" });
+            return res.status(404).json({ message: "No data available" });
         } else {
             return res
                 .status(200)
@@ -15,6 +15,6 @@ exports.getUserProjectList = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
-        res.status(404).json({ message: "No data available" });
+        res.status(500).json({ message: "No data available" });
     }
 };

@@ -26,7 +26,7 @@ exports.postUserProfile = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res
-            .status(201)
+            .status(500)
             .json({ message: "User profile creation failed" });
     }
 };
@@ -38,13 +38,13 @@ exports.getUserProfile = async (req, res) => {
             currentUserEmail
         );
         if (userProfileData == null) {
-            return res.status(404).json({ message: "no data found" });
+            return res.status(404).json({ message: "No data available" });
         } else {
             return res.status(200).json({ data: userProfileData });
         }
     } catch (error) {
         console.log(error);
-        return res.status(404).json({ message: "No data available" });
+        return res.status(500).json({ message: "No data available" });
     }
 };
 
@@ -67,12 +67,12 @@ exports.updateUserProfile = async (req, res) => {
             }
         );
         return res
-            .status(200)
+            .status(201)
             .json({ message: "User profile updated successfully" });
     } catch (error) {
         console.log(error);
         return res
-            .status(404)
+            .status(500)
             .json({ message: "User profile updation failed" });
     }
 };

@@ -30,12 +30,12 @@ exports.postSignUp = async (req, res) => {
                 .status(201)
                 .json({ message: "User created successfully" });
         } else {
-            return res.json({ message: "User already exist" });
+            return res.status(403).json({ message: "User already exist" });
         }
     } catch (error) {
         console.log(error);
-        return res.status(400).json({
-            message: "No data available",
+        return res.status(500).json({
+            message: "User creation failed",
         });
     }
 };
@@ -53,7 +53,7 @@ exports.getUser = async (req, res) => {
         return res.status(200).json(data[0][0]);
     } catch (error) {
         console.log(error);
-        return res.status(400).json({
+        return res.status(404).json({
             message: "No data available",
         });
     }

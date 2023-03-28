@@ -10,7 +10,7 @@ const fetchAttendance = async (userEmail) => {
                 replacements: { userId: userId },
             }
         );
-        return data[0][0];
+        return data[0];
     } catch (error) {
         console.log(error);
         return error;

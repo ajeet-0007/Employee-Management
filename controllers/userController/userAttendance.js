@@ -25,7 +25,7 @@ exports.postCheckIn = async (req, res) => {
             .json({ message: "User checked-in successfully" });
     } catch (error) {
         console.log(error);
-        return res.status(201).json({ message: "User check-in failed" });
+        return res.status(500).json({ message: "User check-in failed" });
     }
 };
 
@@ -36,13 +36,13 @@ exports.getUserAttendance = async (req, res) => {
             currentUserEmail
         );
         if (userAttendanceData == null) {
-            return res.status(404).json({ message: "no data found" });
+            return res.status(404).json({ message: "No data available" });
         } else {
             return res.status(200).json({ data: userAttendanceData });
         }
     } catch (error) {
         console.log(error);
-        return res.status(404).json({ message: "No data available" });
+        return res.status(500).json({ message: "No data available" });
     }
 };
 
@@ -62,10 +62,10 @@ exports.putCheckOut = async (req, res) => {
             }
         );
         return res
-            .status(200)
+            .status(201)
             .json({ message: "User checked-out successfully" });
     } catch (error) {
         console.log(error);
-        return res.status(404).json({ message: "User check-out failed" });
+        return res.status(500).json({ message: "User check-out failed" });
     }
 };
