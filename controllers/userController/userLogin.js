@@ -36,11 +36,7 @@ exports.postLogin = async (req, res) => {
                             expires: false,
                             maxAge: 1000 * 60 * 60 * 24 * 30,
                         });
-
-                        res.status(200).json({
-                            data: user[0][0],
-                            cookie: req.cookies,
-                        });
+                        res.status(200).json({ data: user[0][0] });
                     }
                 });
             } else {

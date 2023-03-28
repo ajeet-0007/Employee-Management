@@ -61,9 +61,11 @@ exports.putCheckOut = async (req, res) => {
                 },
             }
         );
-        return res.status(200).json({ message: "Data updated successfully" });
+        return res
+            .status(200)
+            .json({ message: "User checked-out successfully" });
     } catch (error) {
         console.log(error);
-        return res.status(404).json({ message: "No data updated" });
+        return res.status(404).json({ message: "User check-out failed" });
     }
 };
