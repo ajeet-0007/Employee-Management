@@ -11,6 +11,9 @@ const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
     dialect: "mssql",
     port: DB_PORT,
     logging: false,
+    define: {
+        timestamps: false,
+    },
 });
 
 try {

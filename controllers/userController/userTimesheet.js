@@ -28,6 +28,7 @@ exports.postUserTimesheet = async (req, res) => {
       .status(201)
       .json({ message: "User timesheet created successfully" });
   } catch (error) {
+    console.log(error);
     return res.status(201).json({ message: "User timesheet creation failed" });
   }
 };
@@ -44,6 +45,7 @@ exports.getUserTimesheet = async (req, res) => {
       return res.status(200).json({ data: userTimesheetData });
     }
   } catch (error) {
+    console.log(error);
     return res.status(404).json({ message: "No data available" });
   }
 };

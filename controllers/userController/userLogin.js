@@ -33,10 +33,10 @@ exports.postLogin = async (req, res) => {
                         res.cookie("userToken", token, {
                             sameSite: "none",
                             secure: true,
-                            expires : false,
-                            maxAge: 1000*60*60*24*30,
+                            expires: false,
+                            maxAge: 1000 * 60 * 60 * 24 * 30,
                         });
-              
+
                         res.status(200).json({
                             data: user[0][0],
                             cookie: req.cookies,
