@@ -11,7 +11,6 @@ const userSkillsController = require("../controllers/userController/userSkills")
 const userTimesheetController = require("../controllers/userController/userTimesheet");
 const userProjectListController = require("../controllers/userController/userProjectList");
 
-
 router.post("/account/add-user-profile", authorize, userProfileController.postUserProfile);
 
 router.post("/skills/add-user-skills", authorize, userSkillsController.postUserAddSkills);
