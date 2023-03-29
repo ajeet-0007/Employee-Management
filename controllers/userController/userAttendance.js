@@ -35,7 +35,7 @@ exports.getUserAttendance = async (req, res) => {
         const userAttendanceData = await getUserAttendanceData.fetchAttendance(
             currentUserEmail
         );
-        if (userAttendanceData == null) {
+        if (userAttendanceData.length == 0) {
             return res.status(404).json({ message: "No data available" });
         } else {
             return res.status(200).json({ data: userAttendanceData });

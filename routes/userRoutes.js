@@ -9,7 +9,7 @@ const userAttendanceController = require("../controllers/userController/userAtte
 const userRequestController = require("../controllers/userController/userRequest");
 const userSkillsController = require("../controllers/userController/userSkills");
 const userTimesheetController = require("../controllers/userController/userTimesheet");
-const userProjectListController = require("../controllers/userController/userProjectList");
+const userProjectController = require("../controllers/userController/userProject");
 
 router.post("/account/add-user-profile", authorize, userProfileController.postUserProfile);
 
@@ -18,6 +18,8 @@ router.post("/skills/add-user-skills", authorize, userSkillsController.postUserA
 router.post("/requests/add-user-request", authorize, userRequestController.postUserRequest);
 
 router.post("/add-user-timesheet", authorize, userTimesheetController.postUserTimesheet);
+
+router.post("/add-user-project", authorize, userProjectController.postUserProject);
 
 router.post("/check-in", authorize, userAttendanceController.postCheckIn);
 
@@ -41,8 +43,8 @@ router.get("/get-user-attendance", authorize, userAttendanceController.getUserAt
 
 router.get("/skills/get-user-skills", authorize, userSkillsController.getUserSkills);
 
-router.get('/get-user-timesheet', authorize, userTimesheetController.getUserTimesheet);
+router.get('/get-user-timesheets', authorize, userTimesheetController.getUserTimesheets);
 
-router.get("/get-user-project-list", authorize, userProjectListController.getUserProjectList);
+router.get("/get-user-projects", authorize, userProjectController.getUserProjects);
 
 module.exports = router;

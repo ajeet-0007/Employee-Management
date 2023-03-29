@@ -32,7 +32,7 @@ db.userSkills = require("./userSkills")(sequelize, DataTypes);
 db.userRequest = require("./userRequest")(sequelize, DataTypes);
 db.userAttendance = require("./userAttendance")(sequelize, DataTypes);
 db.userTimesheet = require("./userTimesheet")(sequelize, DataTypes);
-db.userProjectList = require("./userProjectList")(sequelize, DataTypes);
+db.userProject = require("./userProject")(sequelize, DataTypes);
 
 db.sequelize.sync({ force: false });
 

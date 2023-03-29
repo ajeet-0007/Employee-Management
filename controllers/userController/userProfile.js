@@ -37,8 +37,8 @@ exports.getUserProfile = async (req, res) => {
         const userProfileData = await getUserProfileData.fetchProfile(
             currentUserEmail
         );
-        if (userProfileData == null) {
-            return res.status(404).json({ message: "No data available" });
+        if (userProfileData.length == 0) {
+            return res.status(404).json({ message: "No user profile found" });
         } else {
             return res.status(200).json({ data: userProfileData });
         }

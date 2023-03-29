@@ -32,11 +32,11 @@ exports.postUserRequest = async (req, res) => {
 exports.getUserRequests = async (req, res) => {
     try {
         const currentUserEmail = req.user.userEmail;
-        const userRequestData = await getUserRequestData.fetchRequest(
+        const userRequestData = await getUserRequestData.fetchRequests(
             currentUserEmail
         );
-        if (userRequestData == null) {
-            return res.status(404).json({ message: "No data available" });
+        if (userRequestData.length == 0) {
+            return res.status(404).json({ message: "No user request found" });
         } else {
             return res.status(200).json({ data: userRequestData });
         }

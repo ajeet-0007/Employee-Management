@@ -33,8 +33,8 @@ exports.getUserSkills = async (req, res) => {
         const userSkillsData = await getUserSkillsData.fetchSkills(
             currentUserEmail
         );
-        if (userSkillsData == null) {
-            return res.status(404).json({ message: "No data available" });
+        if (userSkillsData.length == 0) {
+            return res.status(404).json({ message: "No user skills found" });
         } else {
             return res.status(200).json({ data: userSkillsData });
         }

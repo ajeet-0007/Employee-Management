@@ -35,14 +35,14 @@ exports.postUserTimesheet = async (req, res) => {
     }
 };
 
-exports.getUserTimesheet = async (req, res) => {
+exports.getUserTimesheets = async (req, res) => {
     try {
         const currentUserEmail = req.user.userEmail;
-        const userTimesheetData = await getUserTimesheetData.fetchTimesheet(
+        const userTimesheetData = await getUserTimesheetData.fetchTimesheets(
             currentUserEmail
         );
-        if (userTimesheetData == null) {
-            return res.status(404).json({ message: "No data available" });
+        if (userTimesheetData.length == 0) {
+            return res.status(404).json({ message: "No user timesheet found" });
         } else {
             return res.status(200).json({ data: userTimesheetData });
         }

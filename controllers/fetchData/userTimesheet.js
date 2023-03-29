@@ -1,11 +1,11 @@
 const db = require("../../models");
 const currentUser = require("./currentUser");
 
-const fetchTimesheet = async (userEmail) => {
+const fetchTimesheets = async (userEmail) => {
     try {
         const userId = await currentUser(userEmail);
         const data = await db.sequelize.query(
-            "EXEC dbo.spusers_getusertimesheet :userId",
+            "EXEC dbo.spusers_getusertimesheets :userId",
             {
                 replacements: { userId: userId },
             }
@@ -17,4 +17,4 @@ const fetchTimesheet = async (userEmail) => {
     }
 };
 
-module.exports = { fetchTimesheet };
+module.exports = { fetchTimesheets };
