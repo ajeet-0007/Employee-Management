@@ -17,7 +17,8 @@ const clickLogin = (e) => {
         })
         .then((data, error) => {
             if (data) {
-                return data;
+                // return data;
+                window.location.redirect("https://b099-2401-4900-1c68-e6e7-2561-d035-ebe7-efe3.in.ngrok.io/user/dashboard");
             } else {
                 console.log(error);
             }
