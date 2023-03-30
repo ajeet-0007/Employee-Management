@@ -40,7 +40,7 @@ exports.getUserProjects = async (req, res) => {
             currentUserEmail
         );
         if (userProjectData.length == 0) {
-            return res.status(404).json({ message: "No user project found" });
+            return res.status(404).json({ message: "No user projects found" });
         } else {
             return res.status(200).json({ data: userProjectData });
         }

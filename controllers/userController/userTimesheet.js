@@ -42,7 +42,7 @@ exports.getUserTimesheets = async (req, res) => {
             currentUserEmail
         );
         if (userTimesheetData.length == 0) {
-            return res.status(404).json({ message: "No user timesheet found" });
+            return res.status(404).json({ message: "No user timesheets found" });
         } else {
             return res.status(200).json({ data: userTimesheetData });
         }

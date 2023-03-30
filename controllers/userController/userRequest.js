@@ -36,7 +36,7 @@ exports.getUserRequests = async (req, res) => {
             currentUserEmail
         );
         if (userRequestData.length == 0) {
-            return res.status(404).json({ message: "No user request found" });
+            return res.status(404).json({ message: "No user requests found" });
         } else {
             return res.status(200).json({ data: userRequestData });
         }

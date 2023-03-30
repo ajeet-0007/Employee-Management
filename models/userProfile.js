@@ -1,23 +1,24 @@
-module.exports=(sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
     const USERPROFILE = sequelize.define("userProfile", {
-        userId :{
-            type: DataTypes.INTEGER
+        userId: {
+            type: DataTypes.INTEGER,
+            unique: true,
         },
         permanentAddress: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
         },
         city: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
         },
         state: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
         },
         country: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
         },
         emergencyPhone: {
-            type: DataTypes.STRING
-        }
-    })
+            type: DataTypes.STRING,
+        },
+    });
     return USERPROFILE;
-}
+};

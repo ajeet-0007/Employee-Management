@@ -36,7 +36,7 @@ exports.getUserAttendance = async (req, res) => {
             currentUserEmail
         );
         if (userAttendanceData.length == 0) {
-            return res.status(404).json({ message: "No data available" });
+            return res.status(404).json({ message: "No user attendance found" });
         } else {
             return res.status(200).json({ data: userAttendanceData });
         }
