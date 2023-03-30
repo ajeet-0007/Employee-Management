@@ -22,9 +22,15 @@ exports.postUserProject = async (req, res) => {
                 },
             }
         );
-        return res
-            .status(201)
-            .json({ message: "User project created successfully" });
+        if (data[1] != 0) {
+            return res
+                .status(201)
+                .json({ message: "User project created successfully" });
+        } else {
+            return res
+                .status(200)
+                .json({ message: "User project already exists" });
+        }
     } catch (error) {
         console.log(error);
         return res

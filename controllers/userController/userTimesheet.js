@@ -24,9 +24,15 @@ exports.postUserTimesheet = async (req, res) => {
                 },
             }
         );
-        return res
-            .status(201)
-            .json({ message: "User timesheet created successfully" });
+        if (data[1] != 0) {
+            return res
+                .status(201)
+                .json({ message: "User timesheet created successfully" });
+        } else {
+            return res
+                .status(200)
+                .json({ message: "User timesheet already exists" });
+        }
     } catch (error) {
         console.log(error);
         return res
@@ -42,7 +48,9 @@ exports.getUserTimesheets = async (req, res) => {
             currentUserEmail
         );
         if (userTimesheetData.length == 0) {
-            return res.status(404).json({ message: "No user timesheets found" });
+            return res
+                .status(404)
+                .json({ message: "No user timesheets found" });
         } else {
             return res.status(200).json({ data: userTimesheetData });
         }
