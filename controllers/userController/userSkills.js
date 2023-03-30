@@ -18,9 +18,15 @@ exports.postUserAddSkills = async (req, res) => {
                 },
             }
         );
-        return res
-            .status(201)
-            .json({ message: "User skills created successfully" });
+        if (data[1] != 0) {
+            return res
+                .status(201)
+                .json({ message: "User skills created successfully" });
+        } else {
+            return res
+                .status(200)
+                .json({ message: "User skills already exists" });
+        }
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "User skills creation failed" });

@@ -2,7 +2,6 @@ module.exports = (sequelize, DataTypes) => {
     const USERSKILLS = sequelize.define("userSkills", {
         userId: {
             type: DataTypes.INTEGER,
-            unique: true,
         },
         primarySkills: {
             type: DataTypes.STRING,

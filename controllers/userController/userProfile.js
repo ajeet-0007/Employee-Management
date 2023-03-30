@@ -20,9 +20,15 @@ exports.postUserProfile = async (req, res) => {
                 },
             }
         );
-        return res
-            .status(201)
-            .json({ message: "User profile created successfully" });
+        if (data[1] != 0) {
+            return res
+                .status(201)
+                .json({ message: "User profile created successfully" });
+        } else {
+            return res
+                .status(200)
+                .json({ message: "User profile already exists" });
+        }
     } catch (error) {
         console.log(error);
         return res
