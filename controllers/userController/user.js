@@ -50,6 +50,7 @@ exports.getUser = async (req, res) => {
                 replacements: { userId: userId },
             }
         );
+        console.log(data[0]);
         return res.status(200).json(data[0][0]);
     } catch (error) {
         console.log(error);
