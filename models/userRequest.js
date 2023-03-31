@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const USERREQUEST = sequelize.define("USERREQUEST", {
+  const USERREQUEST = sequelize.define("userRequests", {
     userId: {
       type: DataTypes.INTEGER,
     },
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     status: {
-      type: DataTypes.ENUM("Pending", "Approved"),
+      type: DataTypes.STRING,
       defaultValue: "Pending",
     },
   });

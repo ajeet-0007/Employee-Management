@@ -1,30 +1,20 @@
 const db = require("../../models");
-const User = db.user;
-const UserTimesheet = db.userTimesheet;
+const currentUser = require("./currentUser");
 
-const fetchTimesheet = async (userEmail) => {
-  try {
-    const currentUserEmail = userEmail;
-    const currentUser = await User.findAll({
-      where: {
-        email: currentUserEmail,
-      },
-    });
-
-    const data = await User.findAll({
-      include: [
-        {
-          model: UserTimesheet,
-          as: "userTimesheet",
-        },
-      ],
-      where: { id: currentUser[0].dataValues.id },
-    });
-    return data[0].dataValues.userTimesheet;
-  } catch (error) {
-    console.log(error);
-    res.status(404).json({ message: "No data available" });
-  }
+const fetchTimesheets = async (userEmail) => {
+    try {
+        const userId = await currentUser(userEmail);
+        const data = await db.sequelize.query(
+            "EXEC dbo.spusers_getusertimesheets :userId",
+            {
+                replacements: { userId: userId },
+            }
+        );
+        return data[0];
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
 };
 
-module.exports = { fetchTimesheet };
+module.exports = { fetchTimesheets };

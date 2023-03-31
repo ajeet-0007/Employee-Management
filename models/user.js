@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const USER = sequelize.define("USER", {
+  const USER = sequelize.define("users", {
     hrmid: {
       type: DataTypes.STRING,
     },
@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
     },
+    password: {
+      type: DataTypes.STRING,
+    },
     phone: {
       type: DataTypes.STRING,
     },
@@ -16,9 +19,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     role: {
-      type: DataTypes.STRING,
-    },
-    password: {
       type: DataTypes.STRING,
     },
     reportingManager: {

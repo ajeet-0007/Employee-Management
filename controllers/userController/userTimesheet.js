@@ -1,37 +1,61 @@
 const db = require("../../models");
-const User = db.user;
-const UserTimesheet = db.userTimesheet;
 const getUserTimesheetData = require("../fetchData/userTimesheet");
+const currentUser = require("../fetchData/currentUser");
 
 exports.postUserTimesheet = async (req, res) => {
-  try {
-    const response = req.body;
-    const currentUserEmail = req.user.userEmail;
-    const currentUser = await User.findAll({
-      where: {
-        email: currentUserEmail,
-      },
-    });
-    response.userId = currentUser[0].dataValues.id;
-    const userTimesheet = await UserTimesheet.create(response);
-    return res.status(201).json(userTimesheet);
-  } catch (error) {
-    console.log(error);
-  }
+    try {
+        const response = req.body;
+        const currentUserEmail = req.user.userEmail;
+        const userId = await currentUser(currentUserEmail);
+        const data = await db.sequelize.query(
+            "EXEC dbo.spusers_postusertimesheet :userId, :clientName, :projectName, :jobName, :workItem, :date, :description, :startTime, :endTime, :billableStatus",
+            {
+                replacements: {
+                    userId: userId,
+                    clientName: response.clientName,
+                    projectName: response.projectName,
+                    jobName: response.jobName,
+                    workItem: response.workItem,
+                    date: response.date,
+                    description: response.description,
+                    startTime: response.startTime,
+                    endTime: response.endTime,
+                    billableStatus: response.billableStatus,
+                },
+            }
+        );
+        if (data[1] != 0) {
+            return res
+                .status(201)
+                .json({ message: "User timesheet created successfully" });
+        } else {
+            return res
+                .status(200)
+                .json({ message: "User timesheet already exists" });
+        }
+    } catch (error) {
+        console.log(error);
+        return res
+            .status(500)
+            .json({ message: "User timesheet creation failed" });
+    }
 };
 
-exports.getUserTimesheet = async (req, res) => {
-  try {
-    const currentUserEmail = req.user.userEmail;
-    const userTimesheetData = await getUserTimesheetData.fetchTimesheet(
-      currentUserEmail
-    );
-    if (userTimesheetData == null) {
-      return res.status(404).json({ message: "no data found" });
-    } else {
-      return res.status(200).json({ data: userTimesheetData.dataValues });
+exports.getUserTimesheets = async (req, res) => {
+    try {
+        const currentUserEmail = req.user.userEmail;
+        const userTimesheetData = await getUserTimesheetData.fetchTimesheets(
+            currentUserEmail
+        );
+        if (userTimesheetData.length == 0) {
+            return res
+                .status(404)
+                .json({ message: "No user timesheets found" });
+        } else {
+            return res.status(200).json({ data: userTimesheetData });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "No data available" });
     }
-  } catch (error) {
-    console.log(error);
-  }
 };

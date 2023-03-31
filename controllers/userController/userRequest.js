@@ -1,38 +1,47 @@
 const db = require("../../models");
-const User = db.user;
-const UserRequest = db.userRequest;
 const getUserRequestData = require("../fetchData/userRequest");
+const currentUser = require("../fetchData/currentUser");
 
 exports.postUserRequest = async (req, res) => {
-  try {
-    const response = req.body;
-    const currentUserEmail = req.user.userEmail;
-    const currentUser = await User.findAll({
-      where: {
-        email: currentUserEmail,
-      },
-    });
-    response.userId = currentUser[0].dataValues.id;
-    const userRequest = await UserRequest.create(response);
-    return res.status(201).json(userRequest);
-  } catch (error) {
-    console.log(error);
-  }
+    try {
+        const response = req.body;
+        const currentUserEmail = req.user.userEmail;
+        const userId = await currentUser(currentUserEmail);
+        const data = await db.sequelize.query(
+            "EXEC dbo.spusers_postuserrequest :userId, :startDate, :endDate, :request",
+            {
+                replacements: {
+                    userId: userId,
+                    startDate: response.startDate,
+                    endDate: response.endDate,
+                    request: response.request,
+                },
+            }
+        );
+        return res
+            .status(201)
+            .json({ message: "User request created successfully" });
+    } catch (error) {
+        console.log(error);
+        return res
+            .status(500)
+            .json({ message: "User request creation failed" });
+    }
 };
 
 exports.getUserRequests = async (req, res) => {
-  try {
-    const currentUserEmail = req.user.userEmail;
-    const userRequestData = await getUserRequestData.fetchRequest(
-      currentUserEmail
-    );
-    if (userRequestData == null) {
-      return res.status(404).json({ message: "no data found" });
-    } else {
-      return res.status(200).json({ data: userRequestData.dataValues });
+    try {
+        const currentUserEmail = req.user.userEmail;
+        const userRequestData = await getUserRequestData.fetchRequests(
+            currentUserEmail
+        );
+        if (userRequestData.length == 0) {
+            return res.status(404).json({ message: "No user requests found" });
+        } else {
+            return res.status(200).json({ data: userRequestData });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "No data available" });
     }
-  } catch (error) {
-    console.log(error);
-    res.status(404).json({ message: "No data available" });
-  }
 };

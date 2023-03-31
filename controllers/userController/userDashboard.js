@@ -1,77 +1,80 @@
-const db = require("../../models");
 const getUserSkillsData = require("../fetchData/userSkills");
 const getUserProfileData = require("../fetchData/userProfile");
 const getUserAttendanceData = require("../fetchData/userAttendance");
 const getUserRequestData = require("../fetchData/userRequest");
-const getUserProjectListData = require("../fetchData/userProjectList");
+const getUserProjectData = require("../fetchData/userProject");
 const getUserTimesheetData = require("../fetchData/userTimesheet");
 
-const createDashboardData = (dashboard, data, message, location) => {
-  if (data == null) {
-    dashboard[location] = message;
-  } else {
-    dashboard[location] = data.dataValues;
-  }
+const createDashboardData = (data, location, field, dashboard) => {
+    if (data.length == 0) {
+        dashboard[location] = { message: `No user ${field} found` };
+    } else {
+        dashboard[location] = data;
+    }
 };
 
 exports.getUserDashboard = async (req, res) => {
-  let dashboardData = {};
-  let message = { message: "no data availabe" };
+    let dashboardData = {};
 
-  const userSkillsData = await getUserSkillsData.fetchSkills(
-    req.user.userEmail
-  );
-  createDashboardData(dashboardData, userSkillsData, message, "userSkillsList");
+    const userSkillsData = await getUserSkillsData.fetchSkills(
+        req.user.userEmail
+    );
+    createDashboardData(
+        userSkillsData,
+        "userSkills",
+        "skills",
+        dashboardData
+    );
 
-  const userProfileData = await getUserProfileData.fetchProfile(
-    req.user.userEmail
-  );
-  createDashboardData(
-    dashboardData,
-    userProfileData,
-    message,
-    "userProfileList"
-  );
+    const userProfileData = await getUserProfileData.fetchProfile(
+        req.user.userEmail
+    );
+    createDashboardData(
+        userProfileData,
+        "userProfile",
+        "profile",
+        dashboardData
+    );
 
-  const userAttendanceData = await getUserAttendanceData.fetchAttendance(
-    req.user.userEmail
-  );
-  createDashboardData(
-    dashboardData,
-    userAttendanceData,
-    message,
-    "userAttendanceList"
-  );
+    const userAttendanceData = await getUserAttendanceData.fetchAttendance(
+        req.user.userEmail
+    );
+    createDashboardData(
+        userAttendanceData,
+        "userAttendanceList",
+        "attendance",
+        dashboardData
+    );
 
-  const userRequestData = await getUserRequestData.fetchRequest(
-    req.user.userEmail
-  );
-  createDashboardData(
-    dashboardData,
-    userRequestData,
-    message,
-    "userRequestList"
-  );
+    const userRequestData = await getUserRequestData.fetchRequests(
+        req.user.userEmail
+    );
+    createDashboardData(
+        userRequestData,
+        "userRequestList",
+        "requests",
+        dashboardData
+    );
 
-  const userProjectListData = await getUserProjectListData.fetchProjectList(
-    req.user.userEmail
-  );
-  createDashboardData(
-    dashboardData,
-    userProjectListData,
-    message,
-    "userProjectList"
-  );
+    const userProjectData = await getUserProjectData.fetchProjects(
+        req.user.userEmail
+    );
+    createDashboardData(
+        userProjectData,
+        "userProjectList",
+        "projects",
+        dashboardData
+    );
 
-  const userTimesheetData = await getUserTimesheetData.fetchTimesheet(
-    req.user.userEmail
-  );
-  createDashboardData(
-    dashboardData,
-    userTimesheetData,
-    message,
-    "userTimesheet"
-  );
+    const userTimesheetData = await getUserTimesheetData.fetchTimesheets(
+        req.user.userEmail
+    );
+    createDashboardData(
+        userTimesheetData,
+        "userTimesheetList",
+        "timesheets",
+        dashboardData
+    );
 
-  res.status(200).json(dashboardData);
+    res.status(200).json({ data: dashboardData });
 };
