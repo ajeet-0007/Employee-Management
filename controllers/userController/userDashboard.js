@@ -41,7 +41,7 @@ exports.getUserDashboard = async (req, res) => {
     );
     createDashboardData(
         userAttendanceData,
-        "userAttendanceList",
+        "userAttendance",
         "attendance",
         dashboardData
     );
@@ -51,7 +51,7 @@ exports.getUserDashboard = async (req, res) => {
     );
     createDashboardData(
         userRequestData,
-        "userRequestList",
+        "userRequests",
         "requests",
         dashboardData
     );
@@ -61,17 +61,17 @@ exports.getUserDashboard = async (req, res) => {
     );
     createDashboardData(
         userProjectData,
-        "userProjectList",
+        "userProjects",
         "projects",
         dashboardData
     );
 
-    const userTimesheetData = await getUserTimesheetData.fetchTimesheets(
+    const userLatestTimesheetData = await getUserTimesheetData.fetchLatestTimesheets(
         req.user.userEmail
     );
     createDashboardData(
-        userTimesheetData,
-        "userTimesheetList",
+        userLatestTimesheetData,
+        "userLatestTimesheets",
         "timesheets",
         dashboardData
     );

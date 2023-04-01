@@ -17,4 +17,36 @@ const fetchTimesheets = async (userEmail) => {
     }
 };
 
-module.exports = { fetchTimesheets };
+// const fetchWeeklyTimesheets = async (userEmail) => {
+//     try {
+//         const userId = await currentUser(userEmail);
+//         const data = await db.sequelize.query(
+//             "EXEC dbo.spusers_getuserweeklytimesheets :userId, :week",
+//             {
+//                 replacements: { userId: userId },
+//             }
+//         );
+//         return data[0];
+//     } catch (error) {
+//         console.log(error);
+//         return error;
+//     }
+// };
+
+const fetchLatestTimesheets = async (userEmail) => {
+    try {
+        const userId = await currentUser(userEmail);
+        const data = await db.sequelize.query(
+            "EXEC dbo.spusers_getuserlatesttimesheets :userId",
+            {
+                replacements: { userId: userId },
+            }
+        );
+        return data[0];
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+};
+
+module.exports = { fetchTimesheets, fetchLatestTimesheets };
