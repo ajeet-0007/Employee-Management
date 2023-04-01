@@ -45,6 +45,8 @@ router.get("/skills/get-user-skills", authorize, userSkillsController.getUserSki
 
 router.get('/get-user-timesheets', authorize, userTimesheetController.getUserTimesheets);
 
+router.get('/get-user-latest-timesheets', authorize, userTimesheetController.getUserLatestTimesheets);
+
 router.get("/get-user-projects", authorize, userProjectController.getUserProjects);
 
 module.exports = router;
