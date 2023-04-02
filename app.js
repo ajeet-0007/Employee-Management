@@ -6,7 +6,7 @@ const userRoutes = require('./routes/userRoutes');
 const userLoginController = require('./controllers/userController/userLogin');
 const userController = require('./controllers/userController/user');
 require('dotenv').config();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 
