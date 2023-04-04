@@ -3,6 +3,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const userRoutes = require("./routes/userRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 const userLoginController = require("./controllers/userController/userLogin");
 const userController = require("./controllers/userController/user");
 require("dotenv").config();
@@ -15,10 +16,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 
+app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
-
 app.post("/", userLoginController.postLogin);
-
-app.post("/signup", userController.postSignUp);
+app.put("/signup", userController.putSignUp);
 
 app.listen(PORT);

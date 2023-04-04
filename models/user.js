@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     reportingManager: {
       type: DataTypes.STRING,
     },
-    allocation: {
+    location: {
       type: DataTypes.STRING,
     },
     joiningDate: {

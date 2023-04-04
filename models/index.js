@@ -36,4 +36,4 @@ db.userProject = require("./userProject")(sequelize, DataTypes);
 
 db.sequelize.sync({ force: false });
 
-module.exports = db;
+module.exports = {db, sequelize};

@@ -1,60 +1,56 @@
 const bcrypt = require("bcrypt");
 const db = require("../../models");
 const currentUser = require("../fetchData/currentUser");
-const User = db.user;
 
-exports.postSignUp = async (req, res) => {
-    try {
-        let response = req.body;
-        response.password = await bcrypt.hash(response.password, 10);
-        const userId = await currentUser(response.email);
-        if (!userId) {
-            const data = await db.sequelize.query(
-                "EXEC dbo.spusers_postsignup :hrmid, :name, :email, :password, :phone, :image, :role, :reportingManager, :allocation, :joiningDate",
-                {
-                    replacements: {
-                        hrmid: response.hrmid,
-                        name: response.name,
-                        email: response.email,
-                        password: response.password,
-                        phone: response.phone,
-                        image: response.image,
-                        role: response.role,
-                        reportingManager: response.reportingManager,
-                        allocation: response.allocation,
-                        joiningDate: response.joiningDate,
-                    },
-                }
-            );
-            return res
-                .status(201)
-                .json({ message: "User created successfully" });
-        } else {
-            return res.status(403).json({ message: "User already exist" });
+exports.putSignUp = async (req, res) => {
+  try {
+    let response = req.body;
+    const currentUser = await db.sequelize.query(
+      "EXEC dbo.spusers_getcurrentuser :email",
+      {
+        replacements: { email: response.email },
+      }
+    );
+    if (currentUser[0][0].id && currentUser[0][0].password === null) {
+      response.password = await bcrypt.hash(response.password, 10);
+      const data = await db.sequelize.query(
+        "EXEC spusers_updateusersignup :name, :email, :password",
+        {
+          replacements: {
+            name: response.name,
+            email: response.email,
+            password: response.password,
+          },
         }
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            message: "User creation failed",
-        });
+      );
+      console.log(data);
+      return res.status(201).json({ message: "User created successfully" });
+    } else {
+      return res.status(403).json({
+        message:
+          "User has already signed up or doesn't exist in the database",
+      });
     }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "User creation failed",
+    });
+  }
 };
 
 exports.getUser = async (req, res) => {
-    try {
-        const userEmail = req.user.userEmail;
-        const userId = await currentUser(userEmail);
-        const data = await db.sequelize.query(
-            "EXEC dbo.spusers_getuser :userId",
-            {
-                replacements: { userId: userId },
-            }
-        );
-        return res.status(200).json(data[0][0]);
-    } catch (error) {
-        console.log(error);
-        return res.status(404).json({
-            message: "No data available",
-        });
-    }
+  try {
+    const userEmail = req.user.userEmail;
+    const userId = await currentUser(userEmail);
+    const data = await db.sequelize.query("EXEC dbo.spusers_getuser :userId", {
+      replacements: { userId: userId },
+    });
+    return res.status(200).json(data[0][0]);
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({
+      message: "No data available",
+    });
+  }
 };
