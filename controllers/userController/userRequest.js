@@ -43,6 +43,8 @@ exports.getUserRequests = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'No data available' });
+		return res
+			.status(500)
+			.json({ message: 'User requests fetching failed' });
 	}
 };
