@@ -1,11 +1,12 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const adminAddUsersController = require("../controllers/adminController/adminAddUsers");
+const upload = require('../middlewares/uploadUser');
+const adminAddUsersController = require('../controllers/adminController/adminAddUsers');
 
 router.post(
-  "/upload-user-details",
-  adminAddUsersController.upload.single("csvFile"),
-  adminAddUsersController.postUploadUserDetails
+	'/upload-user-details',
+	upload.single('csvFile'),
+	adminAddUsersController.postUploadUserDetails,
 );
 
 module.exports = router;
