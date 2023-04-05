@@ -7,19 +7,18 @@
 
 <body>
     <button onclick="getLocation()">Get Location</button>
-
     <script>
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
-            } else {
-                alert("Geolocation is not supported by this browser.");
+        const getLocation = async () => {
+            try {
+                const ipReq = await fetch("https://api.ipify.org?format=json");
+                const ipData = await ipReq.json();
+                const locationReq = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
+                const location = await locationReq.json();
+                console.log(location);
             }
-        }
-
-        function showPosition(position) {
-            alert("Latitude: " + position.coords.latitude +
-                "<br>Longitude: " + position.coords.longitude);
+            catch (error) {
+                console.log(error);
+            }
         }
     </script>
 </body>
