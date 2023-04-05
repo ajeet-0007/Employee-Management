@@ -4,6 +4,7 @@ const fs = require('fs');
 
 const postUploadUserDetails = (req, res) => {
 	try {
+		// console.log(req.file);
 		const file = __dirname + '/uploads/' + req.file.filename;
 		let stream = fs.createReadStream(file);
 		let csvData = [];
