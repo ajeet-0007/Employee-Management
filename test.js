@@ -1,4 +1,4 @@
-const clickLogin = (e) => {
+const handleSubmit = (e) => {
 	e.preventDefault();
 	const form = document.querySelector('form');
 	const formData = new FormData(form);

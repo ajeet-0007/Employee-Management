@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    <form action="https://b09e-2401-4900-1c68-600-5573-a0f7-410c-b6b8.in.ngrok.io"  method="post">
-        <input type="email" name="email"/>
-        <input type="password" name="password"/>
-        <button type="submit" onClick="clickLogin(event)">Submit</button>
-      </form>
-      <!-- <script src="test.js"></script> -->
+    <form action="https://2d65-117-242-153-226.in.ngrok.io/admin/upload-user-details" enctype="multipart/form-data"
+        method="post" class="row-form-class" id="form" onsubmit="handleSubmit">
+        <div class="form-control">
+            <div class="label-input-class">
+                <label class="downloads-label">Select File</label>
+                <input class="files-input" type="file" id="files" name="csvFile">
+            </div>
+        </div>
+        <div class="btn-sub-div">
+            <button class="btn-sub btn" type="submit">Upload</button>
+        </div>
+    </form>
+    <script src="test.js"></script>
 </body>
+
 </html>
-
-
