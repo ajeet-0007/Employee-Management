@@ -15,8 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     checkOutDate: {
       type: DataTypes.DATEONLY,
     },
-    location: {
+    checkInLocation: {
       type: DataTypes.STRING,
+    },
+    checkOutLocation:{
+      type: DataTypes.STRING
     }
   });
   return USERATTENDANCE;
