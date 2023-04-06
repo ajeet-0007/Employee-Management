@@ -8,13 +8,31 @@
 <body>
     <button onclick="getLocation()">Get Location</button>
     <script>
-        const getLocation = async () => {
+        // const getLocation = async () => {
+        //     try {
+        //         const ipReq = await fetch("https://api.ipify.org?format=json");
+        //         const ipData = await ipReq.json();
+        //         const locationReq = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
+        //         const location = await locationReq.json();
+        //         console.log(location);
+        //     }
+        //     catch (error) {
+        //         console.log(error);
+        //     }
+        // }
+
+        const getLocation = () => {
             try {
-                const ipReq = await fetch("https://api.ipify.org?format=json");
-                const ipData = await ipReq.json();
-                const locationReq = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
-                const location = await locationReq.json();
-                console.log(location);
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    const key = 'AqY7SnJUF7Nd7TjPYOfW3tDDj1Fg7AU5m7k6_b17GgOeipWALTkYimZZB - 2ZKRHR';
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    const point = latitude + ',' + longitude;
+                    const locationReq = await fetch(`http://dev.virtualearth.net/REST/v1/Locations/${point}?key=${key}`);
+                    const locationRes = await locationReq.json();
+                    const location = locationRes.resourceSets[0].resources[0].address;
+                    console.log(location);
+                });
             }
             catch (error) {
                 console.log(error);
