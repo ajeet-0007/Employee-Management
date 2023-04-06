@@ -2,9 +2,10 @@
   "name": "employee-management",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "dev": "nodemon .",
+    "start": "node ."
   },
   "keywords": [],
   "author": "",

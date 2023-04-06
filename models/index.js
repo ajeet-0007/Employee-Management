@@ -7,19 +7,26 @@ const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_PORT = process.env.DB_PORT;
 
 const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
-    host: DB_HOST,
-    dialect: "mssql",
-    port: DB_PORT,
-    logging: false,
-    define: {
-        timestamps: false,
-    },
+  host: DB_HOST,
+  dialect: "mssql",
+  port: DB_PORT,
+  logging: false,
+  define: {
+    timestamps: false,
+  },
 });
 
 try {
-    sequelize.authenticate();
+  sequelize
+    .authenticate()
+    .then(() => {
+      console.log("Database connection has been established successfully.");
+    })
+    .catch((err) => {
+      console.error("Unable to connect to the database:", err);
+    });
 } catch (error) {
-    console.log(error);
+  console.log(error);
 }
 
 db = {};
@@ -36,4 +43,4 @@ db.userProject = require("./userProject")(sequelize, DataTypes);
 
 db.sequelize.sync({ force: false });
 
-module.exports = {db, sequelize};
+module.exports = { db, sequelize };
