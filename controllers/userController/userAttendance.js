@@ -7,10 +7,10 @@ const currentUser = require('../fetchData/currentUser');
 const getCheckinStatus = (time, date) => {
 	const date1 = new Date(`${date} ${time}`);
 	const date2 = new Date(`${date} 10:30`);
-	if(date1.getTime()>date2.getTime()){
-		return "Late Check-in";
-	}else{
-		return "Perfect Check-in";
+	if (date1.getTime() > date2.getTime()) {
+		return 'Late Check-in';
+	} else {
+		return 'Perfect Check-in';
 	}
 };
 
@@ -19,7 +19,10 @@ exports.postCheckIn = async (req, res) => {
 		const response = req.body;
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
-		const checkinStatus= getCheckinStatus(response.checkInTime,response.checkInDate);
+		const checkinStatus = getCheckinStatus(
+			response.checkInTime,
+			response.checkInDate,
+		);
 		const data = await db.sequelize.query(
 			'EXEC dbo.spusers_postusercheckin :userId, :checkInTime, :checkInDate, :checkInLocation',
 			{
@@ -33,7 +36,10 @@ exports.postCheckIn = async (req, res) => {
 		);
 		return res
 			.status(201)
-			.json({ message: 'User checked-in successfully', checkinStatusMessage: checkinStatus  });
+			.json({
+				message: 'User checked-in successfully',
+				checkinStatusMessage: checkinStatus,
+			});
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: 'User check-in failed' });
@@ -73,7 +79,7 @@ exports.putCheckOut = async (req, res) => {
 					userId: userId,
 					checkOutDate: response.checkOutDate,
 					checkOutTime: response.checkOutTime,
-					checkOutLocation: response.checkOutLocation
+					checkOutLocation: response.checkOutLocation,
 				},
 			},
 		);
