@@ -1,8 +1,8 @@
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const db = require('../../models');
 const currentUser = require('../fetchData/currentUser');
-require('dotenv').config();
 const SECRET = process.env.SECRET_KEY;
 
 exports.postLogin = async (req, res) => {

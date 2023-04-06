@@ -1,16 +1,24 @@
 const db = require('../../models');
-const User = db.user;
-const UserAttendance = db.userAttendance;
 const getUserAttendanceData = require('../fetchData/userAttendance');
 const currentUser = require('../fetchData/currentUser');
 
-const getCheckinStatus = (time, date) => {
-	const date1 = new Date(`${date} ${time}`);
-	const date2 = new Date(`${date} 10:30`);
-	if (date1.getTime() > date2.getTime()) {
+const getCheckInStatus = (time, date) => {
+	const checkInTime = new Date(`${date} ${time}`);
+	const morningTime = new Date(`${date} 10:30`);
+	if (checkInTime.getTime() > morningTime.getTime()) {
 		return 'Late Check-in';
 	} else {
 		return 'Perfect Check-in';
+	}
+};
+
+const getCheckOutStatus = (time, date) => {
+	const checkOutTime = new Date(`${date} ${time}`);
+	const eveningTime = new Date(`${date} 19:00`);
+	if (checkOutTime.getTime() < eveningTime.getTime()) {
+		return 'Early Check-out';
+	} else {
+		return 'Perfect Check-out';
 	}
 };
 
@@ -19,7 +27,7 @@ exports.postCheckIn = async (req, res) => {
 		const response = req.body;
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
-		const checkinStatus = getCheckinStatus(
+		const checkInStatus = getCheckInStatus(
 			response.checkInTime,
 			response.checkInDate,
 		);
@@ -34,12 +42,10 @@ exports.postCheckIn = async (req, res) => {
 				},
 			},
 		);
-		return res
-			.status(201)
-			.json({
-				message: 'User checked-in successfully',
-				checkinStatusMessage: checkinStatus,
-			});
+		return res.status(201).json({
+			message: 'User checked-in successfully',
+			checkInStatusMessage: checkInStatus,
+		});
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: 'User check-in failed' });
@@ -72,6 +78,10 @@ exports.putCheckOut = async (req, res) => {
 		const response = req.body;
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
+		const checkOutStatus = getCheckOutStatus(
+			response.checkOutTime,
+			response.checkOutDate,
+		);
 		const data = await db.sequelize.query(
 			'EXEC dbo.spusers_updateusercheckout :userId, :checkOutDate, :checkOutTime, :checkOutLocation',
 			{
@@ -83,9 +93,10 @@ exports.putCheckOut = async (req, res) => {
 				},
 			},
 		);
-		return res
-			.status(201)
-			.json({ message: 'User checked-out successfully' });
+		return res.status(201).json({
+			message: 'User checked-out successfully',
+			checkOutStatusMessage: checkOutStatus,
+		});
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: 'User check-out failed' });
