@@ -10,7 +10,7 @@ exports.postCheckIn = async (req, res) => {
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
 		const data = await db.sequelize.query(
-			'EXEC dbo.spusers_postcheckin :userId, :checkInTime, :checkInDate, :location',
+			'EXEC dbo.spusers_postusercheckin :userId, :checkInTime, :checkInDate, :location',
 			{
 				replacements: {
 					userId: userId,
