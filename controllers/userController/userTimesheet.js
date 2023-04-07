@@ -2,7 +2,7 @@ const db = require('../../models');
 const getUserTimesheetData = require('../fetchData/userTimesheet');
 const currentUser = require('../fetchData/currentUser');
 
-const getSubmittedHours = (time1, time2, date) => {
+const getTimeDifference = (time1, time2, date) => {
 	const date1 = new Date(`${date} ${time1}`);
 	const date2 = new Date(`${date} ${time2}`);
 	let diff = Math.abs((date2.getTime() - date1.getTime()) / 1000);
@@ -42,7 +42,7 @@ exports.postUserTimesheet = async (req, res) => {
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
 		const week = getWeek(response.date);
-		const submittedHours = getSubmittedHours(
+		const submittedHours = getTimeDifference(
 			response.startTime,
 			response.endTime,
 			response.date,

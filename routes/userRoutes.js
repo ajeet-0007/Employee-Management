@@ -82,6 +82,12 @@ router.get(
 );
 
 router.get(
+	'/get-user-timer',
+	authorize,
+	userAttendanceController.getUserTimer,
+);
+
+router.get(
 	'/skills/get-user-skills',
 	authorize,
 	userSkillsController.getUserSkills,
