@@ -92,22 +92,18 @@ exports.getUserAttendance = async (req, res) => {
 
 exports.getUserTimer = async (req, res) => {
 	try {
-		let today = new Date();
-		let todaysDate = today.toISOString().split('T')[0];
+		const currentDate = new Date().toLocaleDateString();
 		const currentUserEmail = req.user.userEmail;
 		const userCurrentAttendanceData =
 			await getUserAttendanceData.fetchCurrentAttendance(
-				currentUserEmail, todaysDate
+				currentUserEmail,
+				currentDate,
 			);
 		if (userCurrentAttendanceData.length == 0) {
-			return res
-				.status(404)
-				.json({ message: 'No user timer found' });
+			return res.status(404).json({ message: 'No user timer found' });
 		} else {
-			let currentDate = new Date();
-			let currentTime = currentDate.toLocaleString('en-US', {timeZone: 'Asia/Kolkata', hour12: false,  hour: '2-digit',
-			minute: '2-digit'});
-			const checkInTime = userCurrentAttendanceData[0].checkInTime.toISOString().substring(11,16);
+			const currentTime = new Date().toLocaleTimeString('en-US', {});
+			const checkInTime = userCurrentAttendanceData[0].checkInTime;
 			const timeDifference = getTimeDifference(
 				checkInTime,
 				currentTime,
@@ -117,9 +113,7 @@ exports.getUserTimer = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res
-			.status(500)
-			.json({ message: 'User timer fetching failed' });
+		return res.status(500).json({ message: 'User timer fetching failed' });
 	}
 };
 
