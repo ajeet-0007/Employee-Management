@@ -102,7 +102,10 @@ exports.getUserTimer = async (req, res) => {
 		if (userCurrentAttendanceData.length == 0) {
 			return res.status(404).json({ message: 'No user timer found' });
 		} else {
-			const currentTime = new Date().toLocaleTimeString('en-US', {});
+			const currentTime = new Date().toLocaleTimeString('en-US', {
+				timeStyle: 'short',
+				hour12: false,
+			});
 			const checkInTime = userCurrentAttendanceData[0].checkInTime;
 			const timeDifference = getTimeDifference(
 				checkInTime,
