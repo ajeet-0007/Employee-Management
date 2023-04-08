@@ -22,23 +22,6 @@ const getCheckOutStatus = (time, date) => {
 	}
 };
 
-const getTimeDifference = (time1, time2, date) => {
-	const date1 = new Date(`${date} ${time1}`);
-	const date2 = new Date(`${date} ${time2}`);
-	let diff = Math.abs((date2.getTime() - date1.getTime()) / 1000);
-	diff /= 60;
-	let minutes = diff % 60;
-	if (minutes < 10 || minutes == 0) {
-		minutes = '0' + minutes;
-	}
-	diff /= 60;
-	let hours = Math.floor(diff);
-	if (hours < 10 || hours == 0) {
-		hours = '0' + hours;
-	}
-	return hours + ':' + minutes;
-};
-
 exports.postCheckIn = async (req, res) => {
 	try {
 		const response = req.body;
@@ -90,36 +73,27 @@ exports.getUserAttendance = async (req, res) => {
 	}
 };
 
-exports.getUserTimer = async (req, res) => {
+exports.getUserCurrentAttendance = async (req, res) => {
 	try {
-		let today = new Date();
-		let todaysDate = today.toISOString().split('T')[0];
+		const currentDate = new Date().toLocaleDateString();
 		const currentUserEmail = req.user.userEmail;
 		const userCurrentAttendanceData =
 			await getUserAttendanceData.fetchCurrentAttendance(
-				currentUserEmail, todaysDate
+				currentUserEmail,
+				currentDate,
 			);
 		if (userCurrentAttendanceData.length == 0) {
 			return res
 				.status(404)
-				.json({ message: 'No user timer found' });
+				.json({ message: 'No user current attendance found' });
 		} else {
-			let currentDate = new Date();
-			let currentTime = currentDate.toLocaleString('en-US', {timeZone: 'Asia/Kolkata', hour12: false,  hour: '2-digit',
-			minute: '2-digit'});
-			const checkInTime = userCurrentAttendanceData[0].checkInTime.toISOString().substring(11,16);
-			const timeDifference = getTimeDifference(
-				checkInTime,
-				currentTime,
-				userCurrentAttendanceData[0].checkInDate,
-			);
-			return res.status(200).json({ data: timeDifference });
+			return res.status(200).json({ data: userCurrentAttendanceData });
 		}
 	} catch (error) {
 		console.log(error);
 		return res
 			.status(500)
-			.json({ message: 'User timer fetching failed' });
+			.json({ message: 'User current attendance fetching failed' });
 	}
 };
 
