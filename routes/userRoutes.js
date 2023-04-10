@@ -82,9 +82,9 @@ router.get(
 );
 
 router.get(
-	'/get-user-timer',
+	'/get-user-current-attendance',
 	authorize,
-	userAttendanceController.getUserTimer,
+	userAttendanceController.getUserCurrentAttendance,
 );
 
 router.get(

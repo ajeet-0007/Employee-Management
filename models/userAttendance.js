@@ -4,10 +4,10 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.INTEGER,
 		},
 		checkInTime: {
-			type: DataTypes.TIME,
+			type: DataTypes.STRING,
 		},
 		checkOutTime: {
-			type: DataTypes.TIME,
+			type: DataTypes.STRING,
 		},
 		checkInDate: {
 			type: DataTypes.DATEONLY,

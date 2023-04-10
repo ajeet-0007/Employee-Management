@@ -1,24 +1,27 @@
 module.exports = (sequelize, DataTypes) => {
 	const USERREQUEST = sequelize.define('userRequests', {
 		userId: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.INTEGER
+		},
+		email: {
+			type: DataTypes.STRING
 		},
 		startDate: {
-			type: DataTypes.DATEONLY,
+			type: DataTypes.DATEONLY
 		},
 		endDate: {
-			type: DataTypes.DATEONLY,
+			type: DataTypes.DATEONLY
 		},
 		request: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING
 		},
 		reason: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING
 		},
 		status: {
 			type: DataTypes.STRING,
-			defaultValue: 'Pending',
-		},
+			defaultValue: 'Pending'
+		}
 	});
 	return USERREQUEST;
 };

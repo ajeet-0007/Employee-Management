@@ -9,19 +9,13 @@
 </head>
 
 <body>
-    <form action="https://2d65-117-242-153-226.in.ngrok.io/admin/upload-user-details" enctype="multipart/form-data"
-        method="post" class="row-form-class" id="form" onsubmit="handleSubmit">
-        <div class="form-control">
-            <div class="label-input-class">
-                <label class="downloads-label">Select File</label>
-                <input class="files-input" type="file" id="files" name="csvFile">
-            </div>
-        </div>
-        <div class="btn-sub-div">
-            <button class="btn-sub btn" type="submit">Upload</button>
-        </div>
+    <form enctype="multipart/form-data" id="form">
+        <label>Select File</label>
+        <input type="file" name="csvFile">
+        <button type="submit">Upload</button>
     </form>
-    <script src="test.js"></script>
+    <script>
+    </script>
 </body>
 
 </html>
