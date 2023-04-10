@@ -1,0 +1,4 @@
+hrmid,name,email,phone,role,reportingManager,location,joiningDate
+HRM101,Pankaj Gupta,pankaj@gmail.com,1234567890,Intern,Ajeet Gupta,Jaipur,2023-02-01
+HRM102,Ajeet Gupta,dummy1@mail.com,1234567890,Intern,Pankaj Gupta,Bareilly,2023-02-01
+HRM103,Dummy One,dummy1@mail.com,1234567890,Intern,Ajeet Gupta,Pune,2023-02-01
