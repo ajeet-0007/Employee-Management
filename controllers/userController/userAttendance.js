@@ -4,7 +4,7 @@ const currentUser = require('../fetchData/currentUser');
 
 const getCheckInStatus = (time, date) => {
 	const checkInTime = new Date(`${date} ${time}`);
-	const morningTime = new Date(`${date} 10:30`);
+	const morningTime = new Date(`${date} 10:30:00`);
 	if (checkInTime.getTime() > morningTime.getTime()) {
 		return 'Late Check-in';
 	} else {
@@ -14,7 +14,7 @@ const getCheckInStatus = (time, date) => {
 
 const getCheckOutStatus = (time, date) => {
 	const checkOutTime = new Date(`${date} ${time}`);
-	const eveningTime = new Date(`${date} 19:00`);
+	const eveningTime = new Date(`${date} 19:00:00`);
 	if (checkOutTime.getTime() < eveningTime.getTime()) {
 		return 'Early Check-out';
 	} else {

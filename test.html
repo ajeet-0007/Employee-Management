@@ -9,19 +9,48 @@
 </head>
 
 <body>
-    <form action="https://2d65-117-242-153-226.in.ngrok.io/admin/upload-user-details" enctype="multipart/form-data"
-        method="post" class="row-form-class" id="form" onsubmit="handleSubmit">
-        <div class="form-control">
-            <div class="label-input-class">
-                <label class="downloads-label">Select File</label>
-                <input class="files-input" type="file" id="files" name="csvFile">
-            </div>
-        </div>
-        <div class="btn-sub-div">
-            <button class="btn-sub btn" type="submit">Upload</button>
-        </div>
+    <form enctype="multipart/form-data" id="form">
+        <label>Select File</label>
+        <input type="file" name="csvFile">
+        <button type="submit">Upload</button>
     </form>
-    <script src="test.js"></script>
+    <script>
+        document.getElementById("form").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const form = document.getElementById('form');
+            const formData = new FormData(form);
+            console.log(formData);
+        });
+    // const handleClick = (e) => {
+    //         e.preventDefault();
+    //         const form = document.getElementById('form');
+    //         const formData = new FormData(form);
+    //         console.log(formData);
+            // fetch('https://electronics-dated-personal-bbc.trycloudflare.com/admin/upload-user-details', {
+            // 	mode: 'cors',
+            // 	method: 'POST',
+            // 	headers: {
+            // 		'Content-Type': 'application/form-data'
+            // 	},
+            // 	credentials: 'include',
+            // 	withCredentials: true,
+            // 	body: new URLSearchParams(formData)
+            // })
+            // 	.then((response) => {
+            // 		return response.json();
+            // 	})
+            // 	.then((data, error) => {
+            // 		if (data) {
+            // 			console.log(data);
+            // 		} else {
+            // 			console.log(error);
+            // 		}
+            // 	})
+            // 	.catch((error) => {
+            // 		console.log(error);
+            // 	});
+        // };
+    </script>
 </body>
 
 </html>

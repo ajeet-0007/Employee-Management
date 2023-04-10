@@ -22,7 +22,7 @@ const fetchCurrentAttendance = async (userEmail, date) => {
 		const userId = await currentUser(userEmail);
 		const currentDate = date;
 		const data = await db.sequelize.query(
-			'EXEC dbo.spusers_getusercurrentattendance :userId, :currentDate',
+			'EXEC dbo.spusers_getusercurrentattendancetest :userId, :currentDate',
 			{
 				replacements: { userId: userId, currentDate: currentDate },
 			},
