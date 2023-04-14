@@ -1,6 +1,7 @@
 const authorize = require('./authorize');
-const { updateUserTimeDifference, getTimeDifference } = require('./message');
 const currentUser = require('../controllers/fetchData/currentUser');
+const { updateUserTimeDifference } = require('./message');
+const { getAttendanceTimeDifference } = require('../controllers/functions/userAttendance');
 const { fetchCurrentAttendance } = require('../controllers/fetchData/userAttendance');
 
 const userCheckIn = async (data, socket) => {
@@ -12,7 +13,7 @@ const userCheckIn = async (data, socket) => {
 			const interval_id = setInterval(async () => {
 				fetchCurrentAttendance(email, date).then(async (data) => {
 					const checkinTime = data[0]?.checkInTime;
-					const timeDifference = getTimeDifference(checkinTime, date);
+					const timeDifference = getAttendanceTimeDifference(checkinTime, date);
 					const checkInDate = data[0]?.checkInDate;
 					await updateUserTimeDifference(userId, checkInDate, timeDifference);
 					const data_ = await fetchCurrentAttendance(email, date);
