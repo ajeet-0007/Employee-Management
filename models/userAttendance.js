@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
     checkOutLocation: {
       type: DataTypes.STRING,
     },
+    timeDifference: {
+      type: DataTypes.STRING,
+    },
     status: {
       type: DataTypes.STRING,
     },
