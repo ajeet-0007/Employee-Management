@@ -17,8 +17,8 @@ const userCheckIn = async (data, socket) => {
 					const checkInDate = data[0]?.checkInDate;
 					await updateUserTimeDifference(userId, checkInDate, timeDifference);
 					const data_ = await fetchCurrentAttendance(email, date);
-					socket.emit('message', data_[0]?.timeDifference);
-					socket.emit('status', data_[0]?.status);
+					socket.in(email).emit('message', data_[0]?.timeDifference);
+					socket.in(email).emit('status', data_[0]?.status);
 				});
 			}, 1000);
 			socket.timer = interval_id;

@@ -28,8 +28,8 @@ const onConnection = (io) => async (socket) => {
 
 						await updateUserTimeDifference(userId, checkInDate, timeDifference);
 						const data_ = await fetchCurrentAttendance(email, date);
-						socket.emit('message', data_[0]?.timeDifference);
-						socket.emit('status', data_[0]?.status);
+						socket.in(email).emit('message', data_[0]?.timeDifference);
+						socket.in(email).emit('status', data_[0]?.status);
 					});
 				}, 1000);
 
@@ -42,6 +42,9 @@ const onConnection = (io) => async (socket) => {
 	});
 	socket.on('checkin', (data) => userCheckInEvent(data, socket));
 	socket.on('checkout', (data) => userCheckOutEvent(data, socket));
+	socket.on('join', (data) => {
+		socket.join(socket.user.userEmail);
+	});
 	socket.on('disconnect', () => {
 		clearInterval(socket?.timer);
 		clearInterval(socket?.timerConnect);
