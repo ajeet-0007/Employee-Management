@@ -5,8 +5,8 @@ const updateUserTimeDifference = async (userId, checkInDate, timeDifference) => 
 			{
 				replacements: {
 					userId: userId,
-					checkInDate,
-					timeDifference
+					checkInDate: checkInDate,
+					timeDifference: timeDifference
 				}
 			}
 		);
