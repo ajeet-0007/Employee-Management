@@ -14,18 +14,14 @@ exports.postUserAddSkills = async (req, res) => {
 					userId: userId,
 					primarySkills: response.primarySkills,
 					secondarySkills: response.secondarySkills,
-					certifications: response.certifications,
-				},
-			},
+					certifications: response.certifications
+				}
+			}
 		);
 		if (data[1] != 0) {
-			return res
-				.status(201)
-				.json({ message: 'User skills created successfully' });
+			return res.status(201).json({ message: 'User skills created successfully' });
 		} else {
-			return res
-				.status(200)
-				.json({ message: 'User skills already exists' });
+			return res.status(200).json({ message: 'User skills already exists' });
 		}
 	} catch (error) {
 		console.log(error);
@@ -36,9 +32,7 @@ exports.postUserAddSkills = async (req, res) => {
 exports.getUserSkills = async (req, res) => {
 	try {
 		const currentUserEmail = req.user.userEmail;
-		const userSkillsData = await getUserSkillsData.fetchSkills(
-			currentUserEmail,
-		);
+		const userSkillsData = await getUserSkillsData.fetchSkills(currentUserEmail);
 		if (userSkillsData.length == 0) {
 			return res.status(404).json({ message: 'No user skills found' });
 		} else {
@@ -62,13 +56,11 @@ exports.updateUserSkills = async (req, res) => {
 					userId: userId,
 					primarySkills: response.primarySkills,
 					secondarySkills: response.secondarySkills,
-					certifications: response.certifications,
-				},
-			},
+					certifications: response.certifications
+				}
+			}
 		);
-		return res
-			.status(201)
-			.json({ message: 'User skills updated successfully' });
+		return res.status(201).json({ message: 'User skills updated successfully' });
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: 'User skills updation failed' });

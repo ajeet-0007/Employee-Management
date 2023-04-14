@@ -17,33 +17,25 @@ exports.postUserProfile = async (req, res) => {
 					city: response.city,
 					state: response.state,
 					country: response.country,
-					emergencyPhone: response.emergencyPhone,
-				},
-			},
+					emergencyPhone: response.emergencyPhone
+				}
+			}
 		);
 		if (data[1] != 0) {
-			return res
-				.status(201)
-				.json({ message: 'User profile created successfully' });
+			return res.status(201).json({ message: 'User profile created successfully' });
 		} else {
-			return res
-				.status(200)
-				.json({ message: 'User profile already exists' });
+			return res.status(200).json({ message: 'User profile already exists' });
 		}
 	} catch (error) {
 		console.log(error);
-		return res
-			.status(500)
-			.json({ message: 'User profile creation failed' });
+		return res.status(500).json({ message: 'User profile creation failed' });
 	}
 };
 
 exports.getUserProfile = async (req, res) => {
 	try {
 		const currentUserEmail = req.user.userEmail;
-		const userProfileData = await getUserProfileData.fetchProfile(
-			currentUserEmail,
-		);
+		const userProfileData = await getUserProfileData.fetchProfile(currentUserEmail);
 		if (userProfileData.length == 0) {
 			return res.status(404).json({ message: 'No user profile found' });
 		} else {
@@ -51,9 +43,7 @@ exports.getUserProfile = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res
-			.status(500)
-			.json({ message: 'User profile fetching failed' });
+		return res.status(500).json({ message: 'User profile fetching failed' });
 	}
 };
 
@@ -72,17 +62,13 @@ exports.updateUserProfile = async (req, res) => {
 					city: response.city,
 					state: response.state,
 					country: response.country,
-					emergencyPhone: response.emergencyPhone,
-				},
-			},
+					emergencyPhone: response.emergencyPhone
+				}
+			}
 		);
-		return res
-			.status(201)
-			.json({ message: 'User profile updated successfully' });
+		return res.status(201).json({ message: 'User profile updated successfully' });
 	} catch (error) {
 		console.log(error);
-		return res
-			.status(500)
-			.json({ message: 'User profile updation failed' });
+		return res.status(500).json({ message: 'User profile updation failed' });
 	}
 };
