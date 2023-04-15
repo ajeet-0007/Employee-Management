@@ -8,21 +8,29 @@ const {
 const userCheckIn = async (data, socket) => {
   try {
     await authorize(socket, async () => {
-      const email = socket.user.userEmail;
+      const email = socket.user?.userEmail;
       const userId = await currentUser(email);
       const date = new Date().toISOString().slice(0, 10); // 2021-05-05
-      const interval_id = setInterval(async () => {
-        fetchCurrentAttendance(email, date).then(async (data) => {
-          const checkinTime = data[0]?.checkInTime;
+      fetchCurrentAttendance(email, date).then(async (data) => {
+        const checkInDate = data[0]?.checkInDate;
+        const checkinTime = data[0]?.checkInTime;
+
+        // timer for checkin
+        const interval_id = setInterval(async () => {
+          const checkOutDate = data[0]?.checkOutDate;
+          if (checkOutDate) {
+            clearInterval(interval_id);
+            return;
+          }
           const timeDifference = getTimeDifference(checkinTime, date);
-          const checkInDate = data[0]?.checkInDate;
           await updateUserTimeDifference(userId, checkInDate, timeDifference);
           const data_ = await fetchCurrentAttendance(email, date);
-          socket.emit("message", data_[0]?.timeDifference);
-          socket.emit("status", data_[0]?.status);
-        });
-      }, 1000);
-      socket.timer = interval_id;
+          socket.in(email).emit("message", data_[0]?.timeDifference);
+          socket.in(email).emit("status", data_[0]?.status);
+        }, 1000);
+        socket.timer = interval_id;
+      });
+      
     });
   } catch (error) {
     // console.log(error);
