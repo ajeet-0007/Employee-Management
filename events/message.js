@@ -1,15 +1,17 @@
 const updateUserTimeDifference = async (
   userId,
   checkInDate,
+  checInTime,
   timeDifference
 ) => {
   try {
     const data = await db.sequelize.query(
-      "EXEC dbo.spusers_updatetimedifference :userId, :checkInDate, :timeDifference",
+      "EXEC dbo.spusers_updatetimedifference :userId, :checkInDate, :checkInTime, :timeDifference",
       {
         replacements: {
           userId: parseInt(userId),
           checkInDate,
+          checInTime,
           timeDifference,
         },
       }

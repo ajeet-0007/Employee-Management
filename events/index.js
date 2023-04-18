@@ -13,33 +13,33 @@ const onConnection = (io) => async (socket) => {
     await authorize(socket, async () => {
       console.log("Client connected: " + socket.id);
       const email = socket.user?.userEmail;
-      const userId = await currentUser(email);
+      // const userId = await currentUser(email);
       const date = new Date().toISOString().slice(0, 10); // 2021-05-05
       fetchCurrentAttendance(email, date).then(async (data) => {
-        const checkInDate = data[0]?.checkInDate;
-        const checkinTime = data[0]?.checkInTime;
-        const status = data[0]?.status;
+        // timer for checkin
+        const interval_id = setInterval(async () => {
+          const data_ = await fetchCurrentAttendance(email, date);
+          const status_ = data_[0]?.status || "not-checked-in";
+          if (status_ === "checked-out") {
+            clearInterval(interval_id);
+            socket.disconnect();
+            return;
+          }
+          const timeDifference = getTimeDifference(
+            data_[0]?.checkInTime,
+            data_[0]?.checkInDate
+          );
+          socket.emit("status", {
+            status: status_,
+            timeDifference: timeDifference,
+          });
+       
+        }, 1000);
 
-        if (status === "checked-in") {
-          // timer for checkin
-          const interval_id = setInterval(async () => {
-            const checkOutDate = data[0]?.checkOutDate;
-            if (checkOutDate) {
-              clearInterval(interval_id);
-              return;
-            }
-            const timeDifference = getTimeDifference(checkinTime, date);
-            await updateUserTimeDifference(userId, checkInDate, timeDifference);
-            const data_ = await fetchCurrentAttendance(email, date);
-            socket.in(email).emit("message", data_[0]?.timeDifference);
-            socket.in(email).emit("status", data_[0]?.status);
-          }, 1000);
-          socket.timerConnect = interval_id;
-        }
+        socket.timerConnect = interval_id;
       });
     });
   } catch (error) {
-    // console.log(error);
     socket.emit("error", error);
   }
   socket.on("checkin", (data) => userCheckInEvent(data, socket));
