@@ -1,6 +1,6 @@
-require('dotenv').config();
 const { parse } = require('cookie');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 const SECRET = process.env.SECRET_KEY;
 
 const authorize = async (socket, next) => {

@@ -3,8 +3,8 @@ module.exports = (sequelize, DataTypes) => {
 		userId: {
 			type: DataTypes.INTEGER,
 		},
-		image: {
-			type: DataTypes.STRING,
+		profileImage: {
+			type: DataTypes.TEXT,
 		},
 		permanentAddress: {
 			type: DataTypes.STRING,

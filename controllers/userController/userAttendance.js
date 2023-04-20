@@ -74,36 +74,92 @@ exports.getUserCurrentAttendance = async (req, res) => {
 	}
 };
 
+// exports.putCheckOut = async (req, res) => {
+// 	try {
+// 		const response = req.body;
+// 		console.log(response);
+// 		const currentUserEmail = req.user.userEmail;
+// 		const userId = await currentUser(currentUserEmail);
+// 		const checkOutStatus = getCheckOutStatus(response.checkOutTime, response.checkOutDate);
+// 		const currentAttendance = await getUserAttendanceData.fetchCurrentAttendance(
+// 			currentUserEmail,
+// 			new Date().toISOString().slice(0, 10)
+// 		);
+// 		const checkInTime = currentAttendance[0].checkInTime;
+// 		const data = await db.sequelize.query(
+// 			'EXEC dbo.spusers_updateusercheckout :userId, :checkOutDate, :checkOutTime, :checkOutLocation, :status, :checkInTime, :timeDifference',
+// 			{
+// 				replacements: {
+// 					userId: userId,
+// 					checkOutDate: response.checkOutDate,
+// 					checkOutTime: response.checkOutTime,
+// 					checkOutLocation: response.checkOutLocation,
+// 					status: 'checked-out',
+// 					checkInTime: checkInTime,
+// 					timeDifference: response.timeDifference
+// 				}
+// 			}
+// 		);
+// 		return res.status(201).json({
+// 			message: 'User checked-out successfully',
+// 			checkOutStatusMessage: checkOutStatus
+// 		});
+// 	} catch (error) {
+// 		console.log(error);
+// 		return res.status(500).json({ message: 'User check-out failed' });
+// 	}
+// };
+
 exports.putCheckOut = async (req, res) => {
 	try {
 		const response = req.body;
+
 		const currentUserEmail = req.user.userEmail;
+
 		const userId = await currentUser(currentUserEmail);
-		const checkOutStatus = getCheckOutStatus(response.checkOutTime, response.checkOutDate);
+
+		const checkOutStatus = getCheckOutStatus(
+			response.checkOutTime,
+
+			response.checkOutDate
+		);
+
 		const currentAttendance = await getUserAttendanceData.fetchCurrentAttendance(
 			currentUserEmail,
-			new Date().toISOString().slice(0, 10)
-		);
+
+			new Date().toISOString().slice(0, 10) // 2021-05-05
+		); // if (currentAttendance.length == 0) { //   return res.status(409).json({ message: "User not checked-in" }); // }
+
 		const checkInTime = currentAttendance[0].checkInTime;
+
 		const data = await db.sequelize.query(
 			'EXEC dbo.spusers_updateusercheckout :userId, :checkOutDate, :checkOutTime, :checkOutLocation, :status, :checkInTime',
+
 			{
 				replacements: {
 					userId: userId,
+
 					checkOutDate: response.checkOutDate,
+
 					checkOutTime: response.checkOutTime,
+
 					checkOutLocation: response.checkOutLocation,
+
 					status: 'checked-out',
+
 					checkInTime: checkInTime
 				}
 			}
 		);
+
 		return res.status(201).json({
 			message: 'User checked-out successfully',
+
 			checkOutStatusMessage: checkOutStatus
 		});
 	} catch (error) {
 		console.log(error);
+
 		return res.status(500).json({ message: 'User check-out failed' });
 	}
 };

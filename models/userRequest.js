@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
 		endDate: {
 			type: DataTypes.DATEONLY
 		},
+		leaveType: {
+			type: DataTypes.STRING
+		},
 		request: {
 			type: DataTypes.STRING
 		},

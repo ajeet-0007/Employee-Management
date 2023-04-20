@@ -1,20 +1,17 @@
-const db = require("../../models");
-const currentUser = require("./currentUser");
+const db = require('../../models');
+const currentUser = require('./currentUser');
 
 const fetchTimesheets = async (userEmail) => {
-    try {
-        const userId = await currentUser(userEmail);
-        const data = await db.sequelize.query(
-            "EXEC dbo.spusers_getusertimesheets :userId",
-            {
-                replacements: { userId: userId },
-            }
-        );
-        return data[0];
-    } catch (error) {
-        console.log(error);
-        return error;
-    }
+	try {
+		const userId = await currentUser(userEmail);
+		const data = await db.sequelize.query('EXEC dbo.spusers_getusertimesheets :userId', {
+			replacements: { userId: userId }
+		});
+		return data[0];
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
 };
 
 // const fetchWeeklyTimesheets = async (userEmail) => {
@@ -34,19 +31,16 @@ const fetchTimesheets = async (userEmail) => {
 // };
 
 const fetchLatestTimesheets = async (userEmail) => {
-    try {
-        const userId = await currentUser(userEmail);
-        const data = await db.sequelize.query(
-            "EXEC dbo.spusers_getuserlatesttimesheets :userId",
-            {
-                replacements: { userId: userId },
-            }
-        );
-        return data[0];
-    } catch (error) {
-        console.log(error);
-        return error;
-    }
+	try {
+		const userId = await currentUser(userEmail);
+		const data = await db.sequelize.query('EXEC dbo.spusers_getuserlatesttimesheets :userId', {
+			replacements: { userId: userId }
+		});
+		return data[0];
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
 };
 
 module.exports = { fetchTimesheets, fetchLatestTimesheets };

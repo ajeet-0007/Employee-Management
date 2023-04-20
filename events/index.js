@@ -1,50 +1,38 @@
 const userCheckInEvent = require('./checkin');
 const userCheckOutEvent = require('./checkout');
 const authorize = require('./authorize');
-const currentUser = require('../controllers/fetchData/currentUser');
-const { getAttendanceTimeDifference } = require('../controllers/functions/userAttendance');
-const { updateUserTimeDifference } = require('./message');
 const { fetchCurrentAttendance } = require('../controllers/fetchData/userAttendance');
 
 const onConnection = (io) => async (socket) => {
-	console.log('Client connected');
-	await authorize(socket, async () => {
-		try {
-			await authorize(socket, async () => {
-				const email = socket.user?.userEmail;
-				const userId = await currentUser(email);
-				const date = new Date().toISOString().slice(0, 10); // 2021-05-05
-
+	try {
+		await authorize(socket, async () => {
+			console.log('Client connected: ' + socket.id);
+			const email = socket.user?.userEmail;
+			const date = new Date().toISOString().slice(0, 10); // 2021-05-05
+			fetchCurrentAttendance(email, date).then(async (data) => {
 				const interval_id = setInterval(async () => {
-					fetchCurrentAttendance(email, date).then(async (data) => {
-						const checkOutDate = data[0]?.checkOutDate;
-						if (checkOutDate) {
-							clearInterval(interval_id);
-							return;
-						}
-						const checkinTime = data[0]?.checkInTime;
-						const timeDifference = getAttendanceTimeDifference(checkinTime, date);
-						const checkInDate = data[0]?.checkInDate;
-
-						await updateUserTimeDifference(userId, checkInDate, timeDifference);
-						const data_ = await fetchCurrentAttendance(email, date);
-						socket.in(email).emit('message', data_[0]?.timeDifference);
-						socket.in(email).emit('status', data_[0]?.status);
+					const data_ = await fetchCurrentAttendance(email, date);
+					const status_ = data_[0]?.status || 'not-checked-in';
+					if (status_ === 'checked-out' || status_ === 'not-checked-in') {
+						clearInterval(interval_id);
+					}
+					const timeDifference = getTimeDifference(
+						data_[0]?.checkInTime,
+						data_[0]?.checkInDate
+					);
+					socket.emit('status', {
+						status: status_,
+						timeDifference: timeDifference
 					});
 				}, 1000);
-
 				socket.timerConnect = interval_id;
 			});
-		} catch (error) {
-			console.log(error);
-			socket.emit('error', error);
-		}
-	});
+		});
+	} catch (error) {
+		socket.emit('error', error);
+	}
 	socket.on('checkin', (data) => userCheckInEvent(data, socket));
 	socket.on('checkout', (data) => userCheckOutEvent(data, socket));
-	socket.on('join', (data) => {
-		socket.join(socket.user.userEmail);
-	});
 	socket.on('disconnect', () => {
 		clearInterval(socket?.timer);
 		clearInterval(socket?.timerConnect);

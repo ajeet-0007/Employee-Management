@@ -11,7 +11,7 @@ const currentUser = async (userEmail) => {
 			return currentUser[0][0].id;
 		}
 	} catch (error) {
-		// console.log(error);
+		console.log(error);
 		return error;
 	}
 };

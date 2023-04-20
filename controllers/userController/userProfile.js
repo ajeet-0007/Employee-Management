@@ -1,18 +1,24 @@
 const db = require('../../models');
 const getUserProfileData = require('../fetchData/userProfile');
 const currentUser = require('../fetchData/currentUser');
+// var fs = require('fs');
+const path = require('path');
 
 exports.postUserProfile = async (req, res) => {
 	try {
 		const response = req.body;
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
+		// const filePath = path.join(__dirname, '.', 'uploads', req.file.filename);
+		// const imageAsBase64 = fs.readFileSync(filePath, 'base64');
+		// fs.unlinkSync(filePath);
+
 		const data = await db.sequelize.query(
-			'EXEC dbo.spusers_postuserprofile :userId, :image, :permanentAddress, :city, :state, :country, :emergencyPhone',
+			'EXEC dbo.spusers_postuserprofile :userId, :profileImage, :permanentAddress, :city, :state, :country, :emergencyPhone',
 			{
 				replacements: {
 					userId: userId,
-					image: response.image,
+					profileImage: response.profileImage,
 					permanentAddress: response.permanentAddress,
 					city: response.city,
 					state: response.state,
@@ -52,12 +58,19 @@ exports.updateUserProfile = async (req, res) => {
 		const response = req.body;
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
+		// const img = response.profileImage;
+		// for (let i = 0; i < img.size(); i++) {
+		// 	console.log(img[i]);
+		// }
+		// const filePath = path.join(__dirname, '.', 'uploads', req.file.filename);
+		// const imageAsBase64 = fs.readFileSync(filePath, 'base64');
+		// fs.unlinkSync(filePath);
 		const data = await db.sequelize.query(
-			'EXEC dbo.spusers_updateuserprofile :userId, :image, :permanentAddress, :city, :state, :country, :emergencyPhone',
+			'EXEC dbo.spusers_updateuserprofile :userId, :profileImage, :permanentAddress, :city, :state, :country, :emergencyPhone',
 			{
 				replacements: {
 					userId: userId,
-					image: response.image,
+					profileImage: response.profileImage,
 					permanentAddress: response.permanentAddress,
 					city: response.city,
 					state: response.state,
