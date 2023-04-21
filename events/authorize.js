@@ -21,7 +21,6 @@ const authorize = async (socket, next) => {
 		}
 	} catch (error) {
 		console.log(error);
-		res.json();
 	}
 };
 
