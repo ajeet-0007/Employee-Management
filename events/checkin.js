@@ -1,5 +1,5 @@
 const authorize = require('./authorize');
-const { getTimeDifference } = require('./message');
+const { getAttendanceTimeDifference } = require('../controllers/functions/userAttendance');
 const { fetchCurrentAttendance } = require('../controllers/fetchData/userAttendance');
 
 const userCheckIn = async (data, socket) => {
@@ -14,7 +14,7 @@ const userCheckIn = async (data, socket) => {
 					if (status_ === 'checked-out') {
 						clearInterval(interval_id);
 					}
-					const timeDifference = getTimeDifference(
+					const timeDifference = getAttendanceTimeDifference(
 						data_[0]?.checkInTime,
 						data_[0]?.checkInDate
 					);
@@ -28,7 +28,7 @@ const userCheckIn = async (data, socket) => {
 			});
 		});
 	} catch (error) {
-		// console.log(error);
+		console.log(error);
 		socket.emit('error', error);
 	}
 };
