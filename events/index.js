@@ -33,8 +33,8 @@ const onConnection = (io) => async (socket) => {
 	socket.on('checkedIn', () => {
 		socket.broadcast.emit('startClock');
 	});
-	socket.on('checkin', (data) => userCheckInEvent(data, socket));
-	socket.on('checkout', (data) => userCheckOutEvent(data, socket));
+	socket.on('checkin', () => userCheckInEvent(socket));
+	socket.on('checkout', () => userCheckOutEvent(socket));
 	socket.on('disconnect', () => {
 		clearInterval(socket?.timer);
 		clearInterval(socket?.timerConnect);

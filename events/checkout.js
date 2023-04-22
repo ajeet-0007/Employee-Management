@@ -1,6 +1,6 @@
 const authorize = require('./authorize');
 
-const userCheckOut = async (data, socket) => {
+const userCheckOut = async (socket) => {
 	await authorize(socket, async () => {
 		socket.emit('status', {
 			status: 'checked-out',

@@ -2,7 +2,7 @@ const authorize = require('./authorize');
 const { getAttendanceTimeDifference } = require('../controllers/functions/userAttendance');
 const { fetchCurrentAttendance } = require('../controllers/fetchData/userAttendance');
 
-const userCheckIn = async (io, socket) => {
+const userCheckIn = async (socket) => {
 	try {
 		await authorize(socket, async () => {
 			const email = socket.user?.userEmail;
@@ -17,7 +17,6 @@ const userCheckIn = async (io, socket) => {
 					data_[0]?.checkInTime,
 					data_[0]?.checkInDate
 				);
-
 				socket.emit('status', {
 					status: status_,
 					timeDifference: timeDifference
