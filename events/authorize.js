@@ -1,6 +1,6 @@
+require('dotenv').config();
 const { parse } = require('cookie');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
 const SECRET = process.env.SECRET_KEY;
 
 const authorize = async (socket, next) => {
@@ -10,7 +10,7 @@ const authorize = async (socket, next) => {
 			const userToken = parse(bearerHeader).userToken;
 			jwt.verify(userToken, SECRET, (error, decoded) => {
 				if (error) {
-					socket.emit('message', 'Access Denied Error');
+					socket.emit('message', 'Access Denied');
 				} else {
 					socket.user = decoded;
 				}

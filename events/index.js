@@ -4,10 +4,10 @@ const authorize = require('./authorize');
 const { fetchCurrentAttendance } = require('../controllers/fetchData/userAttendance');
 const { getAttendanceTimeDifference } = require('../controllers/functions/userAttendance');
 
-const onConnection = (io) => async (socket) => {
+const onConnection = async (socket) => {
 	try {
-		await authorize(socket, async () => {
-			console.log('Client connected: ' + socket.id);
+		await authorize(socket, () => {
+			// console.log('Client connected: ' + socket.id);
 			const email = socket.user?.userEmail;
 			const date = new Date().toISOString().slice(0, 10);
 			const interval_id = setInterval(async () => {
