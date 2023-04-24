@@ -6,7 +6,7 @@ const userCheckIn = async (socket) => {
 	try {
 		await authorize(socket, async () => {
 			const email = socket.user?.userEmail;
-			const date = new Date().toISOString().slice(0, 10); // 2021-05-05
+			const date = new Date().toISOString().slice(0, 10);
 			const interval_id = setInterval(async () => {
 				const data_ = await fetchCurrentAttendance(email, date);
 				const status_ = data_[0]?.status;

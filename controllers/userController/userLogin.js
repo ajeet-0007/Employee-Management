@@ -5,9 +5,8 @@ const db = require('../../models');
 const currentUser = require('../fetchData/currentUser');
 const SECRET = process.env.SECRET_KEY;
 
-exports.postLogin = async (req, res) => {
+exports.postLogin = async (req, res, io) => {
 	try {
-		const abc = req.body;
 		const response = {
 			email: req.body.email,
 			password: req.body.password
@@ -31,7 +30,8 @@ exports.postLogin = async (req, res) => {
 							maxAge: 1000 * 60 * 60 * 24 * 30,
 							httpOnly: true
 						});
-						res.status(201).json({ data: user[0][0] });
+						// res.status(201).json({ data: user[0][0] });
+						res.status(201).json({ message: 'Logged In Successfully' });
 					}
 				});
 			} else {
