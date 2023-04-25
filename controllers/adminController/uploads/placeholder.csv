@@ -1,1 +1,1 @@
-hrmid,name,email,phone,role,reportingManager,location,joiningDate
+hrmid,name,email,phone,role,location,joiningDate,reportingManager,reportsTo

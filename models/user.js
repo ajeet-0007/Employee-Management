@@ -1,32 +1,35 @@
 module.exports = (sequelize, DataTypes) => {
 	const USER = sequelize.define('users', {
 		hrmid: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING
 		},
 		name: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING
 		},
 		email: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING
 		},
 		password: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING
 		},
 		phone: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING
 		},
 		role: {
-			type: DataTypes.STRING,
-		},
-		reportingManager: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING
 		},
 		location: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING
 		},
 		joiningDate: {
-			type: DataTypes.DATEONLY,
+			type: DataTypes.DATEONLY
 		},
+		reportingManager: {
+			type: DataTypes.STRING
+		},
+		reportsTo: {
+			type: DataTypes.STRING
+		}
 	});
 	return USER;
 };

@@ -1,6 +1,6 @@
 const db = require('../../models');
 
-const fetchAllUsers = async (userEmail) => {
+const fetchAllUsers = async () => {
 	try {
 		const data = await db.sequelize.query('EXEC dbo.spadmins_getallusers');
 		return data[0];

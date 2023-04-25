@@ -9,8 +9,8 @@ const userRequestController = require('../controllers/userController/userRequest
 const userSkillsController = require('../controllers/userController/userSkills');
 const userTimesheetController = require('../controllers/userController/userTimesheet');
 const userProjectController = require('../controllers/userController/userProject');
+const userHierarchyController = require('../controllers/userController/userHierarchy');
 const authorize = require('../middlewares/authorize');
-const uploadImage = require('../middlewares/uploadImage');
 
 router.post('/account/add-user-profile', authorize, userProfileController.postUserProfile);
 
@@ -59,5 +59,7 @@ router.get(
 );
 
 router.get('/get-user-projects', authorize, userProjectController.getUserProjects);
+
+router.get('/get-user-hierarchy', authorize, userHierarchyController.getUserHierarchy);
 
 module.exports = router;
