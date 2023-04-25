@@ -37,17 +37,10 @@ const io = new Server(httpServer, {
 		expires: false,
 		maxAge: 1000 * 60 * 60 * 24 * 30,
 		httpOnly: true
-	},
-	path: '/dashboard'
+	}
 });
 
-// io.on('connection', (socket) => {
-// 	onConnection(socket);
-// });
-
-const myNamespace = io.of('/dashboard');
-
-myNamespace.use((socket, next) => {
+io.use((socket, next) => {
 	const userToken = socket.request.headers.cookie
 		?.split('; ')
 		.find((row) => row.startsWith('userToken='));
@@ -57,7 +50,7 @@ myNamespace.use((socket, next) => {
 	return next();
 });
 
-myNamespace.on('connection', onConnection(io));
+io.on('connection', onConnection(io));
 
 httpServer.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
