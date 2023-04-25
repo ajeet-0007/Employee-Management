@@ -4,7 +4,7 @@ const authorize = require('./authorize');
 const { fetchCurrentAttendance } = require('../controllers/fetchData/userAttendance');
 const { getAttendanceTimeDifference } = require('../controllers/functions/userAttendance');
 
-const onConnection = async (socket) => {
+const onConnection = (io) => async (socket) => {
 	try {
 		await authorize(socket, () => {
 			// console.log('Client connected: ' + socket.id);

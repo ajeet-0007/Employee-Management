@@ -37,12 +37,27 @@ const io = new Server(httpServer, {
 		expires: false,
 		maxAge: 1000 * 60 * 60 * 24 * 30,
 		httpOnly: true
-	}
+	},
+	path: '/dashboard'
 });
 
-io.on('connection', (socket) => {
-	onConnection(socket);
+// io.on('connection', (socket) => {
+// 	onConnection(socket);
+// });
+
+const myNamespace = io.of('/dashboard');
+
+myNamespace.use((socket, next) => {
+	const userToken = socket.request.headers.cookie
+		?.split('; ')
+		.find((row) => row.startsWith('userToken='));
+	if (!userToken) {
+		return next(new Error('Authentication error'));
+	}
+	return next();
 });
+
+myNamespace.on('connection', onConnection(io));
 
 httpServer.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
