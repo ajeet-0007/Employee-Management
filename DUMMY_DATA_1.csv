@@ -1,5 +1,0 @@
-hrmid,name,email,phone,role,location,joiningDate,reportingManager,reportsTo
-HRM101,Ajeet Gupta,ajeet@gmail.com,1234567890,Associate,Jaipur,2023-02-01,Dipantan Chakraborty,HRM100
-HRM102,Pankaj Gupta,pankaj@gmail.com,1234567890,Intern,Bareilly,2023-02-01,Ajeet Gupta,HRM101
-HRM103,Dummy One,dummy1@mail.com,1234567890,Intern,Pune,2023-02-01,Ajeet Gupta,HRM101
-HRM100,Dipantan Chakraborty,dipantan@gmail.com,9798205488,Principal Consultant,UAE,2023-02-01,,

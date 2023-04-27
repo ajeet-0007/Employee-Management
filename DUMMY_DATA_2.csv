@@ -1,3 +1,0 @@
-hrmid,name,email,phone,role,location,joiningDate,reportingManager,reportsTo
-HRM104,Dummy Two,dummy2@gmail.com,1234567890,Intern,Jaipur,2023-02-01,Ajeet Gupta,HRM101
-HRM105,Dummy Three,dummy3@gmail.com,1234567890,Intern,Jaipur,2023-02-01,Ajeet Gupta,HRM101

@@ -42,3 +42,49 @@ exports.getUserRequests = async (req, res) => {
 		return res.status(500).json({ message: 'User requests fetching failed' });
 	}
 };
+
+exports.getSubordinatesRequests = async (req, res) => {
+	try {
+		const currentUserEmail = req.user.userEmail;
+		const subordinateRequestsData = await getUserRequestData.fetchSubordinatesRequests(
+			currentUserEmail
+		);
+		if (subordinateRequestsData.length == 0) {
+			return res.status(404).json({ message: 'No subordinate requests found' });
+		} else {
+			return res.status(200).json({ data: subordinateRequestsData });
+		}
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: 'User requests fetching failed' });
+	}
+};
+
+exports.updateSuborndinateRequest = async (req, res) => {
+	try {
+		const response = req.body;
+		const userId = response.userId;
+		const requestId = response.requestId;
+		const status = response.status === 'Approve' ? 'Approved' : 'Rejected';
+		const data = await db.sequelize.query(
+			'EXEC dbo.spusers_updatesubordinaterequest :userId, :id, :status',
+			{
+				replacements: {
+					userId: userId,
+					id: requestId,
+					status: status
+				}
+			}
+		);
+		if (data[1] != 0) {
+			return res.status(201).json({ message: 'Request updated successfully' });
+		} else {
+			return res.status(400).json({
+				message: 'Request updation failed'
+			});
+		}
+	} catch (error) {
+		console.log(error);
+		return res.status(201).json({ message: 'Request updation failed' });
+	}
+};

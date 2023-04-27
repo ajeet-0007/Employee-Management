@@ -66,7 +66,11 @@ exports.updateUserProfile = async (req, res) => {
 				}
 			}
 		);
-		return res.status(201).json({ message: 'User profile updated successfully' });
+		if (data[1] != 0) {
+			return res.status(201).json({ message: 'User profile updated successfully' });
+		} else {
+			return res.status(400).json({ message: 'User profile updation failed' });
+		}
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: 'User profile updation failed' });
