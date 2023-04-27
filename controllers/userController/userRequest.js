@@ -67,7 +67,7 @@ exports.updateSuborndinateRequest = async (req, res) => {
 		const requestId = response.requestId;
 		const status = response.status === 'Approve' ? 'Approved' : 'Rejected';
 		const data = await db.sequelize.query(
-			'EXEC dbo.spusers_updatesubordinaterequest :userId, :id, :status',
+			'EXEC dbo.spusers_updateuserrequest :userId, :id, :status',
 			{
 				replacements: {
 					userId: userId,
@@ -77,6 +77,36 @@ exports.updateSuborndinateRequest = async (req, res) => {
 			}
 		);
 		if (data[1] != 0) {
+			return res.status(201).json({ message: 'Request updated successfully' });
+		} else {
+			return res.status(400).json({
+				message: 'Request updation failed'
+			});
+		}
+	} catch (error) {
+		console.log(error);
+		return res.status(201).json({ message: 'Request updation failed' });
+	}
+};
+
+exports.updateUserRequest = async (req, res) => {
+	try {
+		const response = req.body;
+		const currentUserEmail = req.user.userEmail;
+		const userId = await currentUser(currentUserEmail);
+		const status = 'Cancelled';
+		const requestId = response.requestId;
+		const userRequestData = await db.sequelize.query(
+			'EXEC dbo.spusers_updateuserrequest :userId, :id, :status',
+			{
+				replacements: {
+					userId: userId,
+					id: requestId,
+					status: status
+				}
+			}
+		);
+		if (userRequestData[1] != 0) {
 			return res.status(201).json({ message: 'Request updated successfully' });
 		} else {
 			return res.status(400).json({

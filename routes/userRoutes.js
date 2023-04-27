@@ -28,8 +28,10 @@ router.put('/skills/update-user-skills', authorize, userSkillsController.updateU
 
 router.put('/account/update-user-profile', authorize, userProfileController.updateUserProfile);
 
+router.put('/requests/update-user-request', authorize, userRequestController.updateUserRequest);
+
 router.put(
-	'requests/update-subordinate-request',
+	'/requests/update-subordinate-request',
 	authorize,
 	userRequestController.updateSuborndinateRequest
 );
@@ -69,7 +71,7 @@ router.get('/get-user-projects', authorize, userProjectController.getUserProject
 router.get('/get-user-hierarchy', authorize, userHierarchyController.getUserHierarchy);
 
 router.get(
-	'requests/get-subordinates-requests',
+	'/requests/get-subordinates-requests',
 	authorize,
 	userRequestController.getSubordinatesRequests
 );
