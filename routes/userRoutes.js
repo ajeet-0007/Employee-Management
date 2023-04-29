@@ -9,50 +9,27 @@ const userRequestController = require('../controllers/userController/userRequest
 const userSkillsController = require('../controllers/userController/userSkills');
 const userTimesheetController = require('../controllers/userController/userTimesheet');
 const userProjectController = require('../controllers/userController/userProject');
+const userHierarchyController = require('../controllers/userController/userHierarchy');
 const authorize = require('../middlewares/authorize');
 
-router.post(
-	'/account/add-user-profile',
-	authorize,
-	userProfileController.postUserProfile,
-);
+router.post('/requests/add-user-request', authorize, userRequestController.postUserRequest);
 
-router.post(
-	'/skills/add-user-skills',
-	authorize,
-	userSkillsController.postUserAddSkills,
-);
+router.post('/add-user-timesheet', authorize, userTimesheetController.postUserTimesheet);
 
-router.post(
-	'/requests/add-user-request',
-	authorize,
-	userRequestController.postUserRequest,
-);
-
-router.post(
-	'/add-user-timesheet',
-	authorize,
-	userTimesheetController.postUserTimesheet,
-);
-
-router.post(
-	'/add-user-project',
-	authorize,
-	userProjectController.postUserProject,
-);
+router.post('/add-user-project', authorize, userProjectController.postUserProject);
 
 router.post('/check-in', authorize, userAttendanceController.postCheckIn);
 
-router.put(
-	'/skills/update-user-skills',
-	authorize,
-	userSkillsController.updateUserSkills,
-);
+router.put('/skills/update-user-skills', authorize, userSkillsController.updateUserSkills);
+
+router.put('/account/update-user-profile', authorize, userProfileController.updateUserProfile);
+
+router.put('/requests/update-user-request', authorize, userRequestController.updateUserRequest);
 
 router.put(
-	'/account/update-user-profile',
+	'/requests/update-subordinate-request',
 	authorize,
-	userProfileController.updateUserProfile,
+	userRequestController.updateSuborndinateRequest
 );
 
 router.put('/check-out', authorize, userAttendanceController.putCheckOut);
@@ -63,52 +40,36 @@ router.get('/logout', authorize, userLoginController.getLogout);
 
 router.get('/get-user', authorize, userController.getUser);
 
-router.get(
-	'/account/get-user-profile',
-	authorize,
-	userProfileController.getUserProfile,
-);
+router.get('/account/get-user-profile', authorize, userProfileController.getUserProfile);
 
-router.get(
-	'/requests/get-user-requests',
-	authorize,
-	userRequestController.getUserRequests,
-);
+router.get('/requests/get-user-requests', authorize, userRequestController.getUserRequests);
 
-router.get(
-	'/get-user-attendance',
-	authorize,
-	userAttendanceController.getUserAttendance,
-);
+router.get('/get-user-attendance', authorize, userAttendanceController.getUserAttendance);
 
 router.get(
 	'/get-user-current-attendance',
 	authorize,
-	userAttendanceController.getUserCurrentAttendance,
+	userAttendanceController.getUserCurrentAttendance
 );
 
-router.get(
-	'/skills/get-user-skills',
-	authorize,
-	userSkillsController.getUserSkills,
-);
+router.get('/skills/get-user-skills', authorize, userSkillsController.getUserSkills);
 
-router.get(
-	'/get-user-timesheets',
-	authorize,
-	userTimesheetController.getUserTimesheets,
-);
+router.get('/get-user-timesheets', authorize, userTimesheetController.getUserTimesheets);
 
 router.get(
 	'/get-user-latest-timesheets',
 	authorize,
-	userTimesheetController.getUserLatestTimesheets,
+	userTimesheetController.getUserLatestTimesheets
 );
 
+router.get('/get-user-projects', authorize, userProjectController.getUserProjects);
+
+router.get('/get-user-hierarchy', authorize, userHierarchyController.getUserHierarchy);
+
 router.get(
-	'/get-user-projects',
+	'/requests/get-subordinates-requests',
 	authorize,
-	userProjectController.getUserProjects,
+	userRequestController.getSubordinatesRequests
 );
 
 module.exports = router;

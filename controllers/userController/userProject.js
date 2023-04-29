@@ -18,33 +18,25 @@ exports.postUserProject = async (req, res) => {
 					completeBy: response.completeBy,
 					teamMembers: response.teamMembers,
 					teamHead: response.teamHead,
-					department: response.department,
-				},
-			},
+					department: response.department
+				}
+			}
 		);
 		if (data[1] != 0) {
-			return res
-				.status(201)
-				.json({ message: 'User project created successfully' });
+			return res.status(201).json({ message: 'User project created successfully' });
 		} else {
-			return res
-				.status(200)
-				.json({ message: 'User project already exists' });
+			return res.status(200).json({ message: 'User project already exists' });
 		}
 	} catch (error) {
 		console.log(error);
-		return res
-			.status(500)
-			.json({ message: 'User project creation failed' });
+		return res.status(500).json({ message: 'User project creation failed' });
 	}
 };
 
 exports.getUserProjects = async (req, res) => {
 	try {
 		const currentUserEmail = req.user.userEmail;
-		const userProjectData = await getUserProjectData.fetchProjects(
-			currentUserEmail,
-		);
+		const userProjectData = await getUserProjectData.fetchProjects(currentUserEmail);
 		if (userProjectData.length == 0) {
 			return res.status(404).json({ message: 'No user projects found' });
 		} else {
@@ -52,8 +44,6 @@ exports.getUserProjects = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res
-			.status(500)
-			.json({ message: 'User projects fetching failed' });
+		return res.status(500).json({ message: 'User projects fetching failed' });
 	}
 };

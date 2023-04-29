@@ -7,23 +7,16 @@ const SECRET = process.env.SECRET_KEY;
 
 exports.postLogin = async (req, res) => {
 	try {
-		const abc = req.body;
 		const response = {
 			email: req.body.email,
-			password: req.body.password,
+			password: req.body.password
 		};
 		const userId = await currentUser(response.email);
-		const user = await db.sequelize.query(
-			'EXEC dbo.spusers_getuser :userId',
-			{
-				replacements: { userId: userId },
-			},
-		);
+		const user = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
+			replacements: { userId: userId }
+		});
 		if (user[1] != 0) {
-			const userCheck = await bcrypt.compare(
-				response.password,
-				user[0][0].password,
-			);
+			const userCheck = await bcrypt.compare(response.password, user[0][0].password);
 			if (userCheck) {
 				const userEmail = user[0][0].email;
 				jwt.sign({ userEmail }, SECRET, (error, token) => {
@@ -35,9 +28,9 @@ exports.postLogin = async (req, res) => {
 							secure: true,
 							expires: false,
 							maxAge: 1000 * 60 * 60 * 24 * 30,
-							httpOnly: true,
+							httpOnly: true
 						});
-						res.status(201).json({ data: user[0][0] });
+						res.status(201).json({ message: 'Logged In Successfully' });
 					}
 				});
 			} else {
@@ -45,7 +38,7 @@ exports.postLogin = async (req, res) => {
 			}
 		} else {
 			res.status(404).json({
-				message: "User doesn't exist",
+				message: "User doesn't exist"
 			});
 		}
 	} catch (error) {

@@ -1,23 +1,52 @@
 const bcrypt = require('bcrypt');
+const fs = require('fs');
 const db = require('../../models');
 const currentUser = require('../fetchData/currentUser');
 
 exports.putSignUp = async (req, res) => {
 	try {
-		let response = req.body;
-		const currentUser = await db.sequelize.query('EXEC dbo.spusers_getcurrentuser :email', {
+		const response = req.body;
+		const userData = await db.sequelize.query('EXEC dbo.spusers_getcurrentuser :email', {
 			replacements: { email: response.email }
 		});
-		if (currentUser[1] != 0) {
-			if (currentUser[0][0].password == null) {
+		if (userData[1] != 0) {
+			if (userData[0][0].password == null) {
 				response.password = await bcrypt.hash(response.password, 10);
-				const data = await db.sequelize.query(
+				const signupData = await db.sequelize.query(
 					'EXEC spusers_updateusersignup :name, :email, :password',
 					{
 						replacements: {
 							name: response.name,
 							email: response.email,
 							password: response.password
+						}
+					}
+				);
+				const userId = await currentUser(response.email);
+				const defaultImage =
+					'data:image/png;base64,' + fs.readFileSync('./assets/profile.png', 'base64');
+				const profileData = await db.sequelize.query(
+					'EXEC dbo.spusers_postuserprofile :userId, :profileImage, :permanentAddress, :city, :state, :country, :emergencyPhone',
+					{
+						replacements: {
+							userId: userId,
+							profileImage: defaultImage,
+							permanentAddress: '',
+							city: '',
+							state: '',
+							country: '',
+							emergencyPhone: ''
+						}
+					}
+				);
+				const skillsData = await db.sequelize.query(
+					'EXEC dbo.spusers_postuserskills :userId, :primarySkills, :secondarySkills, :certifications',
+					{
+						replacements: {
+							userId: userId,
+							primarySkills: '',
+							secondarySkills: '',
+							certifications: ''
 						}
 					}
 				);

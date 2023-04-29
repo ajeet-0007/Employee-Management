@@ -17,7 +17,7 @@ const postUploadUserDetails = (req, res) => {
 				csvData.shift();
 				await db.sequelize
 					.query(
-						'INSERT INTO users (hrmid, name, email, phone, role, reportingManager, location, joiningDate ) VALUES ?',
+						'INSERT INTO users (hrmid, name, email, phone, role, location, joiningDate, reportingManager, reportsTo ) VALUES ?',
 						{
 							replacements: [csvData]
 						}
