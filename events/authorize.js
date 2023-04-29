@@ -3,7 +3,7 @@ const { parse } = require('cookie');
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.SECRET_KEY;
 
-const authorize = async (socket, next) => {
+const authorize = (socket, next) => {
 	try {
 		if (socket.handshake.headers.cookie) {
 			const bearerHeader = socket.handshake.headers.cookie;

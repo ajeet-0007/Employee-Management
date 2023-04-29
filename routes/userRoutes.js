@@ -12,10 +12,6 @@ const userProjectController = require('../controllers/userController/userProject
 const userHierarchyController = require('../controllers/userController/userHierarchy');
 const authorize = require('../middlewares/authorize');
 
-router.post('/account/add-user-profile', authorize, userProfileController.postUserProfile);
-
-router.post('/skills/add-user-skills', authorize, userSkillsController.postUserAddSkills);
-
 router.post('/requests/add-user-request', authorize, userRequestController.postUserRequest);
 
 router.post('/add-user-timesheet', authorize, userTimesheetController.postUserTimesheet);

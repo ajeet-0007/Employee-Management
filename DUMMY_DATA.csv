@@ -1,7 +1,8 @@
 hrmid,name,email,phone,role,location,joiningDate,reportingManager,reportsTo
-HRM100,Dipantan Chakraborty,dipantan@gmail.com,9798205488,Principal Consultant,UAE,2023-02-01,,
-HRM101,Ajeet Gupta,ajeet@gmail.com,1234567890,Associate,Jaipur,2023-02-01,Dipantan Chakraborty,HRM100
-HRM102,Pankaj Gupta,pankaj@gmail.com,1234567890,Intern,Bareilly,2023-02-01,Ajeet Gupta,HRM101
-HRM103,Dummy One,dummy1@gmail.com,1234567890,Intern,Pune,2023-02-01,Ajeet Gupta,HRM101
-HRM104,Dummy Two,dummy2@gmail.com,1234567890,Intern,Jaipur,2023-02-01,Ajeet Gupta,HRM101
-HRM105,Dummy Three,dummy3@gmail.com,1234567890,Intern,Jaipur,2023-02-01,Ajeet Gupta,HRM101
+HRM1001,Karuna Yadav,karuna@gmail.com,1234567890,App Development Head,Jaipur,2023-02-01,,
+HRM1002,Dipantan Chakraborty,dipantan@gmail.com,9798205488,Principal Consultant,UAE,2023-02-01,Karuna Yadav,HRM1001
+HRM1003,Ajeet Gupta,ajeet@gmail.com,1234567890,Associate,Jaipur,2023-02-01,Dipantan Chakraborty,HRM1002
+HRM1004,Pankaj Gupta,pankaj@gmail.com,1234567890,Intern,Bareilly,2023-02-01,Ajeet Gupta,HRM1003
+HRM1005,Dummy One,dummy1@gmail.com,1234567890,Intern,Pune,2023-02-01,Ajeet Gupta,HRM1003
+HRM1006,Dummy Two,dummy2@gmail.com,1234567890,Intern,Jaipur,2023-02-01,Ajeet Gupta,HRM1003
+HRM1007,Dummy Three,dummy3@gmail.com,1234567890,Intern,Jaipur,2023-02-01,Ajeet Gupta,HRM1003

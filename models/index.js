@@ -22,8 +22,8 @@ try {
 		.then(() => {
 			console.log('Database connection has been established successfully.');
 		})
-		.catch((err) => {
-			console.error('Unable to connect to the database:', err);
+		.catch((error) => {
+			console.error('Unable to connect to the database:', error);
 		});
 } catch (error) {
 	console.log(error);
@@ -32,14 +32,5 @@ try {
 db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-
-// db.user = require("./user")(sequelize, DataTypes);
-// db.userProfile = require("./userProfile")(sequelize, DataTypes);
-// db.userSkills = require("./userSkills")(sequelize, DataTypes);
-// db.userRequest = require("./userRequest")(sequelize, DataTypes);
-// db.userAttendance = require("./userAttendance")(sequelize, DataTypes);
-// db.userTimesheet = require("./userTimesheet")(sequelize, DataTypes);
-// db.userProject = require("./userProject")(sequelize, DataTypes);
-// db.sequelize.sync({ force: false });
 
 module.exports = { db, sequelize };
