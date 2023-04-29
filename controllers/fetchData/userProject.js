@@ -1,13 +1,11 @@
 const db = require('../../models');
-const currentUser = require('./currentUser');
 
 const fetchProjects = async (userEmail) => {
 	try {
-		const userId = await currentUser(userEmail);
 		const userProjectsData = await db.sequelize.query(
-			'EXEC dbo.spusers_getuserprojects :userId',
+			'EXEC dbo.spusers_getuserprojects :userEmail',
 			{
-				replacements: { userId: userId }
+				replacements: { userEmail: userEmail }
 			}
 		);
 		return userProjectsData[0];

@@ -1,36 +1,31 @@
 const db = require('../../models');
 const getUserTimesheetData = require('../fetchData/userTimesheet');
 const currentUser = require('../fetchData/currentUser');
-const { getTimesheetTimeDifference, getTimesheetWeek } = require('../functions/userTimesheet');
+const { getTimesheetWeek } = require('../functions/userTimesheet');
 
 exports.postUserTimesheet = async (req, res) => {
 	try {
-		const response = req.body;
+		const request = req.body;
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
-		const week = getTimesheetWeek(response.date);
-		const submittedHours = getTimesheetTimeDifference(
-			response.startTime,
-			response.endTime,
-			response.date
-		);
+		const week = getTimesheetWeek(request.date);
+		const submittedHours = request.totalTime;
 
 		const data = await db.sequelize.query(
-			'EXEC dbo.spusers_postusertimesheet :userId, :timesheetName, :clientName, :projectName, :jobName, :workItem, :date, :week, :description, :startTime, :endTime, :billableStatus, :submittedHours',
+			'EXEC dbo.spusers_postusertimesheet :userId, :timesheetName, :clientName, :projectName, :jobName, :workItem, :date, :week, :description, :totalTime, :billableStatus, :submittedHours',
 			{
 				replacements: {
 					userId: userId,
-					timesheetName: response.timesheetName,
-					clientName: response.clientName,
-					projectName: response.projectName,
-					jobName: response.jobName,
-					workItem: response.workItem,
-					date: response.date,
+					timesheetName: request.timesheetName,
+					clientName: request.clientName,
+					projectName: request.projectName,
+					jobName: request.jobName,
+					workItem: request.workItem,
+					date: request.date,
 					week: week,
-					description: response.description,
-					startTime: response.startTime,
-					endTime: response.endTime,
-					billableStatus: response.billableStatus,
+					description: request.description,
+					totalTime: request.totalTime,
+					billableStatus: request.billableStatus,
 					submittedHours: submittedHours
 				}
 			}
