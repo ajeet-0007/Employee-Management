@@ -4,7 +4,7 @@ const { fetchCurrentAttendance } = require('../controllers/fetchData/userAttenda
 
 const userCheckIn = async (socket) => {
 	try {
-		await authorize(socket, () => {
+		authorize(socket, () => {
 			const email = socket.user?.userEmail;
 			const date = new Date().toISOString().slice(0, 10);
 			const intervalId = setInterval(async () => {

@@ -6,7 +6,7 @@ const { getAttendanceTimeDifference } = require('../controllers/functions/userAt
 
 const onConnection = (io) => async (socket) => {
 	try {
-		await authorize(socket, () => {
+		authorize(socket, () => {
 			// console.log('Client connected: ' + socket.id);
 			const email = socket.user?.userEmail;
 			const date = new Date().toISOString().slice(0, 10);
