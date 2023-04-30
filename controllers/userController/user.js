@@ -5,24 +5,24 @@ const currentUser = require('../fetchData/currentUser');
 
 exports.putSignUp = async (req, res) => {
 	try {
-		const response = req.body;
+		const request = req.body;
 		const userData = await db.sequelize.query('EXEC dbo.spusers_getcurrentuser :email', {
-			replacements: { email: response.email }
+			replacements: { email: request.email }
 		});
 		if (userData[1] != 0) {
 			if (userData[0][0].password == null) {
-				response.password = await bcrypt.hash(response.password, 10);
+				request.password = await bcrypt.hash(request.password, 10);
 				const signupData = await db.sequelize.query(
 					'EXEC spusers_updateusersignup :name, :email, :password',
 					{
 						replacements: {
-							name: response.name,
-							email: response.email,
-							password: response.password
+							name: request.name,
+							email: request.email,
+							password: request.password
 						}
 					}
 				);
-				const userId = await currentUser(response.email);
+				const userId = await currentUser(request.email);
 				const defaultImage =
 					'data:image/png;base64,' + fs.readFileSync('./assets/profile.png', 'base64');
 				const profileData = await db.sequelize.query(

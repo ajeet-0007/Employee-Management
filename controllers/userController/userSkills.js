@@ -19,7 +19,7 @@ exports.getUserSkills = async (req, res) => {
 
 exports.updateUserSkills = async (req, res) => {
 	try {
-		const response = req.body;
+		const request = req.body;
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
 		const data = await db.sequelize.query(
@@ -27,9 +27,9 @@ exports.updateUserSkills = async (req, res) => {
 			{
 				replacements: {
 					userId: userId,
-					primarySkills: response.primarySkills,
-					secondarySkills: response.secondarySkills,
-					certifications: response.certifications
+					primarySkills: request.primarySkills,
+					secondarySkills: request.secondarySkills,
+					certifications: request.certifications
 				}
 			}
 		);

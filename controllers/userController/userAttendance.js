@@ -5,11 +5,11 @@ const { getCheckInStatus, getCheckOutStatus } = require('../functions/userAttend
 
 exports.postCheckIn = async (req, res) => {
 	try {
-		const response = req.body;
+		const request = req.body;
 		const currentDate = new Date().toISOString().slice(0, 10);
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
-		const checkInStatus = getCheckInStatus(response.checkInTime, response.checkInDate);
+		const checkInStatus = getCheckInStatus(request.checkInTime, request.checkInDate);
 		const currentAttendance = await getUserAttendanceData.fetchCurrentAttendance(
 			currentUserEmail,
 			currentDate
@@ -22,7 +22,7 @@ exports.postCheckIn = async (req, res) => {
 			{
 				replacements: {
 					userId: userId,
-					checkInLocation: response.checkInLocation,
+					checkInLocation: request.checkInLocation,
 					status: 'checked-in'
 				}
 			}
@@ -74,10 +74,10 @@ exports.getUserCurrentAttendance = async (req, res) => {
 
 exports.putCheckOut = async (req, res) => {
 	try {
-		const response = req.body;
+		const request = req.body;
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
-		const checkOutStatus = getCheckOutStatus(response.checkOutTime, response.checkOutDate);
+		const checkOutStatus = getCheckOutStatus(request.checkOutTime, request.checkOutDate);
 		const currentAttendance = await getUserAttendanceData.fetchCurrentAttendance(
 			currentUserEmail,
 			new Date().toISOString().slice(0, 10)
@@ -88,7 +88,7 @@ exports.putCheckOut = async (req, res) => {
 			{
 				replacements: {
 					userId: userId,
-					checkOutLocation: response.checkOutLocation,
+					checkOutLocation: request.checkOutLocation,
 					status: 'checked-out',
 					checkInTime: checkInTime
 				}
