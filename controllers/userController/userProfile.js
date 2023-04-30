@@ -19,7 +19,7 @@ exports.getUserProfile = async (req, res) => {
 
 exports.updateUserProfile = async (req, res) => {
 	try {
-		const response = req.body;
+		const request = req.body;
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
 		const data = await db.sequelize.query(
@@ -27,12 +27,12 @@ exports.updateUserProfile = async (req, res) => {
 			{
 				replacements: {
 					userId: userId,
-					profileImage: response.profileImage,
-					permanentAddress: response.permanentAddress,
-					city: response.city,
-					state: response.state,
-					country: response.country,
-					emergencyPhone: response.emergencyPhone
+					profileImage: request.profileImage,
+					permanentAddress: request.permanentAddress,
+					city: request.city,
+					state: request.state,
+					country: request.country,
+					emergencyPhone: request.emergencyPhone
 				}
 			}
 		);

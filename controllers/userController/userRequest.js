@@ -4,7 +4,7 @@ const currentUser = require('../fetchData/currentUser');
 
 exports.postUserRequest = async (req, res) => {
 	try {
-		const response = req.body;
+		const request = req.body;
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
 		const data = await db.sequelize.query(
@@ -12,12 +12,12 @@ exports.postUserRequest = async (req, res) => {
 			{
 				replacements: {
 					userId: userId,
-					email: response.email,
-					startDate: response.startDate,
-					endDate: response.endDate,
-					leaveType: response.leaveType,
-					request: response.request,
-					reason: response.reason
+					email: request.email,
+					startDate: request.startDate,
+					endDate: request.endDate,
+					leaveType: request.leaveType,
+					request: request.request,
+					reason: request.reason
 				}
 			}
 		);
@@ -62,10 +62,10 @@ exports.getSubordinatesRequests = async (req, res) => {
 
 exports.updateSuborndinateRequest = async (req, res) => {
 	try {
-		const response = req.body;
-		const userId = response.userId;
-		const requestId = response.requestId;
-		const status = response.status === 'Approve' ? 'Approved' : 'Rejected';
+		const request = req.body;
+		const userId = request.userId;
+		const requestId = request.requestId;
+		const status = request.status === 'Approve' ? 'Approved' : 'Rejected';
 		const data = await db.sequelize.query(
 			'EXEC dbo.spusers_updateuserrequest :userId, :id, :status',
 			{
@@ -91,11 +91,11 @@ exports.updateSuborndinateRequest = async (req, res) => {
 
 exports.updateUserRequest = async (req, res) => {
 	try {
-		const response = req.body;
+		const request = req.body;
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
 		const status = 'Cancelled';
-		const requestId = response.requestId;
+		const requestId = request.requestId;
 		const userRequestData = await db.sequelize.query(
 			'EXEC dbo.spusers_updateuserrequest :userId, :id, :status',
 			{
