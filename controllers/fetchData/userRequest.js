@@ -24,7 +24,7 @@ const fetchSubordinatesRequests = async (userEmail) => {
 		});
 		const currentUserHrmId = currentUser[0][0].hrmid;
 		const subordinateRequetsData = await db.sequelize.query(
-			'EXEC dbo.spusers_getrequestsfromsubordinates :hrmid',
+			'EXEC dbo.spusers_getusersubordinatesrequests :hrmid',
 			{
 				replacements: {
 					hrmid: currentUserHrmId

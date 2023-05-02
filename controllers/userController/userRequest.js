@@ -43,24 +43,24 @@ exports.getUserRequests = async (req, res) => {
 	}
 };
 
-exports.getSubordinatesRequests = async (req, res) => {
+exports.getUserSubordinatesRequests = async (req, res) => {
 	try {
 		const currentUserEmail = req.user.userEmail;
 		const subordinateRequestsData = await getUserRequestData.fetchSubordinatesRequests(
 			currentUserEmail
 		);
 		if (subordinateRequestsData.length == 0) {
-			return res.status(404).json({ message: 'No subordinate requests found' });
+			return res.status(404).json({ message: 'No subordinate(s) requests found' });
 		} else {
 			return res.status(200).json({ data: subordinateRequestsData });
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User requests fetching failed' });
+		return res.status(500).json({ message: 'User subordinate(s) requests fetching failed' });
 	}
 };
 
-exports.updateSuborndinateRequest = async (req, res) => {
+exports.updateUserSubordinateRequest = async (req, res) => {
 	try {
 		const request = req.body;
 		const userId = request.userId;

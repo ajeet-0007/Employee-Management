@@ -17,36 +17,25 @@ const fetchTimesheets = async (userEmail) => {
 	}
 };
 
-const fetchLatestTimesheets = async (userEmail) => {
+const fetchSubordinatesTimesheets = async (userEmail) => {
 	try {
-		const userId = await currentUser(userEmail);
-		const userLatestTimesheetsData = await db.sequelize.query(
-			'EXEC dbo.spusers_getuserlatesttimesheets :userId',
+		const currentUser = await db.sequelize.query('EXEC dbo.spusers_getcurrentuser :email', {
+			replacements: { email: userEmail }
+		});
+		const currentUserHrmId = currentUser[0][0].hrmid;
+		const subordinateTimesheetsData = await db.sequelize.query(
+			'EXEC dbo.spusers_getusersubordinatestimesheets :hrmid',
 			{
-				replacements: { userId: userId }
+				replacements: {
+					hrmid: currentUserHrmId
+				}
 			}
 		);
-		return userLatestTimesheetsData[0];
+		return subordinateTimesheetsData[0];
 	} catch (error) {
 		console.log(error);
 		return error;
 	}
 };
 
-// const fetchWeeklyTimesheets = async (userEmail) => {
-//     try {
-//         const userId = await currentUser(userEmail);
-//         const data = await db.sequelize.query(
-//             "EXEC dbo.spusers_getuserweeklytimesheets :userId, :week",
-//             {
-//                 replacements: { userId: userId },
-//             }
-//         );
-//         return data[0];
-//     } catch (error) {
-//         console.log(error);
-//         return error;
-//     }
-// };
-
-module.exports = { fetchTimesheets, fetchLatestTimesheets };
+module.exports = { fetchTimesheets, fetchSubordinatesTimesheets };

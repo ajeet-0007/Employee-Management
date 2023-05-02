@@ -18,7 +18,7 @@ exports.getUserHierarchy = async (req, res) => {
 			}
 		);
 		const userSubordinateData = await db.sequelize.query(
-			'EXEC dbo.spusers_getuserhierarchy :hrmid',
+			'EXEC dbo.spusers_getusersubordinates :hrmid',
 			{
 				replacements: { hrmid: userProfileData[0][0].hrmid }
 			}
