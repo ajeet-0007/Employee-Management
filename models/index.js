@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Sequelize } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const DB_NAME = process.env.DB_NAME;
 const DB_HOST = process.env.DB_HOST;
 const DB_USERNAME = process.env.DB_USERNAME;
@@ -30,6 +30,7 @@ try {
 }
 
 db = {};
+db.userTimesheet = require('./timesheet')(sequelize, DataTypes);
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 

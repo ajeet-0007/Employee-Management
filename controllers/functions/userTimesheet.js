@@ -8,7 +8,7 @@ const getTimesheetWeek = (date) => {
 	const lastDay = new Date(today.setDate(today.getDate() - today.getDay() + 6))
 		.toISOString()
 		.split('T')[0];
-	return firstDay + ' to ' + lastDay;
+	return firstDay + ' - ' + lastDay;
 };
 
 module.exports = { getTimesheetWeek };
