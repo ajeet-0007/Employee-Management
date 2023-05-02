@@ -56,19 +56,46 @@ exports.getUserTimesheets = async (req, res) => {
 	}
 };
 
-exports.getUserLatestTimesheets = async (req, res) => {
+exports.getUserSubordinatesTimesheets = async (req, res) => {
 	try {
 		const currentUserEmail = req.user.userEmail;
-		const userLatestTimesheetData = await getUserTimesheetData.fetchLatestTimesheets(
+		const subordinateTimesheetsData = await getUserTimesheetData.fetchSubordinatesTimesheets(
 			currentUserEmail
 		);
-		if (userLatestTimesheetData.length == 0) {
-			return res.status(404).json({ message: 'No user timesheets found' });
+		if (subordinateTimesheetsData.length == 0) {
+			return res.status(404).json({ message: 'No subordinate(s) timesheets found' });
 		} else {
-			return res.status(200).json({ data: userLatestTimesheetData });
+			return res.status(200).json({ data: subordinateTimesheetsData });
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User timesheets fetching failed' });
+		return res.status(500).json({ message: 'User subordinate(s) timesheets fetching failed' });
+	}
+};
+
+exports.updateUserTimesheetRequest = async (req, res) => {
+	try {
+		const request = req.body;
+		const userId = request.userId;
+		const timesheetId = request.timesheetId;
+		const status = request.status === 'Approve' ? 'Approved' : 'Rejected';
+		const data = await db.sequelize.query(
+			'EXEC dbo.spusers_updateusertimesheet :userId, :id, :status',
+			{
+				replacements: {
+					userId: userId,
+					id: timesheetId,
+					status: status
+				}
+			}
+		);
+		if (data[1] != 0) {
+			return res.status(201).json({ message: 'Timesheet updated successfully' });
+		} else {
+			return res.status(400).json({ message: 'Timesheet updation failed' });
+		}
+	} catch (error) {
+		console.log(error);
+		return res.status(201).json({ message: 'Timesheet updation failed' });
 	}
 };

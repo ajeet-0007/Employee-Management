@@ -12,11 +12,11 @@ const userProjectController = require('../controllers/userController/userProject
 const userHierarchyController = require('../controllers/userController/userHierarchy');
 const authorize = require('../middlewares/authorize');
 
+router.post('/check-in', authorize, userAttendanceController.postCheckIn);
+
 router.post('/requests/add-user-request', authorize, userRequestController.postUserRequest);
 
-router.post('/add-user-timesheet', authorize, userTimesheetController.postUserTimesheet);
-
-router.post('/check-in', authorize, userAttendanceController.postCheckIn);
+router.post('/timesheets/add-user-timesheet', authorize, userTimesheetController.postUserTimesheet);
 
 router.put('/skills/update-user-skills', authorize, userSkillsController.updateUserSkills);
 
@@ -25,9 +25,15 @@ router.put('/account/update-user-profile', authorize, userProfileController.upda
 router.put('/requests/update-user-request', authorize, userRequestController.updateUserRequest);
 
 router.put(
-	'/requests/update-subordinate-request',
+	'/requests/update-user-subordinate-request',
 	authorize,
-	userRequestController.updateSuborndinateRequest
+	userRequestController.updateUserSubordinateRequest
+);
+
+router.put(
+	'/timesheets/update-user-subordinate-timesheet',
+	authorize,
+	userTimesheetController.updateUserTimesheetRequest
 );
 
 router.put('/check-out', authorize, userAttendanceController.putCheckOut);
@@ -42,6 +48,12 @@ router.get('/account/get-user-profile', authorize, userProfileController.getUser
 
 router.get('/requests/get-user-requests', authorize, userRequestController.getUserRequests);
 
+router.get(
+	'/requests/get-user-subordinates-requests',
+	authorize,
+	userRequestController.getUserSubordinatesRequests
+);
+
 router.get('/get-user-attendance', authorize, userAttendanceController.getUserAttendance);
 
 router.get(
@@ -52,22 +64,16 @@ router.get(
 
 router.get('/skills/get-user-skills', authorize, userSkillsController.getUserSkills);
 
-router.get('/get-user-timesheets', authorize, userTimesheetController.getUserTimesheets);
+router.get('/timesheets/get-user-timesheets', authorize, userTimesheetController.getUserTimesheets);
 
 router.get(
-	'/get-user-latest-timesheets',
+	'/timesheets/get-user-subordinates-timesheets',
 	authorize,
-	userTimesheetController.getUserLatestTimesheets
+	userTimesheetController.getUserSubordinatesTimesheets
 );
 
 router.get('/get-user-projects', authorize, userProjectController.getUserProjects);
 
 router.get('/get-user-hierarchy', authorize, userHierarchyController.getUserHierarchy);
-
-router.get(
-	'/requests/get-subordinates-requests',
-	authorize,
-	userRequestController.getSubordinatesRequests
-);
 
 module.exports = router;
