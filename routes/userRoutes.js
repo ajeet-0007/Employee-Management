@@ -16,6 +16,8 @@ router.post('/check-in', authorize, userAttendanceController.postCheckIn);
 
 router.post('/requests/add-user-request', authorize, userRequestController.postUserRequest);
 
+router.post('/requests/resend-user-request', authorize, userRequestController.resendUserRequest);
+
 router.post('/timesheets/add-user-timesheet', authorize, userTimesheetController.postUserTimesheet);
 
 router.put('/skills/update-user-skills', authorize, userSkillsController.updateUserSkills);

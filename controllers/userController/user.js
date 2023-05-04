@@ -22,15 +22,21 @@ exports.putSignUp = async (req, res) => {
 						}
 					}
 				);
+
 				const userId = await currentUser(request.email);
+				const userData = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
+					replacements: { userId: userId }
+				});
 				const defaultImage =
 					'data:image/png;base64,' + fs.readFileSync('./assets/profile.png', 'base64');
 				const profileData = await db.sequelize.query(
-					'EXEC dbo.spusers_postuserprofile :userId, :profileImage, :permanentAddress, :city, :state, :country, :emergencyPhone',
+					'EXEC dbo.spusers_postuserprofile :userId, :profileImage, :hrmid, :name, :permanentAddress, :city, :state, :country, :emergencyPhone',
 					{
 						replacements: {
 							userId: userId,
 							profileImage: defaultImage,
+							hrmid: userData[0][0].hrmid,
+							name: userData[0][0].name,
 							permanentAddress: '',
 							city: '',
 							state: '',
@@ -73,10 +79,10 @@ exports.getUser = async (req, res) => {
 	try {
 		const userEmail = req.user.userEmail;
 		const userId = await currentUser(userEmail);
-		const data = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
+		const userData = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
 			replacements: { userId: userId }
 		});
-		return res.status(200).json(data[0][0]);
+		return res.status(200).json(userData[0][0]);
 	} catch (error) {
 		console.log(error);
 		return res.status(404).json({

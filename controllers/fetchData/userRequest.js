@@ -38,4 +38,19 @@ const fetchSubordinatesRequests = async (userEmail) => {
 	}
 };
 
-module.exports = { fetchRequests, fetchSubordinatesRequests };
+const fetchCurrentRequest = async (userId, requestId) => {
+	try {
+		const userRequestData = await db.sequelize.query(
+			'EXEC dbo.spusers_getusercurrentrequest :userId, :id',
+			{
+				replacements: { userId: userId, id: requestId }
+			}
+		);
+		return userRequestData[0];
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
+};
+
+module.exports = { fetchRequests, fetchCurrentRequest, fetchSubordinatesRequests };
