@@ -118,3 +118,47 @@ exports.updateUserRequest = async (req, res) => {
 		return res.status(201).json({ message: 'Request updation failed' });
 	}
 };
+
+exports.resendUserRequest = async (req, res) => {
+	try {
+		const request = req.body;
+		const userId = request.userId;
+		const requestId = request.requestId;
+		const userRequestData = await getUserRequestData.fetchCurrentRequest(userId, requestId);
+
+		if (new Date(userRequestData[0].startDate).getTime() > Date.now()) {
+			const deleteData = await db.sequelize.query(
+				'EXEC dbo.spusers_deleteuserrequest :userId, :id',
+				{
+					replacements: {
+						userId: userId,
+						id: requestId
+					}
+				}
+			);
+
+			const resendRequestData = await db.sequelize.query(
+				'EXEC dbo.spusers_postuserrequest :userId, :email, :startDate, :endDate, :leaveType, :request, :reason',
+				{
+					replacements: {
+						userId: userRequestData[0].userId,
+						email: userRequestData[0].email,
+						startDate: userRequestData[0].startDate,
+						endDate: userRequestData[0].endDate,
+						leaveType: userRequestData[0].leaveType,
+						request: userRequestData[0].request,
+						reason: userRequestData[0].reason
+					}
+				}
+			);
+			return res.status(201).json({ message: 'User request recreated successfully' });
+		} else {
+			return res.status(200).json({
+				message: 'Please create a new request'
+			});
+		}
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: 'User request creation failed' });
+	}
+};
