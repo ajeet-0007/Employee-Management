@@ -30,8 +30,8 @@ try {
 }
 
 db = {};
-// db.userTimesheet = require('./timesheet')(sequelize, DataTypes);
+db.userTimesheet = require('./timesheet')(sequelize, DataTypes);
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-module.exports = { db, sequelize };
+module.exports = db;
