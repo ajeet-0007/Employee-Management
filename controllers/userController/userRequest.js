@@ -123,7 +123,6 @@ exports.resendUserRequest = async (req, res) => {
 		const userId = request.userId;
 		const requestId = request.requestId;
 		const userRequestData = await getUserRequestData.fetchCurrentRequest(userId, requestId);
-
 		if (new Date(userRequestData[0].startDate).getTime() > Date.now()) {
 			const deleteData = await db.sequelize.query(
 				'EXEC dbo.spusers_deleteuserrequest :userId, :id',

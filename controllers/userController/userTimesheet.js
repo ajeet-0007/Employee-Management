@@ -1,39 +1,15 @@
 const db = require('../../models');
+const userTimesheet = db.userTimesheet;
 const getUserTimesheetData = require('../fetchData/userTimesheet');
-const currentUser = require('../fetchData/currentUser');
-const { getTimesheetWeek } = require('../functions/userTimesheet');
 
 exports.postUserTimesheet = async (req, res) => {
 	try {
 		const request = req.body;
-		const currentUserEmail = req.user.userEmail;
-		const userId = await currentUser(currentUserEmail);
-		const week = getTimesheetWeek(request.date);
-		const submittedHours = request.totalTime;
-
-		const data = await db.sequelize.query(
-			'EXEC dbo.spusers_postusertimesheet :userId, :timesheetName, :clientName, :projectName, :jobName, :workItem, :date, :week, :description, :totalTime, :billableStatus, :submittedHours',
-			{
-				replacements: {
-					userId: userId,
-					timesheetName: request.timesheetName,
-					clientName: request.clientName,
-					projectName: request.projectName,
-					jobName: request.jobName,
-					workItem: request.workItem,
-					date: request.date,
-					week: week,
-					description: request.description,
-					totalTime: request.totalTime,
-					billableStatus: request.billableStatus,
-					submittedHours: submittedHours
-				}
-			}
-		);
-		if (data[1] != 0) {
+		const data = await userTimesheet.bulkCreate(request);
+		if (data.length !== 0) {
 			return res.status(201).json({ message: 'User timesheet created successfully' });
 		} else {
-			return res.status(200).json({ message: 'User timesheet already exists' });
+			return res.status(200).json({ message: 'User timesheet creation failed' });
 		}
 	} catch (error) {
 		console.log(error);
@@ -55,10 +31,6 @@ exports.getUserTimesheets = async (req, res) => {
 		return res.status(500).json({ message: 'User timesheets fetching failed' });
 	}
 };
-
-exports.getUserMontlyTimesheets = async (req, res) => {
-	
-}
 
 exports.getUserSubordinatesTimesheets = async (req, res) => {
 	try {
