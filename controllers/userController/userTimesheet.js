@@ -32,6 +32,25 @@ exports.getUserTimesheets = async (req, res) => {
 	}
 };
 
+exports.getUserWeeklyTimesheets = async (req, res) => {
+	try {
+		const currentUserEmail = req.user.userEmail;
+		const week = req.query.week;
+		const userTimesheetData = await getUserTimesheetData.fetchWeeklyTimesheets(
+			currentUserEmail,
+			week
+		);
+		if (userTimesheetData.length == 0) {
+			return res.status(404).json({ message: 'No user timesheets found' });
+		} else {
+			return res.status(200).json({ data: userTimesheetData });
+		}
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: 'Internal Server Error' });
+	}
+};
+
 exports.getUserSubordinatesTimesheets = async (req, res) => {
 	try {
 		const currentUserEmail = req.user.userEmail;

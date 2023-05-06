@@ -105,7 +105,7 @@ exports.getAllUsers = async (req, res) => {
 
 exports.getSearchedUser = async (req, res) => {
 	try {
-		const userId = req.body.userId;
+		const userId = req.query.userId;
 		const userData = {};
 		const userProfileData = await db.sequelize.query(
 			'EXEC dbo.spusers_getuserprofile :userId',

@@ -22,8 +22,6 @@ router.post('/requests/resend-user-request', authorize, userRequestController.re
 
 router.post('/timesheets/add-user-timesheet', authorize, userTimesheetController.postUserTimesheet);
 
-router.post('/get-searched-user', authorize, userController.getSearchedUser);
-
 router.put('/skills/update-user-skills', authorize, userSkillsController.updateUserSkills);
 
 router.put('/account/update-user-profile', authorize, userProfileController.updateUserProfile);
@@ -50,6 +48,8 @@ router.get('/logout', authorize, userLoginController.getLogout);
 
 router.get('/get-user', authorize, userController.getUser);
 
+router.get('/get-searched-user', authorize, userController.getSearchedUser);
+
 router.get('/get-all-users', authorize, userController.getAllUsers);
 
 router.get('/account/get-user-profile', authorize, userProfileController.getUserProfile);
@@ -73,6 +73,12 @@ router.get(
 router.get('/skills/get-user-skills', authorize, userSkillsController.getUserSkills);
 
 router.get('/timesheets/get-user-timesheets', authorize, userTimesheetController.getUserTimesheets);
+
+router.get(
+	'/timesheets/get-user-weekly-timesheets',
+	authorize,
+	userTimesheetController.getUserWeeklyTimesheets
+);
 
 router.get(
 	'/timesheets/get-user-subordinates-timesheets',
