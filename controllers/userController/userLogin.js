@@ -43,7 +43,7 @@ exports.postLogin = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: 'User login failed' });
+		res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 

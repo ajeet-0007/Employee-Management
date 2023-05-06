@@ -24,7 +24,7 @@ exports.postUserRequest = async (req, res) => {
 		return res.status(201).json({ message: 'User request created successfully' });
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User request creation failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
@@ -39,7 +39,7 @@ exports.getUserRequests = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User requests fetching failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
@@ -56,7 +56,7 @@ exports.getUserSubordinatesRequests = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User subordinate(s) requests fetching failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
@@ -83,7 +83,7 @@ exports.updateUserSubordinateRequest = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(201).json({ message: 'Request updation failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
@@ -107,13 +107,11 @@ exports.updateUserRequest = async (req, res) => {
 		if (userRequestData[1] != 0) {
 			return res.status(201).json({ message: 'Request updated successfully' });
 		} else {
-			return res.status(400).json({
-				message: 'Request updation failed'
-			});
+			return res.status(400).json({ message: 'Request updation failed' });
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(201).json({ message: 'Request updation failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
@@ -153,6 +151,6 @@ exports.resendUserRequest = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User request creation failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };

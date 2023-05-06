@@ -34,7 +34,7 @@ exports.postCheckIn = async (req, res) => {
 		// }
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User check-in failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
@@ -49,7 +49,7 @@ exports.getUserAttendance = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User attendance fetching failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
@@ -68,7 +68,7 @@ exports.getUserCurrentAttendance = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User current attendance fetching failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
@@ -100,6 +100,6 @@ exports.putCheckOut = async (req, res) => {
 		});
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User check-out failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };

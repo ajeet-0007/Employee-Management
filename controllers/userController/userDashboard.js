@@ -31,15 +31,8 @@ exports.getUserDashboard = async (req, res) => {
 	const userProjectData = await getUserProjectData.fetchProjects(req.user.userEmail);
 	createDashboardData(userProjectData, 'userProjects', 'projects', dashboardData);
 
-	const userLatestTimesheetData = await getUserTimesheetData.fetchLatestTimesheets(
-		req.user.userEmail
-	);
-	createDashboardData(
-		userLatestTimesheetData,
-		'userLatestTimesheets',
-		'timesheets',
-		dashboardData
-	);
+	const userTimesheetData = await getUserTimesheetData.fetchTimesheets(req.user.userEmail);
+	createDashboardData(userTimesheetData, 'userTimesheets', 'timesheets', dashboardData);
 
 	res.status(200).json({ data: dashboardData });
 };

@@ -4,7 +4,7 @@ const getUserTimesheetData = require('../fetchData/userTimesheet');
 
 exports.postUserTimesheet = async (req, res) => {
 	try {
-		const request = req.body;
+		const request = JSON.parse(req.body.data);
 		const data = await userTimesheet.bulkCreate(request);
 		if (data.length !== 0) {
 			return res.status(201).json({ message: 'User timesheet created successfully' });
@@ -13,7 +13,7 @@ exports.postUserTimesheet = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User timesheet creation failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
@@ -28,7 +28,7 @@ exports.getUserTimesheets = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User timesheets fetching failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
@@ -45,7 +45,7 @@ exports.getUserSubordinatesTimesheets = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User subordinate(s) timesheets fetching failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
@@ -72,6 +72,6 @@ exports.updateUserTimesheetRequest = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(201).json({ message: 'Timesheet updation failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
