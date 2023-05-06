@@ -6,27 +6,22 @@ const { getCheckInStatus, getCheckOutStatus } = require('../functions/userAttend
 exports.postCheckIn = async (req, res) => {
 	try {
 		const request = req.body;
-		const currentDate = new Date().toISOString().slice(0, 10);
+		const date = new Date().toLocaleDateString('en-GB').split('/');
+		const currentDate = date[2] + '-' + date[1] + '-' + date[0];
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
 		const checkInStatus = getCheckInStatus(request.checkInTime, request.checkInDate);
-		const currentAttendance = await getUserAttendanceData.fetchCurrentAttendance(
-			currentUserEmail,
-			currentDate
-		);
+		const currentAttendance = await getUserAttendanceData.fetchCurrentAttendance(currentUserEmail, currentDate);
 		// if (currentAttendance.length > 0) {
 		//   return res.status(409).json({ message: "User already checked-in" });
 		// } else {
-		const data = await db.sequelize.query(
-			'EXEC dbo.spusers_postusercheckin :userId, :checkInLocation, :status',
-			{
-				replacements: {
-					userId: userId,
-					checkInLocation: request.checkInLocation,
-					status: 'checked-in'
-				}
+		const data = await db.sequelize.query('EXEC dbo.spusers_postusercheckin :userId, :checkInLocation, :status', {
+			replacements: {
+				userId: userId,
+				checkInLocation: request.checkInLocation,
+				status: 'checked-in'
 			}
-		);
+		});
 		return res.status(201).json({
 			message: 'User checked-in successfully',
 			checkInStatusMessage: checkInStatus
@@ -55,12 +50,10 @@ exports.getUserAttendance = async (req, res) => {
 
 exports.getUserCurrentAttendance = async (req, res) => {
 	try {
-		const currentDate = new Date().toISOString().slice(0, 10);
+		const date = new Date().toLocaleDateString('en-GB').split('/');
+		const currentDate = date[2] + '-' + date[1] + '-' + date[0];
 		const currentUserEmail = req.user.userEmail;
-		const currentAttendance = await getUserAttendanceData.fetchCurrentAttendance(
-			currentUserEmail,
-			currentDate
-		);
+		const currentAttendance = await getUserAttendanceData.fetchCurrentAttendance(currentUserEmail, currentDate);
 		if (currentAttendance.length == 0) {
 			return res.status(404).json({ message: 'No user current attendance found' });
 		} else {
@@ -78,22 +71,18 @@ exports.putCheckOut = async (req, res) => {
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
 		const checkOutStatus = getCheckOutStatus(request.checkOutTime, request.checkOutDate);
-		const currentAttendance = await getUserAttendanceData.fetchCurrentAttendance(
-			currentUserEmail,
-			new Date().toISOString().slice(0, 10)
-		);
+		const date = new Date().toLocaleDateString('en-GB').split('/');
+		const currentDate = date[2] + '-' + date[1] + '-' + date[0];
+		const currentAttendance = await getUserAttendanceData.fetchCurrentAttendance(currentUserEmail, currentDate);
 		const checkInTime = currentAttendance[0].checkInTime;
-		const data = await db.sequelize.query(
-			'EXEC dbo.spusers_updateusercheckout :userId, :checkOutLocation, :status, :checkInTime',
-			{
-				replacements: {
-					userId: userId,
-					checkOutLocation: request.checkOutLocation,
-					status: 'checked-out',
-					checkInTime: checkInTime
-				}
+		const data = await db.sequelize.query('EXEC dbo.spusers_updateusercheckout :userId, :checkOutLocation, :status, :checkInTime', {
+			replacements: {
+				userId: userId,
+				checkOutLocation: request.checkOutLocation,
+				status: 'checked-out',
+				checkInTime: checkInTime
 			}
-		);
+		});
 		return res.status(201).json({
 			message: 'User checked-out successfully',
 			checkOutStatusMessage: checkOutStatus

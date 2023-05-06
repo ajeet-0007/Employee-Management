@@ -36,10 +36,7 @@ exports.getUserWeeklyTimesheets = async (req, res) => {
 	try {
 		const currentUserEmail = req.user.userEmail;
 		const week = req.query.week;
-		const userTimesheetData = await getUserTimesheetData.fetchWeeklyTimesheets(
-			currentUserEmail,
-			week
-		);
+		const userTimesheetData = await getUserTimesheetData.fetchWeeklyTimesheets(currentUserEmail, week);
 		if (userTimesheetData.length == 0) {
 			return res.status(404).json({ message: 'No user timesheets found' });
 		} else {
@@ -54,9 +51,7 @@ exports.getUserWeeklyTimesheets = async (req, res) => {
 exports.getUserSubordinatesTimesheets = async (req, res) => {
 	try {
 		const currentUserEmail = req.user.userEmail;
-		const subordinateTimesheetsData = await getUserTimesheetData.fetchSubordinatesTimesheets(
-			currentUserEmail
-		);
+		const subordinateTimesheetsData = await getUserTimesheetData.fetchSubordinatesTimesheets(currentUserEmail);
 		if (subordinateTimesheetsData.length == 0) {
 			return res.status(404).json({ message: 'No subordinate(s) timesheets found' });
 		} else {
@@ -74,16 +69,13 @@ exports.updateUserTimesheetRequest = async (req, res) => {
 		const userId = request.userId;
 		const timesheetId = request.timesheetId;
 		const status = request.status === 'Approve' ? 'Approved' : 'Rejected';
-		const data = await db.sequelize.query(
-			'EXEC dbo.spusers_updateusertimesheet :userId, :id, :status',
-			{
-				replacements: {
-					userId: userId,
-					id: timesheetId,
-					status: status
-				}
+		const data = await db.sequelize.query('EXEC dbo.spusers_updateusertimesheet :userId, :id, :status', {
+			replacements: {
+				userId: userId,
+				id: timesheetId,
+				status: status
 			}
-		);
+		});
 		if (data[1] != 0) {
 			return res.status(201).json({ message: 'Timesheet updated successfully' });
 		} else {
