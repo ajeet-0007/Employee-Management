@@ -6,17 +6,15 @@ const userCheckIn = async (socket) => {
 	try {
 		authorize(socket, () => {
 			const email = socket.user?.userEmail;
-			const date = new Date().toISOString().slice(0, 10);
+			const date = new Date().toLocaleDateString('en-GB').split('/');
+			const currentDate = date[2] + '-' + date[1] + '-' + date[0];
 			const intervalId = setInterval(async () => {
-				const currentAttendanceData = await fetchCurrentAttendance(email, date);
+				const currentAttendanceData = await fetchCurrentAttendance(email, currentDate);
 				const currentAttendanceStatus = currentAttendanceData[0]?.status;
 				if (currentAttendanceStatus === 'checked-out') {
 					clearInterval(intervalId);
 				}
-				const timeDifference = getAttendanceTimeDifference(
-					currentAttendanceData[0]?.checkInTime,
-					currentAttendanceData[0]?.checkInDate
-				);
+				const timeDifference = getAttendanceTimeDifference(currentAttendanceData[0]?.checkInTime, currentAttendanceData[0]?.checkInDate);
 				socket.emit('status', {
 					status: currentAttendanceStatus,
 					timeDifference: timeDifference

@@ -9,21 +9,15 @@ const onConnection = (io) => async (socket) => {
 		authorize(socket, () => {
 			// console.log('Client connected: ' + socket.id);
 			const email = socket.user?.userEmail;
-			const date = new Date().toISOString().slice(0, 10);
+			const date = new Date().toLocaleDateString('en-GB').split('/');
+			const currentDate = date[2] + '-' + date[1] + '-' + date[0];
 			const intervalId = setInterval(async () => {
-				const currentAttendanceData = await fetchCurrentAttendance(email, date);
-				const currentAttendanceStatus =
-					currentAttendanceData[0]?.status || 'not-checked-in';
-				if (
-					currentAttendanceStatus === 'checked-out' ||
-					currentAttendanceStatus === 'not-checked-in'
-				) {
+				const currentAttendanceData = await fetchCurrentAttendance(email, currentDate);
+				const currentAttendanceStatus = currentAttendanceData[0]?.status || 'not-checked-in';
+				if (currentAttendanceStatus === 'checked-out' || currentAttendanceStatus === 'not-checked-in') {
 					clearInterval(intervalId);
 				}
-				const timeDifference = getAttendanceTimeDifference(
-					currentAttendanceData[0]?.checkInTime,
-					currentAttendanceData[0]?.checkInDate
-				);
+				const timeDifference = getAttendanceTimeDifference(currentAttendanceData[0]?.checkInTime, currentAttendanceData[0]?.checkInDate);
 				socket.emit('status', {
 					status: currentAttendanceStatus,
 					timeDifference: timeDifference
