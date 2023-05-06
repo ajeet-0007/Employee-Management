@@ -63,6 +63,8 @@ router.get('/timesheets/get-user-subordinates-timesheets', authorize, userTimesh
 
 router.get('/get-user-projects', authorize, userProjectController.getUserProjects);
 
+router.get('/get-user-projects-minimal-data', authorize, userProjectController.getUserProjectsMinimalData);
+
 router.get('/get-user-hierarchy', authorize, userHierarchyController.getUserHierarchy);
 
 module.exports = router;

@@ -16,12 +16,9 @@ const postUploadUserDetails = (req, res) => {
 			.on('end', async () => {
 				csvData.shift();
 				await db.sequelize
-					.query(
-						'INSERT INTO users (hrmid, name, email, phone, role, department, location, joiningDate, reportingManager, reportsTo ) VALUES ?',
-						{
-							replacements: [csvData]
-						}
-					)
+					.query('INSERT INTO users (hrmid, name, email, phone, role, department, location, joiningDate, reportingManager, reportsTo ) VALUES ?', {
+						replacements: [csvData]
+					})
 					.then((data) => {
 						return res.status(201).json({
 							message: 'File uploaded successfully'
@@ -47,7 +44,7 @@ const getAllUsers = async (req, res) => {
 		if (adminAllUserData.length == 0) {
 			return res.status(404).json({ message: 'No Users found' });
 		} else {
-			return res.status(200).json({ data: adminAllUserData });
+			return res.status(200).json(adminAllUserData);
 		}
 	} catch (error) {
 		console.log(error);
