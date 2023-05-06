@@ -57,6 +57,12 @@ router.get('/account/get-user-profile', authorize, userProfileController.getUser
 router.get('/requests/get-user-requests', authorize, userRequestController.getUserRequests);
 
 router.get(
+	'/requests/get-user-available-requests',
+	authorize,
+	userRequestController.getUserAvailableRequests
+);
+
+router.get(
 	'/requests/get-user-subordinates-requests',
 	authorize,
 	userRequestController.getUserSubordinatesRequests
