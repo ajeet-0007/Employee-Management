@@ -13,7 +13,7 @@ exports.getUserProfile = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User profile fetching failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
@@ -43,6 +43,6 @@ exports.updateUserProfile = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User profile updation failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };

@@ -13,7 +13,7 @@ exports.getUserSkills = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User skills fetching failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
@@ -40,6 +40,6 @@ exports.updateUserSkills = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: 'User skills updation failed' });
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
