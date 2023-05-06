@@ -17,6 +17,22 @@ const fetchTimesheets = async (userEmail) => {
 	}
 };
 
+const fetchWeeklyTimesheets = async (userEmail, week) => {
+	try {
+		const userId = await currentUser(userEmail);
+		const userTimesheetsData = await db.sequelize.query(
+			'EXEC dbo.spusers_getuserweeklytimesheets :userId, :week',
+			{
+				replacements: { userId: userId, week: week }
+			}
+		);
+		return userTimesheetsData[0];
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
+};
+
 const fetchSubordinatesTimesheets = async (userEmail) => {
 	try {
 		const currentUser = await db.sequelize.query('EXEC dbo.spusers_getcurrentuser :email', {
@@ -38,4 +54,4 @@ const fetchSubordinatesTimesheets = async (userEmail) => {
 	}
 };
 
-module.exports = { fetchTimesheets, fetchSubordinatesTimesheets };
+module.exports = { fetchTimesheets, fetchWeeklyTimesheets, fetchSubordinatesTimesheets };
