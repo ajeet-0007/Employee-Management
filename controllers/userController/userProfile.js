@@ -9,7 +9,7 @@ exports.getUserProfile = async (req, res) => {
 		if (userProfileData.length == 0) {
 			return res.status(404).json({ message: 'No user profile found' });
 		} else {
-			return res.status(200).json({ data: userProfileData });
+			return res.status(200).json(userProfileData);
 		}
 	} catch (error) {
 		console.log(error);
@@ -22,20 +22,17 @@ exports.updateUserProfile = async (req, res) => {
 		const request = req.body;
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
-		const data = await db.sequelize.query(
-			'EXEC dbo.spusers_updateuserprofile :userId, :profileImage, :permanentAddress, :city, :state, :country, :emergencyPhone',
-			{
-				replacements: {
-					userId: userId,
-					profileImage: request.profileImage,
-					permanentAddress: request.permanentAddress,
-					city: request.city,
-					state: request.state,
-					country: request.country,
-					emergencyPhone: request.emergencyPhone
-				}
+		const data = await db.sequelize.query('EXEC dbo.spusers_updateuserprofile :userId, :profileImage, :permanentAddress, :city, :state, :country, :emergencyPhone', {
+			replacements: {
+				userId: userId,
+				profileImage: request.profileImage,
+				permanentAddress: request.permanentAddress,
+				city: request.city,
+				state: request.state,
+				country: request.country,
+				emergencyPhone: request.emergencyPhone
 			}
-		);
+		});
 		if (data[1] != 0) {
 			return res.status(201).json({ message: 'User profile updated successfully' });
 		} else {

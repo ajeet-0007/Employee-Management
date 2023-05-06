@@ -40,7 +40,7 @@ exports.getUserAttendance = async (req, res) => {
 		if (userAttendance.length == 0) {
 			return res.status(404).json({ message: 'No user attendance found' });
 		} else {
-			return res.status(200).json({ data: userAttendance });
+			return res.status(200).json(userAttendance);
 		}
 	} catch (error) {
 		console.log(error);

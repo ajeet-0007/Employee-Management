@@ -8,7 +8,7 @@ exports.getUserProjects = async (req, res) => {
 		if (userProjectData.length == 0) {
 			return res.status(404).json({ message: 'No user projects found' });
 		} else {
-			return res.status(200).json({ data: userProjectData });
+			return res.status(200).json(userProjectData);
 		}
 	} catch (error) {
 		console.log(error);

@@ -24,7 +24,7 @@ exports.getUserTimesheets = async (req, res) => {
 		if (userTimesheetData.length == 0) {
 			return res.status(404).json({ message: 'No user timesheets found' });
 		} else {
-			return res.status(200).json({ data: userTimesheetData });
+			return res.status(200).json(userTimesheetData);
 		}
 	} catch (error) {
 		console.log(error);
@@ -40,7 +40,7 @@ exports.getUserWeeklyTimesheets = async (req, res) => {
 		if (userTimesheetData.length == 0) {
 			return res.status(404).json({ message: 'No user timesheets found' });
 		} else {
-			return res.status(200).json({ data: userTimesheetData });
+			return res.status(200).json(userTimesheetData);
 		}
 	} catch (error) {
 		console.log(error);
@@ -55,7 +55,7 @@ exports.getUserSubordinatesTimesheets = async (req, res) => {
 		if (subordinateTimesheetsData.length == 0) {
 			return res.status(404).json({ message: 'No subordinate(s) timesheets found' });
 		} else {
-			return res.status(200).json({ data: subordinateTimesheetsData });
+			return res.status(200).json(subordinateTimesheetsData);
 		}
 	} catch (error) {
 		console.log(error);
