@@ -7,10 +7,10 @@
 // 			null,
 // 			path.join(
 // 				__dirname,
-// 				'..',
-// 				'controllers',
-// 				'userController',
-// 				'uploads',
+// 				'..','..',
+// 				'Cloud-Storage',
+// 				'public',
+// 				'images',
 // 			),
 // 		);
 // 	},
