@@ -1,8 +1,11 @@
 hrmid,name,email,phone,role,department,location,joiningDate,reportingManager,reportsTo
-HRM1001,Karuna Yadav,karuna@gmail.com,1234567890,App Development Head,App Development,Jaipur,2023-02-01,,
-HRM1002,Dipantan Chakraborty,dipantan@gmail.com,9798205488,Principal Consultant,App Development,UAE,2023-02-01,Karuna Yadav,HRM1001
-HRM1003,Ajeet Gupta,ajeet@gmail.com,1234567890,Associate,App Development,Jaipur,2023-02-01,Dipantan Chakraborty,HRM1002
-HRM1004,Pankaj Gupta,pankaj@gmail.com,1234567890,Intern,App Development,Bareilly,2023-02-01,Ajeet Gupta,HRM1003
-HRM1005,Dummy One,dummy1@gmail.com,1234567890,Intern,App Development,Pune,2023-02-01,Ajeet Gupta,HRM1003
-HRM1006,Dummy Two,dummy2@gmail.com,1234567890,Intern,App Development,Jaipur,2023-02-01,Ajeet Gupta,HRM1003
-HRM1007,Dummy Three,dummy3@gmail.com,1234567890,Intern,App Development,Jaipur,2023-02-01,Ajeet Gupta,HRM1003
+HRM125,Anupam Gupta,anupam.gupta@celebaltech.com,9876543210,President,Executive Management,North America,2023-01-01,,
+HRM917,Prankul Middha,prankul.middha@celebaltech.com,9876543210,Principal Consultant,Sales,Jaipur,2023-01-01,Anupam Gupta,HRM125
+HRM7,Deepak Sogani,deepak.sogani@celebaltech.com,9876543210,Principal Consultant,App Development,Jaipur,2023-01-01,Prankul Middha,HRM917
+HRM142,Rahul Jangid,rahul.jangid@celebaltech.com,9876543210,Senior Consultant,App Development,Jaipur,2023-01-01,Deepak Sogani,HRM7
+HRM2953,Ajeet Gupta,ajeet.gupta@celebaltech.com,9876543210,Intern,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
+HRM3010,Dipantan Chakraborty,dipantan.chakraborty@celebaltech.com,9876543210,Intern,App Development,Jalpaiguri,2023-01-01,Rahul Jangid,HRM142
+HRM3024,Harsh Srivastava,harsh.srivastava@celebaltech.com,9876543210,Intern,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
+HRM3042,Karuna Yadav,karuna.yadav@celebaltech.com,9876543210,Intern,App Development,Pune,2023-01-01,Rahul Jangid,HRM142
+HRM3152,Shashank Varshney,shashank.varshney@celebaltech.com,9876543210,Intern,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
+HRM3185,Udyanraje Bhaskar Bhosale,udyanraje.bhosale@celebaltech.com,9876543210,Intern,App Development,Pune,2023-01-01,Rahul Jangid,HRM142
