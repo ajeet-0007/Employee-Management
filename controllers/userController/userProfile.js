@@ -1,5 +1,4 @@
 const db = require('../../models');
-const getUserProfileData = require('../fetchData/userProfile');
 const currentUser = require('../fetchData/currentUser');
 
 exports.getUserProfile = async (req, res) => {
@@ -26,8 +25,12 @@ exports.getUserProfile = async (req, res) => {
 			}
 		);
 		userData.profile = userProfileData[0][0];
-		userData.reportingManager = userReportingManagerData[0][0];
-		userData.subordinates = userSubordinateData[0];
+		if (userReportingManagerData[0][0] !== null) {
+			userData.reportingManager = userReportingManagerData[0][0];
+		}
+		if (userSubordinateData[0].length !== 0) {
+			userData.subordinates = userSubordinateData[0];
+		}
 		return res.status(200).json([userData]);
 	} catch (error) {
 		console.log(error);
