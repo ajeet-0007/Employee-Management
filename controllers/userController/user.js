@@ -134,8 +134,12 @@ exports.getSearchedUser = async (req, res) => {
 		userData.role = userProfileData[0][0].role;
 		userData.department = userProfileData[0][0].department;
 		userData.location = userProfileData[0][0].location;
-		userData.reportingManager = userReportingManagerData[0][0];
-		userData.subordinates = userSubordinateData[0];
+		if (userReportingManagerData[0][0] !== null) {
+			userData.reportingManager = userReportingManagerData[0][0];
+		}
+		if (userSubordinateData[0].length !== 0) {
+			userData.subordinates = userSubordinateData[0];
+		}
 		return res.status(200).json([userData]);
 	} catch (error) {
 		console.log(error);
