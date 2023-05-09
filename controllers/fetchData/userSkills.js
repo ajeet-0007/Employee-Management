@@ -1,9 +1,7 @@
 const db = require('../../models');
-const currentUser = require('./currentUser');
 
-const fetchSkills = async (userEmail) => {
+const fetchSkills = async (userId) => {
 	try {
-		const userId = await currentUser(userEmail);
 		const userSkillsData = await db.sequelize.query('EXEC dbo.spusers_getuserskills :userId', {
 			replacements: { userId: userId }
 		});

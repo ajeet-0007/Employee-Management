@@ -1,51 +1,39 @@
 const db = require('../../models');
-const currentUser = require('./currentUser');
 
-const fetchRequests = async (userEmail) => {
+const fetchRequests = async (userId) => {
 	try {
-		const userId = await currentUser(userEmail);
-		const userRequestsData = await db.sequelize.query(
-			'EXEC dbo.spusers_getuserrequests :userId',
-			{
-				replacements: { userId: userId }
-			}
-		);
-		return userRequestsData[0];
-	} catch (error) {
-		console.log(error);
-		return error;
-	}
-};
-
-const fetchApprovedRequests = async (userId) => {
-	try {
-		const userRequestsData = await db.sequelize.query(
-			'EXEC dbo.spusers_getuserapprovedrequests :userId',
-			{
-				replacements: { userId: userId }
-			}
-		);
-		return userRequestsData[0];
-	} catch (error) {
-		console.log(error);
-		return error;
-	}
-};
-
-const fetchSubordinatesRequests = async (userEmail) => {
-	try {
-		const currentUser = await db.sequelize.query('EXEC dbo.spusers_getcurrentuser :email', {
-			replacements: { email: userEmail }
+		const userRequestsData = await db.sequelize.query('EXEC dbo.spusers_getuserrequests :userId', {
+			replacements: { userId: userId }
 		});
-		const currentUserHrmId = currentUser[0][0].hrmid;
-		const subordinateRequetsData = await db.sequelize.query(
-			'EXEC dbo.spusers_getusersubordinatesrequests :hrmid',
-			{
-				replacements: {
-					hrmid: currentUserHrmId
-				}
+		return userRequestsData[0];
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
+};
+
+const fetchAddedRequests = async (userId) => {
+	try {
+		const userRequestsData = await db.sequelize.query('EXEC dbo.spusers_getuseraddedrequests :userId', {
+			replacements: { userId: userId }
+		});
+		return userRequestsData[0];
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
+};
+
+const fetchSubordinatesRequests = async (userId) => {
+	try {
+		const user = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
+			replacements: { userId: userId }
+		});
+		const subordinateRequetsData = await db.sequelize.query('EXEC dbo.spusers_getusersubordinatesrequests :hrmid', {
+			replacements: {
+				hrmid: user[0][0].hrmid
 			}
-		);
+		});
 		return subordinateRequetsData[0];
 	} catch (error) {
 		console.log(error);
@@ -55,12 +43,9 @@ const fetchSubordinatesRequests = async (userEmail) => {
 
 const fetchCurrentRequest = async (userId, requestId) => {
 	try {
-		const userRequestData = await db.sequelize.query(
-			'EXEC dbo.spusers_getusercurrentrequest :userId, :id',
-			{
-				replacements: { userId: userId, id: requestId }
-			}
-		);
+		const userRequestData = await db.sequelize.query('EXEC dbo.spusers_getusercurrentrequest :userId, :id', {
+			replacements: { userId: userId, id: requestId }
+		});
 		return userRequestData[0];
 	} catch (error) {
 		console.log(error);
@@ -70,7 +55,7 @@ const fetchCurrentRequest = async (userId, requestId) => {
 
 module.exports = {
 	fetchRequests,
-	fetchApprovedRequests,
+	fetchAddedRequests,
 	fetchCurrentRequest,
 	fetchSubordinatesRequests
 };

@@ -1,37 +1,21 @@
 const db = require('../../models');
-const currentUser = require('../fetchData/currentUser');
+const getUserProfileData = require('../fetchData/userProfile');
+const getUserHierarchyData = require('../fetchData/userHierarchy');
 
 exports.getUserProfile = async (req, res) => {
 	try {
-		const currentUserEmail = req.user.userEmail;
-		const userId = await currentUser(currentUserEmail);
 		const userData = {};
-		const userProfileData = await db.sequelize.query(
-			'EXEC dbo.spusers_getuserprofile :userId',
-			{
-				replacements: { userId: userId }
-			}
-		);
-		const userReportingManagerData = await db.sequelize.query(
-			'EXEC dbo.spusers_getusersuperiorprofile :hrmid',
-			{
-				replacements: { hrmid: userProfileData[0][0].reportsTo }
-			}
-		);
-		const userSubordinateData = await db.sequelize.query(
-			'EXEC dbo.spusers_getusersubordinates :hrmid',
-			{
-				replacements: { hrmid: userProfileData[0][0].hrmid }
-			}
-		);
-		userData.profile = userProfileData[0][0];
-		if (userReportingManagerData[0][0] !== null) {
-			userData.reportingManager = userReportingManagerData[0][0];
+		const userProfileData = await getUserProfileData.fetchProfile(req.user.userId);
+		const userReportingManagerData = await getUserHierarchyData.fetchSuperiorProfile(userProfileData[0].reportsTo);
+		const userSubordinateData = await getUserHierarchyData.fetchSubordinateProfile(userProfileData[0].hrmid);
+		userData.profile = userProfileData[0];
+		if (userReportingManagerData.length !== 0) {
+			userData.reportingManager = userReportingManagerData[0];
 		}
-		if (userSubordinateData[0].length !== 0) {
-			userData.subordinates = userSubordinateData[0];
+		if (userSubordinateData.length !== 0) {
+			userData.subordinates = userSubordinateData;
 		}
-		return res.status(200).json([userData]);
+		return res.status(200).json(userData);
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: 'Internal Server Error' });
@@ -41,22 +25,17 @@ exports.getUserProfile = async (req, res) => {
 exports.updateUserProfile = async (req, res) => {
 	try {
 		const request = req.body;
-		const currentUserEmail = req.user.userEmail;
-		const userId = await currentUser(currentUserEmail);
-		const data = await db.sequelize.query(
-			'EXEC dbo.spusers_updateuserprofile :userId, :profileImage, :permanentAddress, :city, :state, :country, :emergencyPhone',
-			{
-				replacements: {
-					userId: userId,
-					profileImage: request.profileImage,
-					permanentAddress: request.permanentAddress,
-					city: request.city,
-					state: request.state,
-					country: request.country,
-					emergencyPhone: request.emergencyPhone
-				}
+		const data = await db.sequelize.query('EXEC dbo.spusers_updateuserprofile :userId, :profileImage, :permanentAddress, :city, :state, :country, :emergencyPhone', {
+			replacements: {
+				userId: req.user.userId,
+				profileImage: request.profileImage,
+				permanentAddress: request.permanentAddress,
+				city: request.city,
+				state: request.state,
+				country: request.country,
+				emergencyPhone: request.emergencyPhone
 			}
-		);
+		});
 		if (data[1] != 0) {
 			return res.status(201).json({ message: 'User profile updated successfully' });
 		} else {

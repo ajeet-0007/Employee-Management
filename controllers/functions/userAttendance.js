@@ -1,3 +1,5 @@
+const getUserAttendanceData = require('../fetchData/userAttendance');
+
 const getCheckInStatus = (time, date) => {
 	const checkInTime = new Date(`${date} ${time}`);
 	const morningTime = new Date(`${date} 10:30:00`);
@@ -16,6 +18,13 @@ const getCheckOutStatus = (time, date) => {
 	} else {
 		return 'Perfect Check-out';
 	}
+};
+
+const getCurrentAttendance = async (userId) => {
+	const date = new Date().toLocaleDateString('en-GB').split('/');
+	const currentDate = date[2] + '-' + date[1] + '-' + date[0];
+	const currentAttendance = await getUserAttendanceData.fetchCurrentAttendance(userId, currentDate);
+	return currentAttendance;
 };
 
 const getAttendanceTimeDifference = (time, date) => {
@@ -39,4 +48,4 @@ const getAttendanceTimeDifference = (time, date) => {
 	return hours + ':' + minutes + ':' + seconds;
 };
 
-module.exports = { getCheckInStatus, getCheckOutStatus, getAttendanceTimeDifference };
+module.exports = { getCheckInStatus, getCheckOutStatus, getCurrentAttendance, getAttendanceTimeDifference };

@@ -1,10 +1,8 @@
-const db = require('../../models');
 const getUserProjectData = require('../fetchData/userProject');
 
 exports.getUserProjects = async (req, res) => {
 	try {
-		const currentUserEmail = req.user.userEmail;
-		const userProjectData = await getUserProjectData.fetchProjects(currentUserEmail);
+		const userProjectData = await getUserProjectData.fetchProjects(req.user.userId);
 		if (userProjectData.length == 0) {
 			return res.status(404).json({ message: 'No user projects found' });
 		} else {
@@ -18,8 +16,7 @@ exports.getUserProjects = async (req, res) => {
 
 exports.getUserProjectsMinimalData = async (req, res) => {
 	try {
-		const currentUserEmail = req.user.userEmail;
-		const userProjectData = await getUserProjectData.fetchProjectsMinimal(currentUserEmail);
+		const userProjectData = await getUserProjectData.fetchProjectsMinimal(req.user.userId);
 		if (userProjectData.length == 0) {
 			return res.status(404).json({ message: 'No user projects found' });
 		} else {

@@ -1,23 +1,20 @@
 const userCheckInEvent = require('./checkin');
 const userCheckOutEvent = require('./checkout');
 const authorize = require('./authorize');
-const { fetchCurrentAttendance } = require('../controllers/fetchData/userAttendance');
-const { getAttendanceTimeDifference } = require('../controllers/functions/userAttendance');
+const { getAttendanceTimeDifference, getCurrentAttendance } = require('../controllers/functions/userAttendance');
 
 const onConnection = (io) => async (socket) => {
 	try {
 		authorize(socket, () => {
 			// console.log('Client connected: ' + socket.id);
-			const email = socket.user?.userEmail;
-			const date = new Date().toLocaleDateString('en-GB').split('/');
-			const currentDate = date[2] + '-' + date[1] + '-' + date[0];
+			const userId = socket.user?.userId;
 			const intervalId = setInterval(async () => {
-				const currentAttendanceData = await fetchCurrentAttendance(email, currentDate);
-				const currentAttendanceStatus = currentAttendanceData[0]?.status || 'not-checked-in';
+				const currentAttendance = await getCurrentAttendance(userId);
+				const currentAttendanceStatus = currentAttendance[0]?.status || 'not-checked-in';
 				if (currentAttendanceStatus === 'checked-out' || currentAttendanceStatus === 'not-checked-in') {
 					clearInterval(intervalId);
 				}
-				const timeDifference = getAttendanceTimeDifference(currentAttendanceData[0]?.checkInTime, currentAttendanceData[0]?.checkInDate);
+				const timeDifference = getAttendanceTimeDifference(currentAttendance[0]?.checkInTime, currentAttendance[0]?.checkInDate);
 				socket.emit('status', {
 					status: currentAttendanceStatus,
 					timeDifference: timeDifference

@@ -12,23 +12,19 @@ exports.putSignUp = async (req, res) => {
 		if (userData[1] != 0) {
 			if (userData[0][0].password == null) {
 				request.password = await bcrypt.hash(request.password, 10);
-				const signupData = await db.sequelize.query(
-					'EXEC spusers_updateusersignup :name, :email, :password',
-					{
-						replacements: {
-							name: request.name,
-							email: request.email,
-							password: request.password
-						}
+				const signupData = await db.sequelize.query('EXEC spusers_updateusersignup :name, :email, :password', {
+					replacements: {
+						name: request.name,
+						email: request.email,
+						password: request.password
 					}
-				);
+				});
 
 				const userId = await currentUser(request.email);
 				const userData = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
 					replacements: { userId: userId }
 				});
-				const defaultImage =
-					'data:image/png;base64,' + fs.readFileSync('./assets/profile.png', 'base64');
+				const defaultImage = 'data:image/png;base64,' + fs.readFileSync('./assets/profile.png', 'base64');
 				const profileData = await db.sequelize.query(
 					'EXEC dbo.spusers_postuserprofile :userId, :profileImage, :hrmid, :name, :permanentAddress, :city, :state, :country, :emergencyPhone',
 					{
@@ -77,8 +73,7 @@ exports.putSignUp = async (req, res) => {
 
 exports.getUser = async (req, res) => {
 	try {
-		const userEmail = req.user.userEmail;
-		const userId = await currentUser(userEmail);
+		const userId = req.user.userId;
 		const userData = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
 			replacements: { userId: userId }
 		});
@@ -107,24 +102,15 @@ exports.getSearchedUser = async (req, res) => {
 	try {
 		const userId = req.query.userId;
 		const userData = {};
-		const userProfileData = await db.sequelize.query(
-			'EXEC dbo.spusers_getuserprofile :userId',
-			{
-				replacements: { userId: userId }
-			}
-		);
-		const userReportingManagerData = await db.sequelize.query(
-			'EXEC dbo.spusers_getusersuperiorprofile :hrmid',
-			{
-				replacements: { hrmid: userProfileData[0][0].reportsTo }
-			}
-		);
-		const userSubordinateData = await db.sequelize.query(
-			'EXEC dbo.spusers_getusersubordinates :hrmid',
-			{
-				replacements: { hrmid: userProfileData[0][0].hrmid }
-			}
-		);
+		const userProfileData = await db.sequelize.query('EXEC dbo.spusers_getuserprofile :userId', {
+			replacements: { userId: userId }
+		});
+		const userReportingManagerData = await db.sequelize.query('EXEC dbo.spusers_getusersuperiorprofile :hrmid', {
+			replacements: { hrmid: userProfileData[0][0].reportsTo }
+		});
+		const userSubordinateData = await db.sequelize.query('EXEC dbo.spusers_getusersubordinates :hrmid', {
+			replacements: { hrmid: userProfileData[0][0].hrmid }
+		});
 		userData.userId = userProfileData[0][0].userId;
 		userData.hrmid = userProfileData[0][0].hrmid;
 		userData.name = userProfileData[0][0].name;

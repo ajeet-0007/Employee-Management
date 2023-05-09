@@ -1,20 +1,17 @@
 const authorize = require('./authorize');
 const { getAttendanceTimeDifference } = require('../controllers/functions/userAttendance');
-const { fetchCurrentAttendance } = require('../controllers/fetchData/userAttendance');
 
 const userCheckIn = async (socket) => {
 	try {
 		authorize(socket, () => {
-			const email = socket.user?.userEmail;
-			const date = new Date().toLocaleDateString('en-GB').split('/');
-			const currentDate = date[2] + '-' + date[1] + '-' + date[0];
+			const userId = socket.user?.userId;
 			const intervalId = setInterval(async () => {
-				const currentAttendanceData = await fetchCurrentAttendance(email, currentDate);
-				const currentAttendanceStatus = currentAttendanceData[0]?.status;
+				const currentAttendance = await getCurrentAttendance(userId);
+				const currentAttendanceStatus = currentAttendance[0]?.status;
 				if (currentAttendanceStatus === 'checked-out') {
 					clearInterval(intervalId);
 				}
-				const timeDifference = getAttendanceTimeDifference(currentAttendanceData[0]?.checkInTime, currentAttendanceData[0]?.checkInDate);
+				const timeDifference = getAttendanceTimeDifference(currentAttendance[0]?.checkInTime, currentAttendance[0]?.checkInDate);
 				socket.emit('status', {
 					status: currentAttendanceStatus,
 					timeDifference: timeDifference
