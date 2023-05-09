@@ -7,17 +7,20 @@ exports.postUserRequest = async (req, res) => {
 		const request = req.body;
 		const currentUserEmail = req.user.userEmail;
 		const userId = await currentUser(currentUserEmail);
-		const data = await db.sequelize.query('EXEC dbo.spusers_postuserrequest :userId, :email, :startDate, :endDate, :leaveType, :request, :reason', {
-			replacements: {
-				userId: userId,
-				email: request.email,
-				startDate: request.startDate,
-				endDate: request.endDate,
-				leaveType: request.leaveType,
-				request: request.request,
-				reason: request.reason
+		const data = await db.sequelize.query(
+			'EXEC dbo.spusers_postuserrequest :userId, :email, :startDate, :endDate, :leaveType, :request, :reason',
+			{
+				replacements: {
+					userId: userId,
+					email: request.email,
+					startDate: request.startDate,
+					endDate: request.endDate,
+					leaveType: request.leaveType,
+					request: request.request,
+					reason: request.reason
+				}
 			}
-		});
+		);
 		return res.status(201).json({ message: 'User request created successfully' });
 	} catch (error) {
 		console.log(error);
@@ -117,17 +120,20 @@ exports.resendUserRequest = async (req, res) => {
 					id: requestId
 				}
 			});
-			const resendRequestData = await db.sequelize.query('EXEC dbo.spusers_postuserrequest :userId, :email, :startDate, :endDate, :leaveType, :request, :reason', {
-				replacements: {
-					userId: userRequestData[0].userId,
-					email: userRequestData[0].email,
-					startDate: userRequestData[0].startDate,
-					endDate: userRequestData[0].endDate,
-					leaveType: userRequestData[0].leaveType,
-					request: userRequestData[0].request,
-					reason: userRequestData[0].reason
+			const resendRequestData = await db.sequelize.query(
+				'EXEC dbo.spusers_postuserrequest :userId, :email, :startDate, :endDate, :leaveType, :request, :reason',
+				{
+					replacements: {
+						userId: userRequestData[0].userId,
+						email: userRequestData[0].email,
+						startDate: userRequestData[0].startDate,
+						endDate: userRequestData[0].endDate,
+						leaveType: userRequestData[0].leaveType,
+						request: userRequestData[0].request,
+						reason: userRequestData[0].reason
+					}
 				}
-			});
+			);
 			return res.status(201).json({ message: 'User request recreated successfully' });
 		} else {
 			return res.status(200).json({ message: 'Please create a new request' });
@@ -142,7 +148,7 @@ exports.getUserAvailableRequests = async (req, res) => {
 	try {
 		const userId = await currentUser(req.user.userEmail);
 		let bereavementLeave = 5;
-		let casualLeaveIntern = new Date().getMonth() + 1;
+		let casualLeave = new Date().getMonth() + 1;
 		let compensatoryOff = 5;
 		let leaveWithoutPay = 15;
 		let restrictedHoliday = 5;
@@ -155,11 +161,11 @@ exports.getUserAvailableRequests = async (req, res) => {
 				} else {
 					bereavementLeave -= 0.5;
 				}
-			} else if (userApprovedRequestData[i].request === 'Casual Leave Intern') {
+			} else if (userApprovedRequestData[i].request === 'Casual Leave') {
 				if (userApprovedRequestData[i].leaveType === 'Full-Day') {
-					casualLeaveIntern -= 1;
+					casualLeave -= 1;
 				} else {
-					casualLeaveIntern -= 0.5;
+					casualLeave -= 0.5;
 				}
 			} else if (userApprovedRequestData[i].request === 'Compensatory Off') {
 				if (userApprovedRequestData[i].leaveType === 'Full-Day') {
@@ -189,7 +195,7 @@ exports.getUserAvailableRequests = async (req, res) => {
 		}
 		const availableRequests = {
 			bereavementLeave: bereavementLeave,
-			casualLeaveIntern: casualLeaveIntern,
+			casualLeave: casualLeave,
 			compensatoryOff: compensatoryOff,
 			leaveWithoutPay: leaveWithoutPay,
 			restrictedHoliday: restrictedHoliday,
