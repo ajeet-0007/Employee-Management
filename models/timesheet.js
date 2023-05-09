@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		approvedHours: {
 			type: DataTypes.STRING,
-			defaultValue: 'Waiting for Approval'
+			defaultValue: '00:00'
 		},
 		status: {
 			type: DataTypes.STRING,
