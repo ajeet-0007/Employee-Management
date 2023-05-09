@@ -5,7 +5,7 @@ const currentUser = async (userEmail) => {
 		const currentUserData = await db.sequelize.query('EXEC dbo.spusers_getcurrentuser :email', {
 			replacements: { email: userEmail }
 		});
-		if (currentUserData[1] == 0) {
+		if (currentUserData[1] === 0) {
 			return false;
 		} else {
 			return currentUserData[0][0].id;

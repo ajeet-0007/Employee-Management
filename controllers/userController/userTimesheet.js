@@ -19,8 +19,7 @@ exports.postUserTimesheet = async (req, res) => {
 
 exports.getUserTimesheets = async (req, res) => {
 	try {
-		const currentUserEmail = req.user.userEmail;
-		const userTimesheetData = await getUserTimesheetData.fetchTimesheets(currentUserEmail);
+		const userTimesheetData = await getUserTimesheetData.fetchTimesheets(req.user.userId);
 		if (userTimesheetData.length == 0) {
 			return res.status(404).json({ message: 'No user timesheets found' });
 		} else {
@@ -34,9 +33,7 @@ exports.getUserTimesheets = async (req, res) => {
 
 exports.getUserWeeklyTimesheets = async (req, res) => {
 	try {
-		const currentUserEmail = req.user.userEmail;
-		const week = req.query.week;
-		const userTimesheetData = await getUserTimesheetData.fetchWeeklyTimesheets(currentUserEmail, week);
+		const userTimesheetData = await getUserTimesheetData.fetchWeeklyTimesheets(req.user.userId, req.query.week);
 		if (userTimesheetData.length == 0) {
 			return res.status(404).json({ message: 'No user timesheets found' });
 		} else {
@@ -50,8 +47,7 @@ exports.getUserWeeklyTimesheets = async (req, res) => {
 
 exports.getUserSubordinatesTimesheets = async (req, res) => {
 	try {
-		const currentUserEmail = req.user.userEmail;
-		const subordinateTimesheetsData = await getUserTimesheetData.fetchSubordinatesTimesheets(currentUserEmail);
+		const subordinateTimesheetsData = await getUserTimesheetData.fetchSubordinatesTimesheets(req.user.userId);
 		if (subordinateTimesheetsData.length == 0) {
 			return res.status(404).json({ message: 'No subordinate(s) timesheets found' });
 		} else {
@@ -66,14 +62,11 @@ exports.getUserSubordinatesTimesheets = async (req, res) => {
 exports.updateUserTimesheetRequest = async (req, res) => {
 	try {
 		const request = req.body;
-		const userId = request.userId;
-		const timesheetId = request.timesheetId;
-		const status = request.status === 'Approve' ? 'Approved' : 'Rejected';
 		const data = await db.sequelize.query('EXEC dbo.spusers_updateusertimesheet :userId, :id, :status', {
 			replacements: {
-				userId: userId,
-				id: timesheetId,
-				status: status
+				userId: request.userId,
+				id: request.timesheetId,
+				status: request.status === 'Approve' ? 'Approved' : 'Rejected'
 			}
 		});
 		if (data[1] != 0) {

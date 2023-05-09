@@ -1,9 +1,9 @@
 const db = require('../../models');
 
-const fetchProjects = async (userEmail) => {
+const fetchProjects = async (userId) => {
 	try {
-		const userProjectsData = await db.sequelize.query('EXEC dbo.spusers_getuserprojects :userEmail', {
-			replacements: { userEmail: userEmail }
+		const userProjectsData = await db.sequelize.query('EXEC dbo.spusers_getuserprojects :userId', {
+			replacements: { userId: userId }
 		});
 		return userProjectsData[0];
 	} catch (error) {
@@ -12,10 +12,10 @@ const fetchProjects = async (userEmail) => {
 	}
 };
 
-const fetchProjectsMinimal = async (userEmail) => {
+const fetchProjectsMinimal = async (userId) => {
 	try {
-		const userProjectsData = await db.sequelize.query('EXEC dbo.spusers_getuserprojectsminimaldata :userEmail', {
-			replacements: { userEmail: userEmail }
+		const userProjectsData = await db.sequelize.query('EXEC dbo.spusers_getuserprojectsminimaldata :userId', {
+			replacements: { userId: userId }
 		});
 		return userProjectsData[0];
 	} catch (error) {

@@ -34,7 +34,7 @@ const postUploadUserDetails = (req, res) => {
 		stream.pipe(fileStream);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: 'File upload failed' });
+		res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
@@ -48,7 +48,7 @@ const getAllUsers = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: 'Users fetching failed' });
+		res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 

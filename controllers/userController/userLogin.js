@@ -7,10 +7,7 @@ const SECRET = process.env.SECRET_KEY;
 
 exports.postLogin = async (req, res) => {
 	try {
-		const request = {
-			email: req.body.email,
-			password: req.body.password
-		};
+		const request = req.body;
 		const userId = await currentUser(request.email);
 		const user = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
 			replacements: { userId: userId }
@@ -18,8 +15,8 @@ exports.postLogin = async (req, res) => {
 		if (user[1] != 0) {
 			const userCheck = await bcrypt.compare(request.password, user[0][0].password);
 			if (userCheck) {
-				const userEmail = user[0][0].email;
-				jwt.sign({ userEmail }, SECRET, (error, token) => {
+				const userEmail = request.email;
+				jwt.sign({ userEmail, userId }, SECRET, (error, token) => {
 					if (error) {
 						console.log(error);
 					} else {
