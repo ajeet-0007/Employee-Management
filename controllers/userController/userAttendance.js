@@ -48,7 +48,7 @@ exports.getUserCurrentAttendance = async (req, res) => {
 		if (currentAttendance.length == 0) {
 			return res.status(404).json({ message: 'No user current attendance found' });
 		} else {
-			return res.status(200).json(currentAttendance);
+			return res.status(200).json(currentAttendance[0]);
 		}
 	} catch (error) {
 		console.log(error);

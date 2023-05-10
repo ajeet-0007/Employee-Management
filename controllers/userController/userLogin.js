@@ -8,7 +8,7 @@ const SECRET = process.env.SECRET_KEY;
 exports.postLogin = async (req, res) => {
 	try {
 		const request = req.body;
-		const userId = await currentUser(request.email);
+		const userId = (await currentUser(request.email)).id;
 		const user = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
 			replacements: { userId: userId }
 		});

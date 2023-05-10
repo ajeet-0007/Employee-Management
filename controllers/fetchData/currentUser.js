@@ -8,7 +8,7 @@ const currentUser = async (userEmail) => {
 		if (currentUserData[1] === 0) {
 			return false;
 		} else {
-			return currentUserData[0][0].id;
+			return currentUserData[0][0];
 		}
 	} catch (error) {
 		console.log(error);
