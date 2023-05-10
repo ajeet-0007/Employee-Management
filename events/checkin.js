@@ -1,5 +1,5 @@
 const authorize = require('./authorize');
-const { getAttendanceTimeDifference } = require('../controllers/functions/userAttendance');
+const { getAttendanceTimeDifference, getCurrentAttendance } = require('../controllers/functions/userAttendance');
 
 const userCheckIn = async (socket) => {
 	try {
