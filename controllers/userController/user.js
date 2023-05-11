@@ -96,7 +96,7 @@ exports.getAllUsers = async (req, res) => {
 exports.getSearchedUser = async (req, res) => {
 	try {
 		const userData = {};
-		const userProfileData = await getUserProfileData.fetchProfile(req.user.userId);
+		const userProfileData = await getUserProfileData.fetchProfile(req.query.userId);
 		const userReportingManagerData = await getUserHierarchyData.fetchSuperiorProfile(userProfileData[0].reportsTo);
 		const userSubordinateData = await getUserHierarchyData.fetchSubordinateProfile(userProfileData[0].hrmid);
 		userData.userId = userProfileData[0].userId;
