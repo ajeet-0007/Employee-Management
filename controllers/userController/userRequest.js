@@ -6,7 +6,17 @@ exports.postUserRequest = async (req, res) => {
 	try {
 		const request = req.body;
 		const availableRequests = await getAvailableRequests(req.user.userId);
-		if (availableRequests[request.request] > 0) {
+		let leave;
+		if (request.request === 'Casual Leave') {
+			leave = 'casualLeave';
+		} else if (request.request === 'Leave Without Pay') {
+			leave = 'leaveWithoutPay';
+		} else if (request.request === 'Restricted Holiday') {
+			leave = 'restrictedHoliday';
+		} else if (request.request === 'Work From Home') {
+			leave = 'workFromHome';
+		}
+		if (availableRequests[leave] > 0) {
 			const data = await db.sequelize.query('EXEC dbo.spusers_postuserrequest :userId, :email, :startDate, :endDate, :leaveType, :request, :reason', {
 				replacements: {
 					userId: req.user.userId,
