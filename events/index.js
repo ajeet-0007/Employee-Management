@@ -28,6 +28,9 @@ const onConnection = (io) => async (socket) => {
 	socket.on('checkedIn', () => {
 		socket.broadcast.emit('startClock');
 	});
+	socket.on('join', (data) => {
+		// console.log(data);
+	});
 	socket.on('checkin', () => userCheckInEvent(socket));
 	socket.on('checkout', () => userCheckOutEvent(socket));
 	socket.on('disconnect', () => {

@@ -1,3 +1,6 @@
+const db = require('../../models');
+const { getUser } = require('../fetchData/user');
+const { randomBytes } = require('crypto');
 const getUserRequestData = require('../fetchData/userRequest');
 
 const getAvailableRequests = async (userId) => {
@@ -43,4 +46,44 @@ const getAvailableRequests = async (userId) => {
 	return availableRequests;
 };
 
-module.exports = { getAvailableRequests };
+const createRequestNotification = async (userId) => {
+	const userData = await getUser(userId);
+	await db.sequelize.query('EXEC dbo.spusers_postusernotification :notification_id, :content, :sender, :receiver, :type', {
+		replacements: {
+			notification_id: randomBytes(16).toString('hex'),
+			content: `A request is waiting for your approval from ${userData.name}.`,
+			sender: userData.hrmid,
+			receiver: userData.reportsTo,
+			type: 'request'
+		}
+	});
+};
+
+const updateSubordinateRequestNotification = async (senderId, receiverId, status) => {
+	const sender = await getUser(senderId); //user who approves the request
+	const receiver = await getUser(receiverId); //user who sent the request
+	await db.sequelize.query('EXEC dbo.spusers_postusernotification :notification_id, :content, :sender, :receiver, :type', {
+		replacements: {
+			notification_id: randomBytes(16).toString('hex'),
+			content: 'Your request has been ' + status.toLowerCase() + 'ed' + ' by ' + sender.name,
+			sender: sender.hrmid,
+			receiver: receiver.hrmid,
+			type: 'request'
+		}
+	});
+};
+
+const updateRequestNotification = async (userId) => {
+	const userData = await getUser(userId);
+	await db.sequelize.query('EXEC dbo.spusers_postusernotification :notification_id, :content, :sender, :receiver, :type', {
+		replacements: {
+			notification_id: randomBytes(16).toString('hex'),
+			content: `A request has been cancelled by ${userData.name}.`,
+			sender: userData.hrmid,
+			receiver: userData.reportsTo,
+			type: 'request'
+		}
+	});
+};
+
+module.exports = { getAvailableRequests, createRequestNotification, updateSubordinateRequestNotification, updateRequestNotification };

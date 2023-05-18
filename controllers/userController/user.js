@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const db = require('../../models');
 const getUserProfileData = require('../fetchData/userProfile');
 const getUserHierarchyData = require('../fetchData/userHierarchy');
-const currentUser = require('../fetchData/currentUser');
+const currentUser = require('../fetchData/user');
 
 exports.putSignUp = async (req, res) => {
 	try {
