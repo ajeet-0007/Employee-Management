@@ -6,7 +6,6 @@ const { Server } = require('socket.io');
 const { createServer } = require('http');
 const { onConnection } = require('./events');
 const bodyParser = require('body-parser');
-const userRoutes = require('./routes/userRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const userLoginController = require('./controllers/userController/userLogin');
 const userController = require('./controllers/userController/user');
@@ -42,8 +41,9 @@ io.use((socket, next) => {
 	}
 	return next();
 });
-
 io.on('connection', onConnection(io));
+const userRoutes = require('./routes/userRoutes')(io);
+
 app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
 app.post('/', userLoginController.postLogin);
