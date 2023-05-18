@@ -11,60 +11,82 @@ const userProjectController = require('../controllers/userController/userProject
 const userHierarchyController = require('../controllers/userController/userHierarchy');
 const authorize = require('../middlewares/authorize');
 
-router.post('/check-in', authorize, userAttendanceController.postCheckIn);
+const { send, sendTo } = require('../events/sendNotification');
 
-router.post('/requests/add-user-request', authorize, userRequestController.postUserRequest);
+const returnRouter = (io) => {
+	io.on('connection', async (socket) => {
+		const id = socket.user.userId; // ID is the userId of the user
+		const userData = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
+			replacements: { userId: id }
+		});
+		const HRM_ID = userData[0][0].hrmid; // HRM_ID of the user
 
-router.post('/requests/add-user-request', authorize, userRequestController.postUserRequest);
+		socket.join(HRM_ID); // always join with HRM_ID
 
-router.post('/requests/resend-user-request', authorize, userRequestController.resendUserRequest);
+		send(io, HRM_ID); // emit socket event to send all notifications to the user
+	});
 
-router.post('/timesheets/add-user-timesheet', authorize, userTimesheetController.postUserTimesheet);
+	router.use((req, res, next) => {
+		req.io = io;
+		// req.socket = socketOb;
+		next();
+	});
 
-router.put('/skills/update-user-skills', authorize, userSkillsController.updateUserSkills);
+	router.post('/check-in', authorize, userAttendanceController.postCheckIn);
 
-router.put('/account/update-user-profile', authorize, userProfileController.updateUserProfile);
+	router.post('/requests/add-user-request', authorize, userRequestController.postUserRequest);
 
-router.put('/requests/update-user-request', authorize, userRequestController.updateUserRequest);
+	router.post('/requests/resend-user-request', authorize, userRequestController.resendUserRequest);
 
-router.put('/requests/update-user-subordinate-request', authorize, userRequestController.updateUserSubordinateRequest);
+	router.post('/timesheets/add-user-timesheet', authorize, userTimesheetController.postUserTimesheet);
 
-router.put('/timesheets/update-user-subordinate-timesheet', authorize, userTimesheetController.updateUserTimesheetRequest);
+	router.put('/skills/update-user-skills', authorize, userSkillsController.updateUserSkills);
 
-router.put('/check-out', authorize, userAttendanceController.putCheckOut);
+	router.put('/account/update-user-profile', authorize, userProfileController.updateUserProfile);
 
-router.get('/logout', authorize, userLoginController.getLogout);
+	router.put('/requests/update-user-request', authorize, userRequestController.updateUserRequest);
 
-router.get('/get-user', authorize, userController.getUser);
+	router.put('/requests/update-user-subordinate-request', authorize, userRequestController.updateUserSubordinateRequest);
 
-router.get('/get-searched-user', authorize, userController.getSearchedUser);
+	router.put('/timesheets/update-user-subordinate-timesheet', authorize, userTimesheetController.updateUserTimesheetRequest);
 
-router.get('/get-all-users', authorize, userController.getAllUsers);
+	router.put('/check-out', authorize, userAttendanceController.putCheckOut);
 
-router.get('/account/get-user-profile', authorize, userProfileController.getUserProfile);
+	router.get('/logout', authorize, userLoginController.getLogout);
 
-router.get('/requests/get-user-requests', authorize, userRequestController.getUserRequests);
+	router.get('/get-user', authorize, userController.getUser);
 
-router.get('/requests/get-user-available-requests', authorize, userRequestController.getUserAvailableRequests);
+	router.get('/get-searched-user', authorize, userController.getSearchedUser);
 
-router.get('/requests/get-user-subordinates-requests', authorize, userRequestController.getUserSubordinatesRequests);
+	router.get('/get-all-users', authorize, userController.getAllUsers);
 
-router.get('/get-user-attendance', authorize, userAttendanceController.getUserAttendance);
+	router.get('/account/get-user-profile', authorize, userProfileController.getUserProfile);
 
-router.get('/get-user-current-attendance', authorize, userAttendanceController.getUserCurrentAttendance);
+	router.get('/requests/get-user-requests', authorize, userRequestController.getUserRequests);
 
-router.get('/skills/get-user-skills', authorize, userSkillsController.getUserSkills);
+	router.get('/requests/get-user-available-requests', authorize, userRequestController.getUserAvailableRequests);
 
-router.get('/timesheets/get-user-timesheets', authorize, userTimesheetController.getUserTimesheets);
+	router.get('/requests/get-user-subordinates-requests', authorize, userRequestController.getUserSubordinatesRequests);
 
-router.get('/timesheets/get-user-weekly-timesheets', authorize, userTimesheetController.getUserWeeklyTimesheets);
+	router.get('/get-user-attendance', authorize, userAttendanceController.getUserAttendance);
 
-router.get('/timesheets/get-user-subordinates-timesheets', authorize, userTimesheetController.getUserSubordinatesTimesheets);
+	router.get('/get-user-current-attendance', authorize, userAttendanceController.getUserCurrentAttendance);
 
-router.get('/get-user-projects', authorize, userProjectController.getUserProjects);
+	router.get('/skills/get-user-skills', authorize, userSkillsController.getUserSkills);
 
-router.get('/get-user-projects-minimal-data', authorize, userProjectController.getUserProjectsMinimalData);
+	router.get('/timesheets/get-user-timesheets', authorize, userTimesheetController.getUserTimesheets);
 
-router.get('/get-user-hierarchy', authorize, userHierarchyController.getUserHierarchy);
+	router.get('/timesheets/get-user-weekly-timesheets', authorize, userTimesheetController.getUserWeeklyTimesheets);
 
-module.exports = router;
+	router.get('/timesheets/get-user-subordinates-timesheets', authorize, userTimesheetController.getUserSubordinatesTimesheets);
+
+	router.get('/get-user-projects', authorize, userProjectController.getUserProjects);
+
+	router.get('/get-user-projects-minimal-data', authorize, userProjectController.getUserProjectsMinimalData);
+
+	router.get('/get-user-hierarchy', authorize, userHierarchyController.getUserHierarchy);
+
+	return router;
+};
+
+module.exports = returnRouter;

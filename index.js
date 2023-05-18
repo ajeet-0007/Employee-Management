@@ -19,11 +19,6 @@ app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' }));
 app.use(express.json({ limit: '50mb' }));
 app.use(cookieParser());
 
-app.use('/user', userRoutes);
-app.use('/admin', adminRoutes);
-app.post('/', userLoginController.postLogin);
-app.put('/signup', userController.putSignUp);
-
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
@@ -41,9 +36,7 @@ const io = new Server(httpServer, {
 });
 
 io.use((socket, next) => {
-	const userToken = socket.request.headers.cookie
-		?.split('; ')
-		.find((row) => row.startsWith('userToken='));
+	const userToken = socket.request.headers.cookie?.split('; ').find((row) => row.startsWith('userToken='));
 	if (!userToken) {
 		return next(new Error('Authentication error'));
 	}
@@ -51,6 +44,10 @@ io.use((socket, next) => {
 });
 
 io.on('connection', onConnection(io));
+app.use('/user', userRoutes);
+app.use('/admin', adminRoutes);
+app.post('/', userLoginController.postLogin);
+app.put('/signup', userController.putSignUp);
 
 httpServer.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
