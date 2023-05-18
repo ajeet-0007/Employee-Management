@@ -13,7 +13,6 @@ const createTimesheetNotification = async (userId) => {
 			type: 'timesheet'
 		}
 	});
-	send(req.io, userData.reportsTo);
 };
 
 const updateTimesheetNotification = async (senderId, receiverId, status) => {

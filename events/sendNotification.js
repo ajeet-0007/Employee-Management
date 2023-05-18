@@ -17,14 +17,26 @@ const { fetchNotifications } = require('../controllers/fetchData/userNotificatio
  */
 
 const send = async (io, hrmid) => {
+	let unreadCount = 0;
 	const userNotificationData = await fetchNotifications(hrmid);
 	const receiver = userNotificationData[0]?.receiver;
-	io.to(receiver).emit('notifications', userNotificationData);
+	userNotificationData.forEach((data) => {
+		if (data.status === 'unread') {
+			unreadCount++;
+		}
+	});
+	io.to(receiver).emit('notifications', { unread: unreadCount, messages: userNotificationData });
 };
 
 const sendTo = async (io, hrmid) => {
+	let unreadCount = 0;
 	const userNotificationData = await fetchNotifications(hrmid);
-	io.to(hrmid).emit('notifications', userNotificationData);
+	userNotificationData.forEach((data) => {
+		if (data.status === 'unread') {
+			unreadCount++;
+		}
+	});
+	io.to(hrmid).emit('notifications', { unread: unreadCount, messages: userNotificationData });
 };
 
 module.exports = { send, sendTo };
