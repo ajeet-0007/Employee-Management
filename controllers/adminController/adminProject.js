@@ -1,5 +1,5 @@
 const db = require('../../models');
-const currentUser = require('../fetchData/currentUser');
+const currentUser = require('../fetchData/user');
 
 exports.postUserProject = async (req, res) => {
 	try {

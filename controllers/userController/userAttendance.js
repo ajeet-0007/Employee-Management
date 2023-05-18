@@ -62,7 +62,7 @@ exports.putCheckOut = async (req, res) => {
 		const checkOutStatus = getCheckOutStatus(request.checkOutTime, request.checkOutDate);
 		const currentAttendance = await getCurrentAttendance(req.user.userId);
 		const checkInTime = currentAttendance[0].checkInTime;
-		const data = await db.sequelize.query('EXEC dbo.spusers_updateusercheckout :userId, :checkOutLocation, :status, :checkInTime', {
+		await db.sequelize.query('EXEC dbo.spusers_updateusercheckout :userId, :checkOutLocation, :status, :checkInTime', {
 			replacements: {
 				userId: req.user.userId,
 				checkOutLocation: request.checkOutLocation,

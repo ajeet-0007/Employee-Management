@@ -9,26 +9,20 @@ const userSkillsController = require('../controllers/userController/userSkills')
 const userTimesheetController = require('../controllers/userController/userTimesheet');
 const userProjectController = require('../controllers/userController/userProject');
 const userHierarchyController = require('../controllers/userController/userHierarchy');
+const userNotificationController = require('../controllers/userController/userNotification');
 const authorize = require('../middlewares/authorize');
-
-const { send, sendTo } = require('../events/sendNotification');
+const { send } = require('../events/sendNotification');
+const { getUser } = require('../controllers/fetchData/user');
 
 const returnRouter = (io) => {
 	io.on('connection', async (socket) => {
-		const id = socket.user.userId; // ID is the userId of the user
-		const userData = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
-			replacements: { userId: id }
-		});
-		const HRM_ID = userData[0][0].hrmid; // HRM_ID of the user
-
-		socket.join(HRM_ID); // always join with HRM_ID
-
-		send(io, HRM_ID); // emit socket event to send all notifications to the user
+		const userData = await getUser(socket.user.userId);
+		socket.join(userData.hrmid); // Always join with hrmid
+		send(io, userData.hrmid); // Emit socket event to send all notifications to the user
 	});
 
 	router.use((req, res, next) => {
 		req.io = io;
-		// req.socket = socketOb;
 		next();
 	});
 
@@ -49,6 +43,10 @@ const returnRouter = (io) => {
 	router.put('/requests/update-user-subordinate-request', authorize, userRequestController.updateUserSubordinateRequest);
 
 	router.put('/timesheets/update-user-subordinate-timesheet', authorize, userTimesheetController.updateUserTimesheetRequest);
+
+	router.put('/update-user-notification', authorize, userNotificationController.updateUserNotification);
+
+	router.put('/update-all-user-notifications', authorize, userNotificationController.updateAllUserNotifications);
 
 	router.put('/check-out', authorize, userAttendanceController.putCheckOut);
 

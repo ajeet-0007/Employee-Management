@@ -16,4 +16,16 @@ const currentUser = async (userEmail) => {
 	}
 };
 
-module.exports = currentUser;
+const getUser = async (userId) => {
+	try {
+		const userData = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
+			replacements: { userId: userId }
+		});
+		return userData[0][0];
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
+};
+
+module.exports = { currentUser, getUser };
