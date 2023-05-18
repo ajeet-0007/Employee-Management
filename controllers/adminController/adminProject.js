@@ -1,11 +1,11 @@
 const db = require('../../models');
-const currentUser = require('../fetchData/user');
+const { currentUser } = require('../fetchData/user');
 
 exports.postUserProject = async (req, res) => {
 	try {
 		const request = req.body;
-		const userId = await currentUser(request.userEmail);
-		const data = await db.sequelize.query(
+		const userId = (await currentUser(request.userEmail)).id;
+		const projectData = await db.sequelize.query(
 			'EXEC dbo.spadmins_postuserproject :userId, :userEmail, :clientId, :clientName, :projectId, :projectName, :assignedOn, :completeBy, :teamMembers, :teamHead, :department',
 			{
 				replacements: {
@@ -23,10 +23,10 @@ exports.postUserProject = async (req, res) => {
 				}
 			}
 		);
-		if (data[1] != 0) {
+		if (projectData[1] != 0) {
 			return res.status(201).json({ message: 'User added to the project team successfully' });
 		} else {
-			return res.status(200).json({ message: 'User is already exists in the project team' });
+			return res.status(200).json({ message: 'User already exists in the project team' });
 		}
 	} catch (error) {
 		console.log(error);

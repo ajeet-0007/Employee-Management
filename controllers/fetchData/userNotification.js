@@ -1,9 +1,9 @@
 const db = require('../../models');
 
-const fetchNotifications = async (userId) => {
+const fetchNotifications = async (hrmid) => {
 	try {
-		const userNotificationData = await db.sequelize.query('EXEC dbo.spusers_getusernotifications :userId', {
-			replacements: { userId: userId }
+		const userNotificationData = await db.sequelize.query('EXEC dbo.spusers_getusernotifications :hrmid', {
+			replacements: { hrmid: hrmid }
 		});
 		return userNotificationData[0];
 	} catch (error) {
