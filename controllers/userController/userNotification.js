@@ -19,9 +19,9 @@ exports.updateUserNotification = async (req, res) => {
 
 exports.updateAllUserNotifications = async (req, res) => {
 	try {
-		const userData = await getUser(req.user.userId);
+		const request = req.body;
 		await db.sequelize.query('EXEC dbo.spusers_updateallusernotifications :hrmid', {
-			replacements: { hrmid: userData.hrmid }
+			replacements: { hrmid: request.hrmid }
 		});
 		return res.status(201).json({ message: 'All Notifications read' });
 	} catch (error) {

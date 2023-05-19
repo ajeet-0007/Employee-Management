@@ -42,7 +42,7 @@ const returnRouter = (io) => {
 
 	router.put('/requests/update-user-subordinate-request', authorize, userRequestController.updateUserSubordinateRequest);
 
-	router.put('/timesheets/update-user-subordinate-timesheet', authorize, userTimesheetController.updateUserTimesheetRequest);
+	router.put('/timesheets/update-user-subordinate-timesheet', authorize, userTimesheetController.updateUserSubordinateTimesheet);
 
 	router.put('/update-user-notification', authorize, userNotificationController.updateUserNotification);
 

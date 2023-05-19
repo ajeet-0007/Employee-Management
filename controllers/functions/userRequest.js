@@ -3,36 +3,45 @@ const { getUser } = require('../fetchData/user');
 const { randomBytes } = require('crypto');
 const getUserRequestData = require('../fetchData/userRequest');
 
+const calaculateDays = (startDate, endDate) => {
+	const date1 = new Date(startDate);
+	const date2 = new Date(endDate);
+	let timeDiff = Math.abs(date2.getTime() - date1.getTime());
+	return Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+};
+
 const getAvailableRequests = async (userId) => {
 	let casualLeave = new Date().getMonth() + 1;
 	let leaveWithoutPay = 15;
 	let restrictedHoliday = 5;
 	let workFromHome = 5;
+
 	const userAddedRequestData = await getUserRequestData.fetchAddedRequests(userId);
 	for (let i = 0; i < userAddedRequestData.length; i++) {
+		let days = calaculateDays(userAddedRequestData[i].startDate, userAddedRequestData[i].endDate);
 		if (userAddedRequestData[i].request === 'Casual Leave') {
 			if (userAddedRequestData[i].leaveType === 'Full Day') {
-				casualLeave -= 1;
+				casualLeave -= 1 * days;
 			} else {
-				casualLeave -= 0.5;
+				casualLeave -= 0.5 * days;
 			}
 		} else if (userAddedRequestData[i].request === 'Leave Without Pay') {
 			if (userAddedRequestData[i].leaveType === 'Full Day') {
-				leaveWithoutPay -= 1;
+				leaveWithoutPay -= 1 * days;
 			} else {
-				leaveWithoutPay -= 0.5;
+				leaveWithoutPay -= 0.5 * days;
 			}
 		} else if (userAddedRequestData[i].request === 'Restricted Holiday') {
 			if (userAddedRequestData[i].leaveType === 'Full Day') {
-				restrictedHoliday -= 1;
+				restrictedHoliday -= 1 * days;
 			} else {
-				restrictedHoliday -= 0.5;
+				restrictedHoliday -= 0.5 * days;
 			}
 		} else if (userAddedRequestData[i].request === 'Work From Home') {
 			if (userAddedRequestData[i].leaveType === 'Full Day') {
-				workFromHome -= 1;
+				workFromHome -= 1 * days;
 			} else {
-				workFromHome -= 0.5;
+				workFromHome -= 0.5 * days;
 			}
 		}
 	}
@@ -90,4 +99,4 @@ const updateRequestNotification = async (userId) => {
 	});
 };
 
-module.exports = { getAvailableRequests, createRequestNotification, updateSubordinateRequestNotification, updateRequestNotification };
+module.exports = { calaculateDays, getAvailableRequests, createRequestNotification, updateSubordinateRequestNotification, updateRequestNotification };

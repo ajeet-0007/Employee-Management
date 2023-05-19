@@ -2,7 +2,7 @@ const db = require('../../models');
 const getUserRequestData = require('../fetchData/userRequest');
 const { getUser } = require('../fetchData/user');
 const { send, sendTo } = require('../../events/sendNotification');
-const { getAvailableRequests, createRequestNotification, updateSubordinateRequestNotification, updateRequestNotification } = require('../functions/userRequest');
+const { getAvailableRequests, createRequestNotification, updateSubordinateRequestNotification, updateRequestNotification, calaculateDays } = require('../functions/userRequest');
 
 exports.postUserRequest = async (req, res) => {
 	try {
@@ -18,7 +18,8 @@ exports.postUserRequest = async (req, res) => {
 		} else if (request.request === 'Work From Home') {
 			leave = 'workFromHome';
 		}
-		if (availableRequests[leave] > 0) {
+		let days = calaculateDays(request.startDate, request.endDate);
+		if (availableRequests[leave] - days > 0) {
 			const data = await db.sequelize.query('EXEC dbo.spusers_postuserrequest :userId, :email, :startDate, :endDate, :leaveType, :request, :reason', {
 				replacements: {
 					userId: req.user.userId,

@@ -67,13 +67,13 @@ exports.getUserSubordinatesTimesheets = async (req, res) => {
 	}
 };
 
-exports.updateUserTimesheetRequest = async (req, res) => {
+exports.updateUserSubordinateTimesheet = async (req, res) => {
 	try {
 		const request = req.body;
-		const updatedData = await db.sequelize.query('EXEC dbo.spusers_updateusertimesheet :userId, :id, :status', {
+		const updatedData = await db.sequelize.query('EXEC dbo.spusers_updateusertimesheet :userId, :timesheetId, :status', {
 			replacements: {
 				userId: request.userId,
-				id: request.timesheetId,
+				timesheetId: request.timesheetId,
 				status: request.status === 'Approve' ? 'Approved' : 'Rejected'
 			}
 		});

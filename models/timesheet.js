@@ -3,6 +3,9 @@ module.exports = (sequelize, DataTypes) => {
 		userId: {
 			type: DataTypes.INTEGER
 		},
+		timesheetId: {
+			type: DataTypes.STRING
+		},
 		timesheetName: {
 			type: DataTypes.STRING
 		},
