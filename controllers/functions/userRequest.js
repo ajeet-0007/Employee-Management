@@ -77,13 +77,14 @@ const updateSubordinateRequestNotification = async (senderId, receiverId, status
 
 const updateRequestNotification = async (userId) => {
 	const userData = await getUser(userId);
+	const date = new Date();
 	await db.sequelize.query('EXEC dbo.spusers_postusernotification :notification_id, :content, :sender, :receiver, :date, :type', {
 		replacements: {
 			notification_id: randomBytes(16).toString('hex'),
 			content: `A request has been cancelled by ${userData.name}.`,
 			sender: userData.hrmid,
 			receiver: userData.reportsTo,
-			date: new Date(),
+			date: date,
 			type: 'request'
 		}
 	});
