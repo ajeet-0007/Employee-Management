@@ -1,9 +1,12 @@
+const { getUser } = require('../fetchData/user');
+
 exports.updateUserNotification = async (req, res) => {
 	try {
 		const request = req.body;
-		await db.sequelize.query('EXEC dbo.spusers_updateusernotification :userId, :notification_id', {
+		const userData = await getUser(req.user.userId);
+		await db.sequelize.query('EXEC dbo.spusers_updateusernotification :hrmid, :notification_id', {
 			replacements: {
-				userId: req.user.userId,
+				hrmid: userData.hrmid,
 				notification_id: request.notificationId
 			}
 		});
@@ -16,9 +19,9 @@ exports.updateUserNotification = async (req, res) => {
 
 exports.updateAllUserNotifications = async (req, res) => {
 	try {
-		const request = req.body;
-		await db.sequelize.query('EXEC dbo.spusers_updateallusernotifications :userId', {
-			replacements: { userId: req.user.userId }
+		const userData = await getUser(req.user.userId);
+		await db.sequelize.query('EXEC dbo.spusers_updateallusernotifications :hrmid', {
+			replacements: { hrmid: userData.hrmid }
 		});
 		return res.status(201).json({ message: 'All Notifications read' });
 	} catch (error) {
