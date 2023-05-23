@@ -29,9 +29,9 @@ const onConnection = (io) => async (socket) => {
 		socket.broadcast.emit('startClock');
 	});
 	socket.on('sendNotifications', () => {
-		io.emit('notify');
+		io.emit('notify', 'notified');
 	});
-	socket.on('join', (data) => {
+	socket.on('join', () => {
 		// console.log(data);
 	});
 	socket.on('checkin', () => userCheckInEvent(socket));

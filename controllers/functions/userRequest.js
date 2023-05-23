@@ -75,7 +75,7 @@ const updateSubordinateRequestNotification = async (senderId, receiverId, status
 	await db.sequelize.query('EXEC dbo.spusers_postusernotification :notification_id, :content, :sender, :receiver, :date, :type', {
 		replacements: {
 			notification_id: randomBytes(16).toString('hex'),
-			content: `Your request has been ${status.toLowerCase()}ed by ${sender.name}.`,
+			content: `Your request has been ${status.toLowerCase() === 'approve' ? 'approved' : 'rejected'} by ${sender.name}.`,
 			sender: sender.hrmid,
 			receiver: receiver.hrmid,
 			date: new Date(),

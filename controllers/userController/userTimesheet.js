@@ -10,11 +10,10 @@ exports.postUserTimesheet = async (req, res) => {
 		const request = JSON.parse(req.body.data);
 		const userTimesheetData = await userTimesheet.bulkCreate(request);
 
-		const userData = await getUser(req.user.userId);
-		createTimesheetNotification(req.user.userId);
-		send(req.io, userData.reportsTo); // send notification to the user who approves the request
-
 		if (userTimesheetData.length !== 0) {
+			const userData = await getUser(req.user.userId);
+			await createTimesheetNotification(req.user.userId);
+			send(req.io, userData.reportsTo); // send notification to the user who approves the request
 			return res.status(201).json({ message: 'User timesheet created successfully' });
 		} else {
 			return res.status(200).json({ message: 'User timesheet creation failed' });
@@ -70,10 +69,10 @@ exports.getUserSubordinatesTimesheets = async (req, res) => {
 exports.updateUserSubordinateTimesheet = async (req, res) => {
 	try {
 		const request = req.body;
-		const updatedData = await db.sequelize.query('EXEC dbo.spusers_updateusertimesheet :userId, :timesheetId, :status', {
+		const updatedData = await db.sequelize.query('EXEC dbo.spusers_updateusertimesheet :id, :userId, :status', {
 			replacements: {
+				id: request.id,
 				userId: request.userId,
-				timesheetId: request.timesheetId,
 				status: request.status === 'Approve' ? 'Approved' : 'Rejected'
 			}
 		});

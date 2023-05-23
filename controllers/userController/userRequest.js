@@ -18,8 +18,8 @@ exports.postUserRequest = async (req, res) => {
 		} else if (request.request === 'Work From Home') {
 			leave = 'workFromHome';
 		}
-		let days = calaculateDays(request.startDate, request.endDate);
-		if (availableRequests[leave] - days > 0) {
+		let days = request.leaveType === 'Full Day' ? calaculateDays(request.startDate, request.endDate) : calaculateDays(request.startDate, request.endDate) * 0.5;
+		if (availableRequests[leave] - days >= 0) {
 			const data = await db.sequelize.query('EXEC dbo.spusers_postuserrequest :userId, :email, :startDate, :endDate, :leaveType, :request, :reason', {
 				replacements: {
 					userId: req.user.userId,
@@ -33,7 +33,7 @@ exports.postUserRequest = async (req, res) => {
 			});
 
 			const userData = await getUser(req.user.userId);
-			createRequestNotification(req.user.userId);
+			await createRequestNotification(req.user.userId);
 			send(req.io, userData.reportsTo); // send notification to the user who approves the request
 
 			return res.status(201).json({ message: 'User request created successfully' });
@@ -79,8 +79,8 @@ exports.updateUserSubordinateRequest = async (req, res) => {
 		const request = req.body;
 		const updatedData = await db.sequelize.query('EXEC dbo.spusers_updateuserrequest :userId, :id, :status', {
 			replacements: {
-				userId: request.userId,
-				id: request.requestId,
+				userId: parseInt(request.userId),
+				id: parseInt(request.requestId),
 				status: request.status === 'Approve' ? 'Approved' : 'Rejected'
 			}
 		});
@@ -103,10 +103,10 @@ exports.updateUserSubordinateRequest = async (req, res) => {
 exports.updateUserRequest = async (req, res) => {
 	try {
 		const request = req.body;
-		const userRequestData = await db.sequelize.query('EXEC dbo.spusers_updateuserrequest :userId, :id, :status', {
+		const userRequestData = await db.sequelize.query('EXEC dbo.spusers_updateuserrequest :userId, :requestId, :status', {
 			replacements: {
 				userId: req.user.userId,
-				id: request.requestId,
+				requestId: request.requestId,
 				status: 'Cancelled'
 			}
 		});
