@@ -6,8 +6,12 @@ const adminProjectController = require('../controllers/adminController/adminProj
 
 router.post('/upload-user-details', upload.single('csvFile'), adminUserController.postUploadUserDetails);
 
+router.post('/add-user', adminUserController.postUser);
+
 router.post('/add-user-project', adminProjectController.postUserProject);
 
 router.get('/get-all-users', adminUserController.getAllUsers);
+
+router.get('/get-all-projects', adminProjectController.getAllProjects);
 
 module.exports = router;
