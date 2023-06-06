@@ -1,24 +1,23 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const db = require('../../models');
-const { currentUser, getUser } = require('../fetchData/user');
+const { currentAdmin, getAdmin } = require('../fetchData/admin');
 const SECRET = process.env.SECRET_KEY;
 
 exports.postLogin = async (req, res) => {
 	try {
 		const request = req.body;
-		const userId = (await currentUser(request.email)).id;
-		const user = await getUser(userId);
-		if (user[1] != 0) {
-			const userCheck = await bcrypt.compare(request.password, user.password);
-			if (userCheck) {
-				const userEmail = request.email;
-				jwt.sign({ userEmail, userId }, SECRET, (error, token) => {
+		const adminId = (await currentAdmin(request.email)).id;
+		const admin = await getAdmin(adminId);
+		if (admin[1] != 0) {
+			const adminCheck = await bcrypt.compare(request.password, admin.password);
+			if (adminCheck) {
+				const adminEmail = request.email;
+				jwt.sign({ adminEmail, adminId }, SECRET, (error, token) => {
 					if (error) {
 						console.log(error);
 					} else {
-						res.status(202).cookie('userToken', token, {
+						res.status(202).cookie('adminToken', token, {
 							sameSite: 'none',
 							secure: true,
 							expires: false,
@@ -32,7 +31,7 @@ exports.postLogin = async (req, res) => {
 				res.status(401).json({ message: 'Invalid Password' });
 			}
 		} else {
-			res.status(404).json({ message: "User doesn't exist" });
+			res.status(404).json({ message: "Admin doesn't exist" });
 		}
 	} catch (error) {
 		console.log(error);
@@ -41,6 +40,6 @@ exports.postLogin = async (req, res) => {
 };
 
 exports.getLogout = (req, res) => {
-	res.clearCookie('userToken');
+	res.clearCookie('adminToken');
 	res.status(200).json({ message: 'Logged Out Successfully' });
 };

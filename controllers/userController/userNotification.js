@@ -1,4 +1,5 @@
 const { getUser } = require('../fetchData/user');
+const db = require('../../models');
 
 exports.updateUserNotification = async (req, res) => {
 	try {

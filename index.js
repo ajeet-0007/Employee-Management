@@ -9,6 +9,8 @@ const bodyParser = require('body-parser');
 const adminRoutes = require('./routes/adminRoutes');
 const userLoginController = require('./controllers/userController/userLogin');
 const userController = require('./controllers/userController/user');
+const adminLoginController = require('./controllers/adminController/adminLogin');
+const adminController = require('./controllers/adminController/admin');
 const PORT = process.env.PORT || 5000;
 
 const app = express();
@@ -46,8 +48,10 @@ const userRoutes = require('./routes/userRoutes')(io);
 
 app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
-app.post('/', userLoginController.postLogin);
-app.put('/signup', userController.putSignUp);
+app.post('/user-login', userLoginController.postLogin);
+app.put('/user-signup', userController.putSignUp);
+app.post('/admin-login', adminLoginController.postLogin);
+app.put('/admin-signup', adminController.putSignUp);
 
 httpServer.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);

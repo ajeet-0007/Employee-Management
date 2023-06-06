@@ -1,5 +1,6 @@
 const db = require('../../models');
 const { currentUser } = require('../fetchData/user');
+const getAdminProjectData = require('../fetchData/adminProject');
 
 exports.postUserProject = async (req, res) => {
 	try {
@@ -27,6 +28,20 @@ exports.postUserProject = async (req, res) => {
 			return res.status(201).json({ message: 'User added to the project team successfully' });
 		} else {
 			return res.status(200).json({ message: 'User already exists in the project team' });
+		}
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: 'Internal Server Error' });
+	}
+};
+
+exports.getAllProjects = async (req, res) => {
+	try {
+		const adminProjectData = await getAdminProjectData.fetchProjects(req.user.userId);
+		if (adminProjectData.length == 0) {
+			return res.status(404).json({ message: 'No projects found' });
+		} else {
+			return res.status(200).json(adminProjectData);
 		}
 	} catch (error) {
 		console.log(error);
