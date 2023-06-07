@@ -7,6 +7,7 @@ const { createServer } = require('http');
 const { onConnection } = require('./events');
 const bodyParser = require('body-parser');
 const adminRoutes = require('./routes/adminRoutes');
+const superAdminRoutes = require('./routes/superAdminRoutes');
 const userLoginController = require('./controllers/userController/userLogin');
 const userController = require('./controllers/userController/user');
 const adminLoginController = require('./controllers/adminController/adminLogin');
@@ -48,8 +49,9 @@ const userRoutes = require('./routes/userRoutes')(io);
 
 app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
-app.post('/user-login', userLoginController.postLogin);
-app.put('/user-signup', userController.putSignUp);
+app.use('/super-admin', superAdminRoutes);
+app.post('/', userLoginController.postLogin);
+app.put('/signup', userController.putSignUp);
 app.post('/admin-login', adminLoginController.postLogin);
 app.put('/admin-signup', adminController.putSignUp);
 
