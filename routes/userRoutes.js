@@ -10,7 +10,7 @@ const userTimesheetController = require('../controllers/userController/userTimes
 const userProjectController = require('../controllers/userController/userProject');
 const userHierarchyController = require('../controllers/userController/userHierarchy');
 const userNotificationController = require('../controllers/userController/userNotification');
-const authorize = require('../middlewares/authorize');
+const { userAuthorize } = require('../middlewares/authorize');
 const { send } = require('../events/sendNotification');
 const { getUser } = require('../controllers/fetchData/user');
 
@@ -26,63 +26,63 @@ const returnRouter = (io) => {
 		next();
 	});
 
-	router.post('/check-in', authorize, userAttendanceController.postCheckIn);
+	router.post('/check-in', userAuthorize, userAttendanceController.postCheckIn);
 
-	router.post('/requests/add-user-request', authorize, userRequestController.postUserRequest);
+	router.post('/requests/add-user-request', userAuthorize, userRequestController.postUserRequest);
 
-	router.post('/requests/resend-user-request', authorize, userRequestController.resendUserRequest);
+	router.post('/requests/resend-user-request', userAuthorize, userRequestController.resendUserRequest);
 
-	router.post('/timesheets/add-user-timesheet', authorize, userTimesheetController.postUserTimesheet);
+	router.post('/timesheets/add-user-timesheet', userAuthorize, userTimesheetController.postUserTimesheet);
 
-	router.put('/skills/update-user-skills', authorize, userSkillsController.updateUserSkills);
+	router.put('/skills/update-user-skills', userAuthorize, userSkillsController.updateUserSkills);
 
-	router.put('/account/update-user-profile', authorize, userProfileController.updateUserProfile);
+	router.put('/account/update-user-profile', userAuthorize, userProfileController.updateUserProfile);
 
-	router.put('/requests/update-user-request', authorize, userRequestController.updateUserRequest);
+	router.put('/requests/update-user-request', userAuthorize, userRequestController.updateUserRequest);
 
-	router.put('/requests/update-user-subordinate-request', authorize, userRequestController.updateUserSubordinateRequest);
+	router.put('/requests/update-user-subordinate-request', userAuthorize, userRequestController.updateUserSubordinateRequest);
 
-	router.put('/timesheets/update-user-subordinate-timesheet', authorize, userTimesheetController.updateUserSubordinateTimesheet);
+	router.put('/timesheets/update-user-subordinate-timesheet', userAuthorize, userTimesheetController.updateUserSubordinateTimesheet);
 
-	router.put('/update-user-notification', authorize, userNotificationController.updateUserNotification);
+	router.put('/update-user-notification', userAuthorize, userNotificationController.updateUserNotification);
 
-	router.put('/update-all-user-notifications', authorize, userNotificationController.updateAllUserNotifications);
+	router.put('/update-all-user-notifications', userAuthorize, userNotificationController.updateAllUserNotifications);
 
-	router.put('/check-out', authorize, userAttendanceController.putCheckOut);
+	router.put('/check-out', userAuthorize, userAttendanceController.putCheckOut);
 
-	router.get('/logout', authorize, userLoginController.getLogout);
+	router.get('/logout', userAuthorize, userLoginController.getLogout);
 
-	router.get('/get-user', authorize, userController.getUser);
+	router.get('/get-user', userAuthorize, userController.getUser);
 
-	router.get('/get-searched-user', authorize, userController.getSearchedUser);
+	router.get('/get-searched-user', userAuthorize, userController.getSearchedUser);
 
-	router.get('/get-all-users', authorize, userController.getAllUsers);
+	router.get('/get-all-users', userAuthorize, userController.getAllUsers);
 
-	router.get('/account/get-user-profile', authorize, userProfileController.getUserProfile);
+	router.get('/account/get-user-profile', userAuthorize, userProfileController.getUserProfile);
 
-	router.get('/requests/get-user-requests', authorize, userRequestController.getUserRequests);
+	router.get('/requests/get-user-requests', userAuthorize, userRequestController.getUserRequests);
 
-	router.get('/requests/get-user-available-requests', authorize, userRequestController.getUserAvailableRequests);
+	router.get('/requests/get-user-available-requests', userAuthorize, userRequestController.getUserAvailableRequests);
 
-	router.get('/requests/get-user-subordinates-requests', authorize, userRequestController.getUserSubordinatesRequests);
+	router.get('/requests/get-user-subordinates-requests', userAuthorize, userRequestController.getUserSubordinatesRequests);
 
-	router.get('/get-user-attendance', authorize, userAttendanceController.getUserAttendance);
+	router.get('/get-user-attendance', userAuthorize, userAttendanceController.getUserAttendance);
 
-	router.get('/get-user-current-attendance', authorize, userAttendanceController.getUserCurrentAttendance);
+	router.get('/get-user-current-attendance', userAuthorize, userAttendanceController.getUserCurrentAttendance);
 
-	router.get('/skills/get-user-skills', authorize, userSkillsController.getUserSkills);
+	router.get('/skills/get-user-skills', userAuthorize, userSkillsController.getUserSkills);
 
-	router.get('/timesheets/get-user-timesheets', authorize, userTimesheetController.getUserTimesheets);
+	router.get('/timesheets/get-user-timesheets', userAuthorize, userTimesheetController.getUserTimesheets);
 
-	router.get('/timesheets/get-user-weekly-timesheets', authorize, userTimesheetController.getUserWeeklyTimesheets);
+	router.get('/timesheets/get-user-weekly-timesheets', userAuthorize, userTimesheetController.getUserWeeklyTimesheets);
 
-	router.get('/timesheets/get-user-subordinates-timesheets', authorize, userTimesheetController.getUserSubordinatesTimesheets);
+	router.get('/timesheets/get-user-subordinates-timesheets', userAuthorize, userTimesheetController.getUserSubordinatesTimesheets);
 
-	router.get('/get-user-projects', authorize, userProjectController.getUserProjects);
+	router.get('/get-user-projects', userAuthorize, userProjectController.getUserProjects);
 
-	router.get('/get-user-projects-minimal-data', authorize, userProjectController.getUserProjectsMinimalData);
+	router.get('/get-user-projects-minimal-data', userAuthorize, userProjectController.getUserProjectsMinimalData);
 
-	router.get('/get-user-hierarchy', authorize, userHierarchyController.getUserHierarchy);
+	router.get('/get-user-hierarchy', userAuthorize, userHierarchyController.getUserHierarchy);
 
 	return router;
 };
