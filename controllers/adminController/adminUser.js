@@ -1,6 +1,9 @@
 const csv = require('fast-csv');
 const db = require('../../models');
 const fs = require('fs');
+const getUserProfileData = require('../fetchData/userProfile');
+const getUserHierarchyData = require('../fetchData/userHierarchy');
+const { getCurrentAttendance } = require('../functions/userAttendance');
 
 exports.postUploadUserDetails = (req, res) => {
 	try {
@@ -65,12 +68,50 @@ exports.postUser = async (req, res) => {
 	}
 };
 
-exports.getAllUsers = async (req, res) => {
+exports.getUsers = async (req, res) => {
 	try {
-		const adminAllUserData = await db.sequelize.query('EXEC dbo.spadmins_getallusers');
+		const adminAllUserData = await db.sequelize.query('EXEC dbo.spadmins_getusers');
+		for (let i = 0; i < adminAllUserData[0].length; i++) {
+			const attendanceStatus = await getCurrentAttendance(adminAllUserData[0][i].id);
+			adminAllUserData[0][i].status = attendanceStatus[0]?.status === undefined ? 'not checked-in' : attendanceStatus[0].status;
+		}
 		return res.status(200).json(adminAllUserData[0]);
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: 'Internal Server Error' });
+	}
+};
+
+exports.getAllUsers = async (req, res) => {
+	try {
+		const allUserData = await db.sequelize.query('EXEC dbo.spadmins_getallusers');
+		return res.status(200).json(allUserData[0]);
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({
+			message: 'Internal Server Error'
+		});
+	}
+};
+
+exports.getSearchedUser = async (req, res) => {
+	try {
+		const userData = {};
+		const userProfileData = await getUserProfileData.fetchProfile(req.query.userId);
+		const userReportingManagerData = await getUserHierarchyData.fetchSuperiorProfile(userProfileData[0].reportsTo);
+		const userSubordinateData = await getUserHierarchyData.fetchSubordinateProfile(userProfileData[0].hrmid);
+		userData.profile = userProfileData[0];
+		if (userReportingManagerData.length !== 0) {
+			userData.reportingManager = userReportingManagerData[0];
+		}
+		if (userSubordinateData.length !== 0) {
+			userData.subordinates = userSubordinateData;
+		}
+		return res.status(200).json(userData);
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({
+			message: 'Internal Server Error'
+		});
 	}
 };

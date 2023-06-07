@@ -50,8 +50,6 @@ const returnRouter = (io) => {
 
 	router.put('/check-out', userAuthorize, userAttendanceController.putCheckOut);
 
-	router.get('/logout', userAuthorize, userLoginController.getLogout);
-
 	router.get('/get-user', userAuthorize, userController.getUser);
 
 	router.get('/get-searched-user', userAuthorize, userController.getSearchedUser);
@@ -83,6 +81,8 @@ const returnRouter = (io) => {
 	router.get('/get-user-projects-minimal-data', userAuthorize, userProjectController.getUserProjectsMinimalData);
 
 	router.get('/get-user-hierarchy', userAuthorize, userHierarchyController.getUserHierarchy);
+
+	router.get('/logout', userLoginController.getLogout);
 
 	return router;
 };

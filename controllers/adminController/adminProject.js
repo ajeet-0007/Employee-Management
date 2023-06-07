@@ -35,9 +35,9 @@ exports.postUserProject = async (req, res) => {
 	}
 };
 
-exports.getAllProjects = async (req, res) => {
+exports.getProjects = async (req, res) => {
 	try {
-		const adminProjectData = await getAdminProjectData.fetchProjects(req.user.userId);
+		const adminProjectData = await getAdminProjectData.fetchProjects(req.user.adminId);
 		if (adminProjectData.length == 0) {
 			return res.status(404).json({ message: 'No projects found' });
 		} else {

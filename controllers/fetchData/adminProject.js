@@ -2,7 +2,7 @@ const db = require('../../models');
 
 const fetchProjects = async () => {
 	try {
-		const adminProjectsData = await db.sequelize.query('EXEC dbo.spadmins_getallprojects');
+		const adminProjectsData = await db.sequelize.query('EXEC dbo.spadmins_getprojects');
 		return adminProjectsData[0];
 	} catch (error) {
 		console.log(error);

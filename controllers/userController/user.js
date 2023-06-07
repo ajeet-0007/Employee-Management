@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const db = require('../../models');
 const getUserProfileData = require('../fetchData/userProfile');
 const getUserHierarchyData = require('../fetchData/userHierarchy');
-const { currentUser } = require('../fetchData/user');
+const { currentUser, getUser } = require('../fetchData/user');
 
 exports.putSignUp = async (req, res) => {
 	try {
@@ -68,17 +68,8 @@ exports.putSignUp = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
-	try {
-		const userData = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
-			replacements: { userId: req.user.userId }
-		});
-		return res.status(200).json(userData[0][0]);
-	} catch (error) {
-		console.log(error);
-		return res.status(500).json({
-			message: 'Internal Server Error'
-		});
-	}
+	const userData = await getUser(req.user.userId);
+	return res.status(200).json(userData);
 };
 
 exports.getAllUsers = async (req, res) => {
