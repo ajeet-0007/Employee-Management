@@ -12,7 +12,7 @@ const calaculateDays = (startDate, endDate) => {
 
 const getAvailableRequests = async (userId) => {
 	let casualLeave = new Date().getMonth() + 1;
-	let leaveWithoutPay = 15;
+	let leaveWithoutPay = 30;
 	let restrictedHoliday = 5;
 	let workFromHome = 5;
 
@@ -46,9 +46,13 @@ const getAvailableRequests = async (userId) => {
 		}
 	}
 	const availableRequests = {
+		casualLeaves: new Date().getMonth() + 1,
 		casualLeave: casualLeave,
+		leaveWithoutPays: 30,
 		leaveWithoutPay: leaveWithoutPay,
+		restrictedHolidays: 5,
 		restrictedHoliday: restrictedHoliday,
+		workFromHomes: 5,
 		workFromHome: workFromHome
 	};
 

@@ -1,5 +1,6 @@
 const db = require('../../models');
 const bcrypt = require('bcrypt');
+const { getAdmin } = require('../fetchData/admin');
 
 exports.putSignUp = async (req, res) => {
 	try {
@@ -34,4 +35,9 @@ exports.putSignUp = async (req, res) => {
 			message: 'Internal Server Error'
 		});
 	}
+};
+
+exports.getAdmin = async (req, res) => {
+	const adminData = await getAdmin(req.user.adminId);
+	return res.status(200).json(adminData);
 };
