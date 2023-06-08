@@ -46,14 +46,14 @@ const getAvailableRequests = async (userId) => {
 		}
 	}
 	const availableRequests = {
-		casualLeaves: new Date().getMonth() + 1,
-		casualLeave: casualLeave,
-		leaveWithoutPays: 30,
-		leaveWithoutPay: leaveWithoutPay,
-		restrictedHolidays: 5,
-		restrictedHoliday: restrictedHoliday,
-		workFromHomes: 5,
-		workFromHome: workFromHome
+		totalcasualLeaves: new Date().getMonth() + 1,
+		remainingCasualLeaves: casualLeave,
+		totalLeaveWithoutPays: 30,
+		remainingLeaveWithoutPays: leaveWithoutPay,
+		totalRestrictedHolidays: 5,
+		remainingRestrictedHolidays: restrictedHoliday,
+		totalWorkFromHomes: 5,
+		remainingWorkFromHomes: workFromHome
 	};
 
 	return availableRequests;
