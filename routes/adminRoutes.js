@@ -12,7 +12,9 @@ router.post('/upload-user-details', adminAuthorize, upload.single('csvFile'), ad
 
 router.post('/add-user', adminAuthorize, adminUserController.postUser);
 
-router.post('/add-user-project', adminAuthorize, adminProjectController.postUserProject);
+router.post('/projects/add-project', adminAuthorize, adminProjectController.postProject);
+
+router.put('/projects/update-project', adminAuthorize, adminProjectController.putProject);
 
 router.get('/get-admin', adminAuthorize, adminController.getAdmin);
 
@@ -22,9 +24,11 @@ router.get('/get-all-users', adminAuthorize, adminUserController.getAllUsers);
 
 router.get('/get-searched-user', adminAuthorize, adminUserController.getSearchedUser);
 
+router.get('/get-user-skills', adminAuthorize, adminUserController.getUserSkills);
+
 router.get('/get-hierarchy', adminAuthorize, userHierarchyController.getUserHierarchy);
 
-router.get('/get-projects', adminAuthorize, adminProjectController.getProjects);
+router.get('/projects/get-projects', adminAuthorize, adminProjectController.getProjects);
 
 router.get('/logout', adminLoginController.getLogout);
 

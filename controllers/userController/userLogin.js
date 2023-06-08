@@ -24,7 +24,7 @@ exports.postLogin = async (req, res) => {
 							maxAge: 1000 * 60 * 60 * 24 * 30,
 							httpOnly: true
 						});
-						res.status(201).json({ message: 'Logged In Successfully' });
+						res.status(201).json({ message: 'User Logged In Successfully' });
 					}
 				});
 			} else {
@@ -41,5 +41,5 @@ exports.postLogin = async (req, res) => {
 
 exports.getLogout = (req, res) => {
 	res.clearCookie('userToken');
-	res.status(200).json({ message: 'Logged Out Successfully' });
+	res.status(200).json({ message: 'User Logged Out Successfully' });
 };

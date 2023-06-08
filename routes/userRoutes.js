@@ -76,9 +76,9 @@ const returnRouter = (io) => {
 
 	router.get('/timesheets/get-user-subordinates-timesheets', userAuthorize, userTimesheetController.getUserSubordinatesTimesheets);
 
-	router.get('/get-user-projects', userAuthorize, userProjectController.getUserProjects);
+	router.get('/projects/get-user-projects', userAuthorize, userProjectController.getUserProjects);
 
-	router.get('/get-user-projects-minimal-data', userAuthorize, userProjectController.getUserProjectsMinimalData);
+	router.get('/projects/get-user-projects-minimal-data', userAuthorize, userProjectController.getUserProjectsMinimalData);
 
 	router.get('/get-user-hierarchy', userAuthorize, userHierarchyController.getUserHierarchy);
 

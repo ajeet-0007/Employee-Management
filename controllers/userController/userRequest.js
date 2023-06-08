@@ -10,13 +10,13 @@ exports.postUserRequest = async (req, res) => {
 		const availableRequests = await getAvailableRequests(req.user.userId);
 		let leave;
 		if (request.request === 'Casual Leave') {
-			leave = 'casualLeave';
+			leave = 'remainingCasualLeaves';
 		} else if (request.request === 'Leave Without Pay') {
-			leave = 'leaveWithoutPay';
+			leave = 'remainingLeaveWithoutPays';
 		} else if (request.request === 'Restricted Holiday') {
-			leave = 'restrictedHoliday';
+			leave = 'remainingRestrictedHolidays';
 		} else if (request.request === 'Work From Home') {
-			leave = 'workFromHome';
+			leave = 'remainingWorkFromHomes';
 		}
 		let days = request.leaveType === 'Full Day' ? calaculateDays(request.startDate, request.endDate) : calaculateDays(request.startDate, request.endDate) * 0.5;
 		if (availableRequests[leave] - days >= 0) {

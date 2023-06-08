@@ -3,6 +3,7 @@ const db = require('../../models');
 const fs = require('fs');
 const getUserProfileData = require('../fetchData/userProfile');
 const getUserHierarchyData = require('../fetchData/userHierarchy');
+const getUserSkillsData = require('../fetchData/userSkills');
 const { getCurrentAttendance } = require('../functions/userAttendance');
 
 exports.postUploadUserDetails = (req, res) => {
@@ -70,11 +71,11 @@ exports.postUser = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
 	try {
-		const adminAllUserData = await db.sequelize.query('EXEC dbo.spadmins_getusers');
-		for (let i = 0; i < adminAllUserData[0].length; i++) {
-			const attendanceStatus = await getCurrentAttendance(adminAllUserData[0][i].id);
-			adminAllUserData[0][i].status = attendanceStatus[0]?.status === undefined ? 'not checked-in' : attendanceStatus[0].status;
-		}
+		const date = new Date().toLocaleDateString('en-GB').split('/');
+		const currentDate = date[2] + '-' + date[1] + '-' + date[0];
+		const adminAllUserData = await db.sequelize.query('EXEC dbo.spadmins_getusers :currentDate', {
+			replacements: { currentDate: currentDate }
+		});
 		return res.status(200).json(adminAllUserData[0]);
 	} catch (error) {
 		console.log(error);
@@ -113,5 +114,19 @@ exports.getSearchedUser = async (req, res) => {
 		return res.status(500).json({
 			message: 'Internal Server Error'
 		});
+	}
+};
+
+exports.getUserSkills = async (req, res) => {
+	try {
+		const userSkillsData = await getUserSkillsData.fetchSkills(req.query.userId);
+		if (userSkillsData.length == 0) {
+			return res.status(404).json({ message: 'No user skills found' });
+		} else {
+			return res.status(200).json(userSkillsData[0]);
+		}
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
