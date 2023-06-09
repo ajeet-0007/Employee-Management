@@ -78,6 +78,8 @@ const returnRouter = (io) => {
 
 	router.get('/projects/get-user-projects', userAuthorize, userProjectController.getUserProjects);
 
+	router.get('/projects/get-project', userAuthorize, userProjectController.getProject);
+
 	router.get('/projects/get-user-projects-minimal-data', userAuthorize, userProjectController.getUserProjectsMinimalData);
 
 	router.get('/get-user-hierarchy', userAuthorize, userHierarchyController.getUserHierarchy);

@@ -12,4 +12,16 @@ const fetchProfile = async (userId) => {
 	}
 };
 
-module.exports = { fetchProfile };
+const fetchCurrentUserProfile = async (email) => {
+	try {
+		const userProfileData = await db.sequelize.query('EXEC dbo.spusers_getcurrentuserprofile :email', {
+			replacements: { email: email }
+		});
+		return userProfileData[0];
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
+};
+
+module.exports = { fetchProfile, fetchCurrentUserProfile };

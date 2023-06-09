@@ -1,5 +1,7 @@
 const db = require('../../models');
-const getAdminProjectData = require('../fetchData/adminProject');
+const getAdminProjectData = require('../fetchData/userProject');
+const { fetchCurrentUserProfile } = require('../fetchData/userProfile');
+const { findUserProfiles } = require('../functions/userProject');
 
 exports.postProject = async (req, res) => {
 	try {
@@ -32,7 +34,27 @@ exports.getProjects = async (req, res) => {
 		if (adminProjectData.length === 0) {
 			return res.status(404).json({ message: 'No projects found' });
 		} else {
+			for (let i = 0; i < adminProjectData.length; i++) {
+				adminProjectData[i].teamHead = (await fetchCurrentUserProfile(adminProjectData[i].teamHead))[0];
+				adminProjectData[i].teamMembers = await findUserProfiles(adminProjectData[i].teamMembers.split(','));
+			}
 			return res.status(200).json(adminProjectData);
+		}
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: 'Internal Server Error' });
+	}
+};
+
+exports.getProject = async (req, res) => {
+	try {
+		const adminProjectData = await getAdminProjectData.fetchProject(req.query.projectId);
+		if (adminProjectData.length === 0) {
+			return res.status(404).json({ message: 'No projects found' });
+		} else {
+			adminProjectData[0].teamHead = (await fetchCurrentUserProfile(adminProjectData[0].teamHead))[0];
+			adminProjectData[0].teamMembers = await findUserProfiles(adminProjectData[0].teamMembers.split(','));
+			return res.status(200).json(adminProjectData[0]);
 		}
 	} catch (error) {
 		console.log(error);
