@@ -34,6 +34,8 @@ router.get('/get-hierarchy', adminAuthorize, userHierarchyController.getUserHier
 
 router.get('/projects/get-projects', adminAuthorize, adminProjectController.getProjects);
 
+router.get('/projects/get-project', adminAuthorize, adminProjectController.getProject);
+
 router.get('/logout', adminLoginController.getLogout);
 
 module.exports = router;

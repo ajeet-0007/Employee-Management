@@ -1,3 +1,4 @@
+const { fetchCurrentUserProfile } = require('../fetchData/userProfile');
 const getUserProjectData = require('../fetchData/userProject');
 
 const findUserProjects = async (userEmail) => {
@@ -16,4 +17,15 @@ const findUserProjects = async (userEmail) => {
 	return userProjects;
 };
 
-module.exports = { findUserProjects };
+const findUserProfiles = async (emailList) => {
+	let userProfiles = [];
+	for (let i = 0; i < emailList.length; i++) {
+		const profile = await fetchCurrentUserProfile(emailList[i]);
+		if (profile.length !== 0) {
+			userProfiles.push(profile[0]);
+		}
+	}
+	return userProfiles;
+};
+
+module.exports = { findUserProjects, findUserProfiles };

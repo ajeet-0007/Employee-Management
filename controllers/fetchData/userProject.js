@@ -10,4 +10,18 @@ const fetchProjects = async (userId) => {
 	}
 };
 
-module.exports = { fetchProjects };
+const fetchProject = async (projectId) => {
+	try {
+		const projectData = await db.sequelize.query('EXEC dbo.spusers_getproject :projectId', {
+			replacements: {
+				projectId: projectId
+			}
+		});
+		return projectData[0];
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
+};
+
+module.exports = { fetchProjects, fetchProject };
