@@ -14,7 +14,11 @@ router.post('/add-user', adminAuthorize, adminUserController.postUser);
 
 router.post('/projects/add-project', adminAuthorize, adminProjectController.postProject);
 
+router.delete('/projects/delete-project', adminAuthorize, adminProjectController.deleteProject);
+
 router.put('/projects/update-project', adminAuthorize, adminProjectController.putProject);
+
+router.put('/update-user', adminAuthorize, adminUserController.putUser);
 
 router.get('/get-admin', adminAuthorize, adminController.getAdmin);
 

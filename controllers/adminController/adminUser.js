@@ -69,6 +69,28 @@ exports.postUser = async (req, res) => {
 	}
 };
 
+exports.putUser = async (req, res) => {
+	try {
+		const request = req.body;
+		const userData = await db.sequelize.query('EXEC dbo.spadmins_updateuser :userId, :role, :department, :location', {
+			replacements: {
+				userId: request.userId,
+				role: request.role,
+				department: request.department,
+				location: request.location
+			}
+		});
+		if (userData[1] != 0) {
+			return res.status(201).json({ message: 'User updated successfully' });
+		} else {
+			return res.status(200).json({ message: 'User updation failed' });
+		}
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: 'Internal Server Error' });
+	}
+};
+
 exports.getUsers = async (req, res) => {
 	try {
 		const date = new Date().toLocaleDateString('en-GB').split('/');

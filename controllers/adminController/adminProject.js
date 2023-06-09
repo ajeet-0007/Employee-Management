@@ -62,3 +62,22 @@ exports.putProject = async (req, res) => {
 		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
+
+exports.deleteProject = async (req, res) => {
+	try {
+		const request = req.body;
+		const data = await db.sequelize.query('EXEC dbo.spadmins_deleteproject :id', {
+			replacements: {
+				id: request.projectId
+			}
+		});
+		if (data[1] != 0) {
+			return res.status(201).json({ message: 'Project removed successfully' });
+		} else {
+			return res.status(400).json({ message: 'Project removal failed' });
+		}
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: 'Internal Server Error' });
+	}
+};
