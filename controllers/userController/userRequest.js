@@ -49,7 +49,7 @@ exports.postUserRequest = async (req, res) => {
 exports.getUserRequests = async (req, res) => {
 	try {
 		const userRequestData = await getUserRequestData.fetchRequests(req.user.userId);
-		if (userRequestData.length == 0) {
+		if (userRequestData.length === 0) {
 			return res.status(404).json({ message: 'No user requests found' });
 		} else {
 			return res.status(200).json(userRequestData);
