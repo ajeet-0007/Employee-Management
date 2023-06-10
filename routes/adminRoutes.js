@@ -5,6 +5,8 @@ const adminController = require('../controllers/adminController/admin');
 const adminLoginController = require('../controllers/adminController/adminLogin');
 const adminUserController = require('../controllers/adminController/adminUser');
 const adminProjectController = require('../controllers/adminController/adminProject');
+const adminRequestController = require('../controllers/adminController/adminRequest');
+const adminTimesheetController = require('../controllers/adminController/adminTimesheet');
 const userHierarchyController = require('../controllers/userController/userHierarchy');
 const { adminAuthorize } = require('../middlewares/authorize');
 
@@ -33,6 +35,10 @@ router.get('/get-user-skills', adminAuthorize, adminUserController.getUserSkills
 router.get('/get-hierarchy', adminAuthorize, userHierarchyController.getUserHierarchy);
 
 router.get('/projects/get-projects', adminAuthorize, adminProjectController.getProjects);
+
+router.get('/requests/get-monthly-requests', adminAuthorize, adminRequestController.getMonthlyRequests);
+
+router.get('/timesheets/get-monthly-timesheets', adminAuthorize, adminTimesheetController.getMonthlyTimesheets);
 
 router.get('/projects/get-project', adminAuthorize, adminProjectController.getProject);
 

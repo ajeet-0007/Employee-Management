@@ -1,10 +1,10 @@
 const csv = require('fast-csv');
 const db = require('../../models');
 const fs = require('fs');
+const getAdminUserData = require('../fetchData/adminUser');
 const getUserProfileData = require('../fetchData/userProfile');
 const getUserHierarchyData = require('../fetchData/userHierarchy');
 const getUserSkillsData = require('../fetchData/userSkills');
-const { getCurrentAttendance } = require('../functions/userAttendance');
 
 exports.postUploadUserDetails = (req, res) => {
 	try {
@@ -93,12 +93,12 @@ exports.putUser = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
 	try {
-		const date = new Date().toLocaleDateString('en-GB').split('/');
-		const currentDate = date[2] + '-' + date[1] + '-' + date[0];
-		const adminAllUserData = await db.sequelize.query('EXEC dbo.spadmins_getusers :currentDate', {
-			replacements: { currentDate: currentDate }
-		});
-		return res.status(200).json(adminAllUserData[0]);
+		const usersData = await getAdminUserData.fetchUsers();
+		if (usersData.length === 0) {
+			return res.status(404).json({ message: 'No users found' });
+		} else {
+			return res.status(200).json(usersData);
+		}
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: 'Internal Server Error' });
@@ -107,13 +107,15 @@ exports.getUsers = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
 	try {
-		const allUserData = await db.sequelize.query('EXEC dbo.spadmins_getallusers');
-		return res.status(200).json(allUserData[0]);
+		const allUsersData = await getAdminUserData.fetchAllUsers();
+		if (allUsersData.length === 0) {
+			return res.status(404).json({ message: 'No users found' });
+		} else {
+			return res.status(200).json(allUsersData);
+		}
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({
-			message: 'Internal Server Error'
-		});
+		return res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 
