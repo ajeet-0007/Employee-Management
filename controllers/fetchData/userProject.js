@@ -2,7 +2,7 @@ const db = require('../../models');
 
 const fetchProjects = async (userId) => {
 	try {
-		const userProjectsData = await db.sequelize.query('EXEC dbo.spadmins_getprojects');
+		const userProjectsData = await db.sequelize.query('EXEC dbo.sp_admins_getprojects');
 		return userProjectsData[0];
 	} catch (error) {
 		console.log(error);
@@ -12,9 +12,9 @@ const fetchProjects = async (userId) => {
 
 const fetchProject = async (projectId) => {
 	try {
-		const projectData = await db.sequelize.query('EXEC dbo.spusers_getproject :projectId', {
+		const projectData = await db.sequelize.query('EXEC dbo.sp_users_getproject :id', {
 			replacements: {
-				projectId: projectId
+				id: projectId
 			}
 		});
 		return projectData[0];

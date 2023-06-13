@@ -2,8 +2,8 @@ const db = require('../../models');
 
 const fetchAttendance = async (userId) => {
 	try {
-		const userAttendanceData = await db.sequelize.query('EXEC dbo.spusers_getuserattendance :userId', {
-			replacements: { userId: userId }
+		const userAttendanceData = await db.sequelize.query('EXEC dbo.sp_users_getuserattendance :user_id', {
+			replacements: { user_id: userId }
 		});
 		return userAttendanceData[0];
 	} catch (error) {
@@ -14,8 +14,8 @@ const fetchAttendance = async (userId) => {
 
 const fetchCurrentAttendance = async (userId, date) => {
 	try {
-		const userCurrentAttendanceData = await db.sequelize.query('EXEC dbo.spusers_getusercurrentattendance :userId, :currentDate', {
-			replacements: { userId: userId, currentDate: date }
+		const userCurrentAttendanceData = await db.sequelize.query('EXEC dbo.sp_users_getusercurrentattendance :user_id, :current_date', {
+			replacements: { user_id: userId, current_date: date }
 		});
 		return userCurrentAttendanceData[0];
 	} catch (error) {

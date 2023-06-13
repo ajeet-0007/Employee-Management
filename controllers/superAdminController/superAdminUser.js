@@ -3,7 +3,7 @@ const db = require('../../models');
 exports.postAdmin = async (req, res) => {
 	try {
 		const request = req.body;
-		const adminData = await db.sequelize.query('EXEC dbo.spsuperadmins_postadmin :hrmid, :name, :email, :phone, :department', {
+		const adminData = await db.sequelize.query('EXEC dbo.sp_superadmins_postadmin :hrmid, :name, :email, :phone, :department', {
 			replacements: {
 				hrmid: request.hrmid,
 				name: request.name,

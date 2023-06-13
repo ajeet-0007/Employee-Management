@@ -18,11 +18,11 @@ exports.getUserSkills = async (req, res) => {
 exports.updateUserSkills = async (req, res) => {
 	try {
 		const request = req.body;
-		const data = await db.sequelize.query('EXEC dbo.spusers_updateuserskills :userId, :primarySkills, :secondarySkills, :certifications', {
+		const data = await db.sequelize.query('EXEC dbo.sp_users_updateuserskills :user_id, :primary_skills, :secondary_skills, :certifications', {
 			replacements: {
-				userId: req.user.userId,
-				primarySkills: request.primarySkills,
-				secondarySkills: request.secondarySkills,
+				user_id: req.user.userId,
+				primary_skills: request.primarySkills,
+				secondary_skills: request.secondarySkills,
 				certifications: request.certifications
 			}
 		});

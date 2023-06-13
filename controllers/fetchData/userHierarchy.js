@@ -2,7 +2,7 @@ const db = require('../../models');
 
 const fetchSuperiorProfile = async (hrmid) => {
 	try {
-		const userSuperiorProfileData = await db.sequelize.query('EXEC dbo.spusers_getusersuperiorprofile :hrmid', {
+		const userSuperiorProfileData = await db.sequelize.query('EXEC dbo.sp_users_getusersuperiorprofile :hrmid', {
 			replacements: { hrmid: hrmid }
 		});
 		return userSuperiorProfileData[0];
@@ -14,7 +14,7 @@ const fetchSuperiorProfile = async (hrmid) => {
 
 const fetchSubordinateProfile = async (hrmid) => {
 	try {
-		const userSubordinateData = await db.sequelize.query('EXEC dbo.spusers_getusersubordinates :hrmid', {
+		const userSubordinateData = await db.sequelize.query('EXEC dbo.sp_users_getusersubordinates :hrmid', {
 			replacements: { hrmid: hrmid }
 		});
 		return userSubordinateData[0];

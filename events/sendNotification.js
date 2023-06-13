@@ -11,7 +11,7 @@ const { fetchNotifications } = require('../controllers/fetchData/userNotificatio
  *  hrmid: hrmid of current user,
  * } hrmid
  * @param {
- *  rmHrmid: reportsTo of the current user for subordinate sender hrmid,
+ *  rmHrmid: reports_to of the current user for subordinate sender hrmid,
  * } rmHrmid
  * @returns {void}
  */
