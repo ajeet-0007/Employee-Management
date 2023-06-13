@@ -4,8 +4,8 @@ const fetchUsers = async () => {
 	try {
 		const date = new Date().toLocaleDateString('en-GB').split('/');
 		const currentDate = date[2] + '-' + date[1] + '-' + date[0];
-		const usersData = await db.sequelize.query('EXEC dbo.spadmins_getusers :currentDate', {
-			replacements: { currentDate: currentDate }
+		const usersData = await db.sequelize.query('EXEC dbo.sp_admins_getusers :current_date', {
+			replacements: { current_date: current_date }
 		});
 		return usersData[0];
 	} catch (error) {
@@ -16,7 +16,7 @@ const fetchUsers = async () => {
 
 const fetchAllUsers = async () => {
 	try {
-		const allUsersData = await db.sequelize.query('EXEC dbo.spadmins_getallusers');
+		const allUsersData = await db.sequelize.query('EXEC dbo.sp_admins_getallusers');
 		return allUsersData[0];
 	} catch (error) {
 		console.log(error);

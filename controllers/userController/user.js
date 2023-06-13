@@ -8,13 +8,13 @@ const { currentUser, getUser } = require('../fetchData/user');
 exports.putSignUp = async (req, res) => {
 	try {
 		const request = req.body;
-		const userData = await db.sequelize.query('EXEC dbo.spusers_getcurrentuser :email', {
+		const userData = await db.sequelize.query('EXEC dbo.sp_users_getcurrentuser :email', {
 			replacements: { email: request.email }
 		});
 		if (userData[1] != 0) {
 			if (userData[0][0].password == null) {
 				request.password = await bcrypt.hash(request.password, 10);
-				const signupData = await db.sequelize.query('EXEC spusers_updateusersignup :name, :email, :password', {
+				await db.sequelize.query('EXEC sp_users_updateusersignup :name, :email, :password', {
 					replacements: {
 						name: request.name,
 						email: request.email,
@@ -23,28 +23,31 @@ exports.putSignUp = async (req, res) => {
 				});
 
 				const userId = (await currentUser(request.email)).id;
-				const userData = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
-					replacements: { userId: userId }
+				const userData = await db.sequelize.query('EXEC dbo.sp_users_getuser :user_id', {
+					replacements: { user_id: userId }
 				});
 				const defaultImage = 'data:image/png;base64,' + fs.readFileSync('./assets/profile.png', 'base64');
-				const profileData = await db.sequelize.query('EXEC dbo.spusers_postuserprofile :userId, :profileImage, :hrmid, :name, :permanentAddress, :city, :state, :country, :emergencyPhone', {
-					replacements: {
-						userId: userId,
-						profileImage: defaultImage,
-						hrmid: userData[0][0].hrmid,
-						name: userData[0][0].name,
-						permanentAddress: '',
-						city: '',
-						state: '',
-						country: '',
-						emergencyPhone: ''
+				const profileData = await db.sequelize.query(
+					'EXEC dbo.sp_users_postuserprofile :user_id, :profile_image, :hrmid, :name, :permanent_address, :city, :state, :country, :emergency_phone',
+					{
+						replacements: {
+							user_id: userId,
+							profile_image: defaultImage,
+							hrmid: userData[0][0].hrmid,
+							name: userData[0][0].name,
+							permanent_address: '',
+							city: '',
+							state: '',
+							country: '',
+							emergency_phone: ''
+						}
 					}
-				});
-				const skillsData = await db.sequelize.query('EXEC dbo.spusers_postuserskills :userId, :primarySkills, :secondarySkills, :certifications', {
+				);
+				const skillsData = await db.sequelize.query('EXEC dbo.sp_users_postuserskills :user_id, :primary_skills, :secondary_skills, :certifications', {
 					replacements: {
-						userId: userId,
-						primarySkills: '',
-						secondarySkills: '',
+						user_id: userId,
+						primary_skills: '',
+						secondary_skills: '',
 						certifications: ''
 					}
 				});
@@ -74,7 +77,7 @@ exports.getUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
 	try {
-		const allUserData = await db.sequelize.query('EXEC dbo.spusers_getallusers');
+		const allUserData = await db.sequelize.query('EXEC dbo.sp_users_getallusers');
 		return res.status(200).json(allUserData[0]);
 	} catch (error) {
 		console.log(error);
@@ -88,12 +91,12 @@ exports.getSearchedUser = async (req, res) => {
 	try {
 		const userData = {};
 		const userProfileData = await getUserProfileData.fetchProfile(req.query.userId);
-		const userReportingManagerData = await getUserHierarchyData.fetchSuperiorProfile(userProfileData[0].reportsTo);
+		const userReportingManagerData = await getUserHierarchyData.fetchSuperiorProfile(userProfileData[0].reports_to);
 		const userSubordinateData = await getUserHierarchyData.fetchSubordinateProfile(userProfileData[0].hrmid);
-		userData.userId = userProfileData[0].userId;
+		userData.userId = userProfileData[0].user_id;
 		userData.hrmid = userProfileData[0].hrmid;
 		userData.name = userProfileData[0].name;
-		userData.profileImage = userProfileData[0].profileImage;
+		userData.profileImage = userProfileData[0].profile_image;
 		userData.phone = userProfileData[0].phone;
 		userData.email = userProfileData[0].email;
 		userData.role = userProfileData[0].role;

@@ -61,12 +61,12 @@ const getAvailableRequests = async (userId) => {
 
 const createRequestNotification = async (userId) => {
 	const userData = await getUser(userId);
-	await db.sequelize.query('EXEC dbo.spusers_postusernotification :notification_id, :content, :sender, :receiver, :date, :type', {
+	await db.sequelize.query('EXEC dbo.sp_users_postusernotification :notification_id, :content, :sender, :receiver, :date, :type', {
 		replacements: {
 			notification_id: randomBytes(16).toString('hex'),
 			content: `A request is waiting for your approval from ${userData.name}.`,
 			sender: userData.hrmid,
-			receiver: userData.reportsTo,
+			receiver: userData.reports_to,
 			date: new Date(),
 			type: 'request'
 		}
@@ -76,7 +76,7 @@ const createRequestNotification = async (userId) => {
 const updateSubordinateRequestNotification = async (senderId, receiverId, status) => {
 	const sender = await getUser(senderId); //user who approves the request
 	const receiver = await getUser(receiverId); //user who sent the request
-	await db.sequelize.query('EXEC dbo.spusers_postusernotification :notification_id, :content, :sender, :receiver, :date, :type', {
+	await db.sequelize.query('EXEC dbo.sp_users_postusernotification :notification_id, :content, :sender, :receiver, :date, :type', {
 		replacements: {
 			notification_id: randomBytes(16).toString('hex'),
 			content: `Your request has been ${status.toLowerCase() === 'approve' ? 'approved' : 'rejected'} by ${sender.name}.`,
@@ -91,12 +91,12 @@ const updateSubordinateRequestNotification = async (senderId, receiverId, status
 const updateRequestNotification = async (userId) => {
 	const userData = await getUser(userId);
 	const date = new Date();
-	await db.sequelize.query('EXEC dbo.spusers_postusernotification :notification_id, :content, :sender, :receiver, :date, :type', {
+	await db.sequelize.query('EXEC dbo.sp_users_postusernotification :notification_id, :content, :sender, :receiver, :date, :type', {
 		replacements: {
 			notification_id: randomBytes(16).toString('hex'),
 			content: `A request has been cancelled by ${userData.name}.`,
 			sender: userData.hrmid,
-			receiver: userData.reportsTo,
+			receiver: userData.reports_to,
 			date: date,
 			type: 'request'
 		}

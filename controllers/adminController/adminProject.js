@@ -6,14 +6,14 @@ const { findUserProfiles } = require('../functions/userProject');
 exports.postProject = async (req, res) => {
 	try {
 		const request = req.body;
-		const projectData = await db.sequelize.query('EXEC dbo.spadmins_postproject :projectName, :clientName, :assignedOn, :completeBy, :teamHead, :teamMembers, :department', {
+		const projectData = await db.sequelize.query('EXEC dbo.sp_admins_postproject :project_name, :client_name, :assigned_on, :complete_by, :team_head, :team_members, :department', {
 			replacements: {
-				projectName: request.projectName,
-				clientName: request.clientName,
-				assignedOn: request.assignedOn,
-				completeBy: request.completeBy,
-				teamHead: request.teamHead,
-				teamMembers: request.teamMembers,
+				project_name: request.projectName,
+				client_name: request.clientName,
+				assigned_on: request.assignedOn,
+				complete_by: request.completeBy,
+				team_head: request.teamHead,
+				team_members: request.teamMembers,
 				department: request.department
 			}
 		});
@@ -35,8 +35,8 @@ exports.getProjects = async (req, res) => {
 			return res.status(404).json({ message: 'No projects found' });
 		} else {
 			for (let i = 0; i < adminProjectData.length; i++) {
-				adminProjectData[i].teamHead = (await fetchCurrentUserProfile(adminProjectData[i].teamHead))[0];
-				adminProjectData[i].teamMembers = await findUserProfiles(adminProjectData[i].teamMembers.split(','));
+				adminProjectData[i].team_head = (await fetchCurrentUserProfile(adminProjectData[i].team_head))[0];
+				adminProjectData[i].team_members = await findUserProfiles(adminProjectData[i].team_members.split(','));
 			}
 			return res.status(200).json(adminProjectData);
 		}
@@ -52,8 +52,8 @@ exports.getProject = async (req, res) => {
 		if (adminProjectData.length === 0) {
 			return res.status(404).json({ message: 'No projects found' });
 		} else {
-			adminProjectData[0].teamHead = (await fetchCurrentUserProfile(adminProjectData[0].teamHead))[0];
-			adminProjectData[0].teamMembers = await findUserProfiles(adminProjectData[0].teamMembers.split(','));
+			adminProjectData[0].team_head = (await fetchCurrentUserProfile(adminProjectData[0].team_head))[0];
+			adminProjectData[0].team_members = await findUserProfiles(adminProjectData[0].team_members.split(','));
 			return res.status(200).json(adminProjectData[0]);
 		}
 	} catch (error) {
@@ -65,12 +65,12 @@ exports.getProject = async (req, res) => {
 exports.putProject = async (req, res) => {
 	try {
 		const request = req.body;
-		const data = await db.sequelize.query('EXEC dbo.spadmins_updateproject :projectName, :completeBy, :teamHead, :teamMembers, :status', {
+		const data = await db.sequelize.query('EXEC dbo.sp_admins_updateproject :project_name, :complete_by, :team_head, :team_members, :status', {
 			replacements: {
-				projectName: request.projectName,
-				completeBy: request.completeBy,
-				teamHead: request.teamHead,
-				teamMembers: request.teamMembers,
+				project_name: request.projectName,
+				complete_by: request.completeBy,
+				team_head: request.teamHead,
+				team_members: request.teamMembers,
 				status: request.status
 			}
 		});
@@ -88,7 +88,7 @@ exports.putProject = async (req, res) => {
 exports.deleteProject = async (req, res) => {
 	try {
 		const request = req.body;
-		const data = await db.sequelize.query('EXEC dbo.spadmins_deleteproject :id', {
+		const data = await db.sequelize.query('EXEC dbo.sp_admins_deleteproject :id', {
 			replacements: {
 				id: request.projectId
 			}

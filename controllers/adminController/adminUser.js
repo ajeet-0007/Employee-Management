@@ -19,7 +19,7 @@ exports.postUploadUserDetails = (req, res) => {
 			.on('end', async () => {
 				csvData.shift();
 				await db.sequelize
-					.query('INSERT INTO users (hrmid, name, email, phone, role, department, location, joiningDate, reportingManager, reportsTo ) VALUES ?', {
+					.query('INSERT INTO users (hrmid, name, email, phone, role, department, location, joining_date, reporting_manager, reports_to ) VALUES ?', {
 						replacements: [csvData]
 					})
 					.then((data) => {
@@ -44,7 +44,7 @@ exports.postUploadUserDetails = (req, res) => {
 exports.postUser = async (req, res) => {
 	try {
 		const request = req.body;
-		const userData = await db.sequelize.query('EXEC dbo.spadmins_postuser :hrmid, :name, :email, :phone, :role, :department, :location, :joiningDate, :reportingManager, :reportsTo', {
+		const userData = await db.sequelize.query('EXEC dbo.sp_admins_postuser :hrmid, :name, :email, :phone, :role, :department, :location, :joining_date, :reporting_manager, :reports_to', {
 			replacements: {
 				hrmid: request.hrmid,
 				name: request.name,
@@ -53,9 +53,9 @@ exports.postUser = async (req, res) => {
 				role: request.role,
 				department: request.department,
 				location: request.location,
-				joiningDate: request.joiningDate,
-				reportingManager: request.reportingManager,
-				reportsTo: request.reportsTo
+				joining_date: request.joiningDate,
+				reporting_manager: request.reportingManager,
+				reports_to: request.reportsTo
 			}
 		});
 		if (userData[1] != 0) {
@@ -72,9 +72,9 @@ exports.postUser = async (req, res) => {
 exports.putUser = async (req, res) => {
 	try {
 		const request = req.body;
-		const userData = await db.sequelize.query('EXEC dbo.spadmins_updateuser :userId, :role, :department, :location', {
+		const userData = await db.sequelize.query('EXEC dbo.sp_admins_updateuser :user_id, :role, :department, :location', {
 			replacements: {
-				userId: request.userId,
+				user_id: request.userId,
 				role: request.role,
 				department: request.department,
 				location: request.location
@@ -123,7 +123,7 @@ exports.getSearchedUser = async (req, res) => {
 	try {
 		const userData = {};
 		const userProfileData = await getUserProfileData.fetchProfile(req.query.userId);
-		const userReportingManagerData = await getUserHierarchyData.fetchSuperiorProfile(userProfileData[0].reportsTo);
+		const userReportingManagerData = await getUserHierarchyData.fetchSuperiorProfile(userProfileData[0].reports_to);
 		const userSubordinateData = await getUserHierarchyData.fetchSubordinateProfile(userProfileData[0].hrmid);
 		userData.profile = userProfileData[0];
 		if (userReportingManagerData.length !== 0) {

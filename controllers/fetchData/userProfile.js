@@ -2,8 +2,8 @@ const db = require('../../models');
 
 const fetchProfile = async (userId) => {
 	try {
-		const userProfileData = await db.sequelize.query('EXEC dbo.spusers_getuserprofile :userId', {
-			replacements: { userId: userId }
+		const userProfileData = await db.sequelize.query('EXEC dbo.sp_users_getuserprofile :user_id', {
+			replacements: { user_id: userId }
 		});
 		return userProfileData[0];
 	} catch (error) {
@@ -14,7 +14,7 @@ const fetchProfile = async (userId) => {
 
 const fetchCurrentUserProfile = async (email) => {
 	try {
-		const userProfileData = await db.sequelize.query('EXEC dbo.spusers_getcurrentuserprofile :email', {
+		const userProfileData = await db.sequelize.query('EXEC dbo.sp_users_getcurrentuserprofile :email', {
 			replacements: { email: email }
 		});
 		return userProfileData[0];

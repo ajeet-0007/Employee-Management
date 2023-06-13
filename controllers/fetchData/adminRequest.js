@@ -2,7 +2,7 @@ const db = require('../../models');
 
 const fetchMonthlyRequests = async (startDate) => {
 	try {
-		const requestData = await db.sequelize.query('EXEC dbo.spadmins_getmonthlyrequests :startDate', {
+		const requestData = await db.sequelize.query('EXEC dbo.sp_admins_getmonthlyrequests :startDate', {
 			replacements: { startDate: startDate }
 		});
 		return requestData[0];

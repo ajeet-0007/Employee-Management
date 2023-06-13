@@ -2,7 +2,7 @@ const db = require('../../models');
 
 const currentUser = async (userEmail) => {
 	try {
-		const currentUserData = await db.sequelize.query('EXEC dbo.spusers_getcurrentuser :email', {
+		const currentUserData = await db.sequelize.query('EXEC dbo.sp_users_getcurrentuser :email', {
 			replacements: { email: userEmail }
 		});
 		if (currentUserData[1] === 0) {
@@ -18,8 +18,8 @@ const currentUser = async (userEmail) => {
 
 const getUser = async (userId) => {
 	try {
-		const userData = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
-			replacements: { userId: userId }
+		const userData = await db.sequelize.query('EXEC dbo.sp_users_getuser :user_id', {
+			replacements: { user_id: userId }
 		});
 		return userData[0][0];
 	} catch (error) {

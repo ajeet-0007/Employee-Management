@@ -1,4 +1,4 @@
-hrmid,name,email,phone,role,department,location,joiningDate,reportingManager,reportsTo
+hrmid,name,email,phone,role,department,location,joining_date,reporting_manager,reports_to
 HRM125,Anupam Gupta,anupam.gupta@celebaltech.com,9876543210,President,Executive Management,North America,2023-01-01,,
 HRM917,Prankul Middha,prankul.middha@celebaltech.com,9876543210,Principal Consultant,Sales,Jaipur,2023-01-01,Anupam Gupta,HRM125
 HRM7,Deepak Sogani,deepak.sogani@celebaltech.com,9876543210,Principal Consultant,App Development,Jaipur,2023-01-01,Prankul Middha,HRM917

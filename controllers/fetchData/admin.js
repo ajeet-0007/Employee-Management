@@ -2,7 +2,7 @@ const db = require('../../models');
 
 const currentAdmin = async (adminEmail) => {
 	try {
-		const currentAdminData = await db.sequelize.query('EXEC dbo.spadmins_getcurrentadmin :email', {
+		const currentAdminData = await db.sequelize.query('EXEC dbo.sp_admins_getcurrentadmin :email', {
 			replacements: { email: adminEmail }
 		});
 		if (currentAdminData[1] === 0) {
@@ -18,8 +18,8 @@ const currentAdmin = async (adminEmail) => {
 
 const getAdmin = async (adminId) => {
 	try {
-		const adminData = await db.sequelize.query('EXEC dbo.spadmins_getadmin :adminId', {
-			replacements: { adminId: adminId }
+		const adminData = await db.sequelize.query('EXEC dbo.sp_admins_getadmin :admin_id', {
+			replacements: { admin_id: adminId }
 		});
 		return adminData[0][0];
 	} catch (error) {
