@@ -20,7 +20,7 @@ exports.postUserRequest = async (req, res) => {
 		}
 		let days = request.leaveType === 'Full Day' ? calaculateDays(request.startDate, request.endDate) : calaculateDays(request.startDate, request.endDate) * 0.5;
 		if (availableRequests[leave] - days >= 0) {
-			const data = await db.sequelize.query('EXEC dbo.spusers_postuserrequest :userId, :email, :startDate, :endDate, :leaveType, :request, :reason', {
+			const data = await db.sequelize.query('EXEC dbo.sp_users_postuserrequest :userId, :email, :startDate, :endDate, :leaveType, :request, :reason', {
 				replacements: {
 					userId: req.user.userId,
 					email: request.email,
@@ -77,7 +77,7 @@ exports.getUserSubordinatesRequests = async (req, res) => {
 exports.updateUserSubordinateRequest = async (req, res) => {
 	try {
 		const request = req.body;
-		const updatedData = await db.sequelize.query('EXEC dbo.spusers_updateuserrequest :userId, :id, :status', {
+		const updatedData = await db.sequelize.query('EXEC dbo.sp_users_updateuserrequest :userId, :id, :status', {
 			replacements: {
 				userId: parseInt(request.userId),
 				id: parseInt(request.requestId),
@@ -103,10 +103,10 @@ exports.updateUserSubordinateRequest = async (req, res) => {
 exports.updateUserRequest = async (req, res) => {
 	try {
 		const request = req.body;
-		const userRequestData = await db.sequelize.query('EXEC dbo.spusers_updateuserrequest :userId, :requestId, :status', {
+		const userRequestData = await db.sequelize.query('EXEC dbo.sp_users_updateuserrequest :userId, :requestId, :status', {
 			replacements: {
 				userId: req.user.userId,
-				requestId: request.requestId,
+				id: request.requestId,
 				status: 'Cancelled'
 			}
 		});
@@ -132,13 +132,13 @@ exports.resendUserRequest = async (req, res) => {
 		const userRequestData = await getUserRequestData.fetchCurrentRequest(request.userId, request.requestId);
 
 		if (new Date(userRequestData[0].startDate).getTime() > Date.now()) {
-			await db.sequelize.query('EXEC dbo.spusers_deleteuserrequest :userId, :id', {
+			await db.sequelize.query('EXEC dbo.sp_users_deleteuserrequest :userId, :id', {
 				replacements: {
 					userId: request.userId,
 					id: request.requestId
 				}
 			});
-			await db.sequelize.query('EXEC dbo.spusers_postuserrequest :userId, :email, :startDate, :endDate, :leaveType, :request, :reason', {
+			await db.sequelize.query('EXEC dbo.sp_users_postuserrequest :userId, :email, :startDate, :endDate, :leaveType, :request, :reason', {
 				replacements: {
 					userId: userRequestData[0].userId,
 					email: userRequestData[0].email,

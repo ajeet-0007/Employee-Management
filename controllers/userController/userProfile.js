@@ -10,7 +10,7 @@ exports.getUserProfile = async (req, res) => {
 		const userSubordinateData = await getUserHierarchyData.fetchSubordinateProfile(userProfileData[0].hrmid);
 		userData.profile = userProfileData[0];
 		if (userReportingManagerData.length !== 0) {
-			userData.reportingManager = userReportingManagerData[0];
+			userData.reportingmanager = userReportingManagerData[0];
 		}
 		if (userSubordinateData.length !== 0) {
 			userData.subordinates = userSubordinateData;
@@ -25,7 +25,7 @@ exports.getUserProfile = async (req, res) => {
 exports.updateUserProfile = async (req, res) => {
 	try {
 		const request = req.body;
-		const data = await db.sequelize.query('EXEC dbo.spusers_updateuserprofile :userId, :profileImage, :permanentAddress, :city, :state, :country, :emergencyPhone', {
+		const data = await db.sequelize.query('EXEC dbo.sp_users_updateuserprofile :userId, profileImage, :permanentAddress, :city, :state, :country, :emergencyPhone', {
 			replacements: {
 				userId: req.user.userId,
 				profileImage: request.profileImage,

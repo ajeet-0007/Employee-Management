@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-	const USERTIMESHEET = sequelize.define('userTimesheets', {
+	const USERTIMESHEET = sequelize.define('timesheets', {
 		userId: {
 			type: DataTypes.INTEGER
 		},

@@ -44,7 +44,7 @@ exports.postUploadUserDetails = (req, res) => {
 exports.postUser = async (req, res) => {
 	try {
 		const request = req.body;
-		const userData = await db.sequelize.query('EXEC dbo.spadmins_postuser :hrmid, :name, :email, :phone, :role, :department, :location, :joiningDate, :reportingManager, :reportsTo', {
+		const userData = await db.sequelize.query('EXEC dbo.sp_admins_postuser :hrmid, :name, :email, :phone, :role, :department, :location, :joiningDate, :reportingManager, :reportsTo', {
 			replacements: {
 				hrmid: request.hrmid,
 				name: request.name,
@@ -72,7 +72,7 @@ exports.postUser = async (req, res) => {
 exports.putUser = async (req, res) => {
 	try {
 		const request = req.body;
-		const userData = await db.sequelize.query('EXEC dbo.spadmins_updateuser :userId, :role, :department, :location', {
+		const userData = await db.sequelize.query('EXEC dbo.sp_admins_updateuser :userId, :role, :department, :location', {
 			replacements: {
 				userId: request.userId,
 				role: request.role,

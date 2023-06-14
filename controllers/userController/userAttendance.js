@@ -10,7 +10,7 @@ exports.postCheckIn = async (req, res) => {
 		// if (currentAttendance.length > 0) {
 		//   return res.status(409).json({ message: "User already checked-in" });
 		// } else {
-		const data = await db.sequelize.query('EXEC dbo.spusers_postusercheckin :userId, :checkInLocation, :status', {
+		const data = await db.sequelize.query('EXEC dbo.sp_users_postusercheckin :userId, :checkInLocation, :status', {
 			replacements: {
 				userId: req.user.userId,
 				checkInLocation: request.checkInLocation,
@@ -62,7 +62,7 @@ exports.putCheckOut = async (req, res) => {
 		const checkOutStatus = getCheckOutStatus(request.checkOutTime, request.checkOutDate);
 		const currentAttendance = await getCurrentAttendance(req.user.userId);
 		const checkInTime = currentAttendance[0].checkInTime;
-		await db.sequelize.query('EXEC dbo.spusers_updateusercheckout :userId, :checkOutLocation, :status, :checkInTime', {
+		await db.sequelize.query('EXEC dbo.sp_users_updateusercheckout :userId, :checkOutLocation, :status, :checkInTime', {
 			replacements: {
 				userId: req.user.userId,
 				checkOutLocation: request.checkOutLocation,

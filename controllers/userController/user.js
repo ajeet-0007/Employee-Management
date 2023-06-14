@@ -8,13 +8,13 @@ const { currentUser, getUser } = require('../fetchData/user');
 exports.putSignUp = async (req, res) => {
 	try {
 		const request = req.body;
-		const userData = await db.sequelize.query('EXEC dbo.spusers_getcurrentuser :email', {
+		const userData = await db.sequelize.query('EXEC dbo.sp_users_getcurrentuser :email', {
 			replacements: { email: request.email }
 		});
 		if (userData[1] != 0) {
 			if (userData[0][0].password == null) {
 				request.password = await bcrypt.hash(request.password, 10);
-				const signupData = await db.sequelize.query('EXEC spusers_updateusersignup :name, :email, :password', {
+				await db.sequelize.query('EXEC sp_users_updateusersignup :name, :email, :password', {
 					replacements: {
 						name: request.name,
 						email: request.email,
@@ -23,11 +23,11 @@ exports.putSignUp = async (req, res) => {
 				});
 
 				const userId = (await currentUser(request.email)).id;
-				const userData = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
+				const userData = await db.sequelize.query('EXEC dbo.sp_users_getuser :userId', {
 					replacements: { userId: userId }
 				});
 				const defaultImage = 'data:image/png;base64,' + fs.readFileSync('./assets/profile.png', 'base64');
-				const profileData = await db.sequelize.query('EXEC dbo.spusers_postuserprofile :userId, :profileImage, :hrmid, :name, :permanentAddress, :city, :state, :country, :emergencyPhone', {
+				const profileData = await db.sequelize.query('EXEC dbo.sp_users_postuserprofile :userId, :profileImage, :hrmid, :name, :permanentAddress, :city, :state, :country, :emergencyPhone', {
 					replacements: {
 						userId: userId,
 						profileImage: defaultImage,
@@ -40,7 +40,7 @@ exports.putSignUp = async (req, res) => {
 						emergencyPhone: ''
 					}
 				});
-				const skillsData = await db.sequelize.query('EXEC dbo.spusers_postuserskills :userId, :primarySkills, :secondarySkills, :certifications', {
+				const skillsData = await db.sequelize.query('EXEC dbo.sp_users_postuserskills :userId, :primarySkills, :secondarySkills, :certifications', {
 					replacements: {
 						userId: userId,
 						primarySkills: '',
@@ -74,7 +74,7 @@ exports.getUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
 	try {
-		const allUserData = await db.sequelize.query('EXEC dbo.spusers_getallusers');
+		const allUserData = await db.sequelize.query('EXEC dbo.sp_users_getallusers');
 		return res.status(200).json(allUserData[0]);
 	} catch (error) {
 		console.log(error);

@@ -69,7 +69,7 @@ exports.getUserSubordinatesTimesheets = async (req, res) => {
 exports.updateUserSubordinateTimesheet = async (req, res) => {
 	try {
 		const request = req.body;
-		const updatedData = await db.sequelize.query('EXEC dbo.spusers_updateusertimesheet :id, :userId, :status', {
+		const updatedData = await db.sequelize.query('EXEC dbo.sp_users_updateusertimesheet :id, :userId, :status', {
 			replacements: {
 				id: request.id,
 				userId: request.userId,

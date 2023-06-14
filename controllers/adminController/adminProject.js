@@ -6,7 +6,7 @@ const { findUserProfiles } = require('../functions/userProject');
 exports.postProject = async (req, res) => {
 	try {
 		const request = req.body;
-		const projectData = await db.sequelize.query('EXEC dbo.spadmins_postproject :projectName, :clientName, :assignedOn, :completeBy, :teamHead, :teamMembers, :department', {
+		const projectData = await db.sequelize.query('EXEC dbo.sp_admins_postproject :projectName, :clientName, :assignedOn, :completeBy, :teamHead, :teamMembers, :department', {
 			replacements: {
 				projectName: request.projectName,
 				clientName: request.clientName,
@@ -65,7 +65,7 @@ exports.getProject = async (req, res) => {
 exports.putProject = async (req, res) => {
 	try {
 		const request = req.body;
-		const data = await db.sequelize.query('EXEC dbo.spadmins_updateproject :projectName, :completeBy, :teamHead, :teamMembers, :status', {
+		const data = await db.sequelize.query('EXEC dbo.sp_admins_updateproject :projectName, :completeBy, :teamHead, :teamMembers, :status', {
 			replacements: {
 				projectName: request.projectName,
 				completeBy: request.completeBy,
@@ -88,7 +88,7 @@ exports.putProject = async (req, res) => {
 exports.deleteProject = async (req, res) => {
 	try {
 		const request = req.body;
-		const data = await db.sequelize.query('EXEC dbo.spadmins_deleteproject :id', {
+		const data = await db.sequelize.query('EXEC dbo.sp_admins_deleteproject :id', {
 			replacements: {
 				id: request.projectId
 			}

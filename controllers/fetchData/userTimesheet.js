@@ -2,7 +2,7 @@ const db = require('../../models');
 
 const fetchTimesheets = async (userId) => {
 	try {
-		const userTimesheetsData = await db.sequelize.query('EXEC dbo.spusers_getusertimesheets :userId', {
+		const userTimesheetsData = await db.sequelize.query('EXEC dbo.sp_users_getusertimesheets :userId', {
 			replacements: { userId: userId }
 		});
 		return userTimesheetsData[0];
@@ -14,7 +14,7 @@ const fetchTimesheets = async (userId) => {
 
 const fetchWeeklyTimesheets = async (userId, week) => {
 	try {
-		const userTimesheetsData = await db.sequelize.query('EXEC dbo.spusers_getuserweeklytimesheets :userId, :week', {
+		const userTimesheetsData = await db.sequelize.query('EXEC dbo.sp_users_getuserweeklytimesheets :userId, :week', {
 			replacements: { userId: userId, week: week }
 		});
 		return userTimesheetsData[0];
@@ -26,10 +26,10 @@ const fetchWeeklyTimesheets = async (userId, week) => {
 
 const fetchSubordinatesTimesheets = async (userId) => {
 	try {
-		const user = await db.sequelize.query('EXEC dbo.spusers_getuser :userId', {
+		const user = await db.sequelize.query('EXEC dbo.sp_users_getuser :userId', {
 			replacements: { userId: userId }
 		});
-		const subordinateTimesheetsData = await db.sequelize.query('EXEC dbo.spusers_getusersubordinatestimesheets :hrmid', {
+		const subordinateTimesheetsData = await db.sequelize.query('EXEC dbo.sp_users_getusersubordinatestimesheets :hrmid', {
 			replacements: {
 				hrmid: user[0][0].hrmid
 			}

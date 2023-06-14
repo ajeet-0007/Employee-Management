@@ -3,9 +3,19 @@ HRM125,Anupam Gupta,anupam.gupta@celebaltech.com,9876543210,President,Executive 
 HRM917,Prankul Middha,prankul.middha@celebaltech.com,9876543210,Principal Consultant,Sales,Jaipur,2023-01-01,Anupam Gupta,HRM125
 HRM7,Deepak Sogani,deepak.sogani@celebaltech.com,9876543210,Principal Consultant,App Development,Jaipur,2023-01-01,Prankul Middha,HRM917
 HRM142,Rahul Jangid,rahul.jangid@celebaltech.com,9876543210,Senior Consultant,App Development,Jaipur,2023-01-01,Deepak Sogani,HRM7
-HRM2953,Ajeet Gupta,ajeet.gupta@celebaltech.com,9876543210,Intern,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
-HRM3010,Dipantan Chakraborty,dipantan.chakraborty@celebaltech.com,9876543210,Intern,App Development,Jalpaiguri,2023-01-01,Rahul Jangid,HRM142
-HRM3024,Harsh Srivastava,harsh.srivastava@celebaltech.com,9876543210,Intern,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
-HRM3042,Karuna Yadav,karuna.yadav@celebaltech.com,9876543210,Intern,App Development,Pune,2023-01-01,Rahul Jangid,HRM142
-HRM3152,Shashank Varshney,shashank.varshney@celebaltech.com,9876543210,Intern,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
-HRM3185,Udyanraje Bhaskar Bhosale,udyanraje.bhosale@celebaltech.com,9876543210,Intern,App Development,Pune,2023-01-01,Rahul Jangid,HRM142
+HRM210,Pulkit Batheja,pulkit.batheja@celebaltech.com,9876543210,Consultant,App Development,Jaipur,2023-01-01,Deepak Sogani,HRM7
+HRM871,Sourabh Rathore,sourabh.rathore@celebaltech.com,9876543210,Associate,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
+HRM1223,Shyam Tailor,shyam.tailor@celebaltech.com,9876543210,Associate,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
+HRM1490,Mohit Arora,mohit.arora@celebaltech.com,9876543210,Associate,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
+HRM1641,Kavita Singh,kavita.singh@celebaltech.com,9876543210,Consultant,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
+HRM2925,Dheeraj Sharma,dheeraj.sharma@celebaltech.com,9876543210,Associate,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
+HRM2953,Ajeet Gupta,ajeet.gupta@celebaltech.com,9876543210,Trainee,App Development,Noida,2023-01-01,Rahul Jangid,HRM142
+HRM3010,Dipantan Chakraborty,dipantan.chakraborty@celebaltech.com,9876543210,Trainee,App Development,Jalpaiguri,2023-01-01,Rahul Jangid,HRM142
+HRM3024,Harsh Srivastava,harsh.srivastava@celebaltech.com,9876543210,Trainee,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
+HRM3042,Karuna Yadav,karuna.yadav@celebaltech.com,9876543210,Trainee,App Development,Pune,2023-01-01,Rahul Jangid,HRM142
+HRM3152,Shashank Varshney,shashank.varshney@celebaltech.com,9876543210,Trainee,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
+HRM3185,Udyanraje Bhaskar Bhosale,udyanraje.bhosale@celebaltech.com,9876543210,Trainee,App Development,Pune,2023-01-01,Rahul Jangid,HRM142
+HRM3238,Priyansh Khandelwal,priyansh.khandelwal@celebaltech.com,9876543210,Associate Consultant,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
+HRM3473,Jahanvi Pandey,jahanvi.pandey@celebaltech.com,9876543210,Intern,App Development,Jaipur,2023-01-01,Rahul Jangid,HRM142
+HRM3313,Chelsi Jain,chelsi.jain@celebaltech.com,9876543210,Intern,App Development,Jaipur,2023-01-01,Pulkit Batheja,HRM210
+HRM3730,Anu Kumari,anu.kumari@celebaltech.com,9876543210,Intern,App Development,Jaipur,2023-01-01,Pulkit Batheja,HRM210

@@ -5,13 +5,13 @@ const { getAdmin } = require('../fetchData/admin');
 exports.putSignUp = async (req, res) => {
 	try {
 		const request = req.body;
-		const adminData = await db.sequelize.query('EXEC dbo.spadmins_getcurrentadmin :email', {
+		const adminData = await db.sequelize.query('EXEC dbo.sp_admins_getcurrentadmin :email', {
 			replacements: { email: request.email }
 		});
 		if (adminData[1] != 0) {
 			if (adminData[0][0].password == null) {
 				request.password = await bcrypt.hash(request.password, 10);
-				await db.sequelize.query('EXEC spadmins_updateadminsignup :name, :email, :password', {
+				await db.sequelize.query('EXEC sp_admins_updateadminsignup :name, :email, :password', {
 					replacements: {
 						name: request.name,
 						email: request.email,
