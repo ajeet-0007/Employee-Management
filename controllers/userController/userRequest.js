@@ -20,9 +20,9 @@ exports.postUserRequest = async (req, res) => {
 		}
 		let days = request.leaveType === 'Full Day' ? calaculateDays(request.startDate, request.endDate) : calaculateDays(request.startDate, request.endDate) * 0.5;
 		if (availableRequests[leave] - days >= 0) {
-			const data = await db.sequelize.query('EXEC dbo.sp_users_postuserrequest :user_id, :email, :startDate, :endDate, :leaveType, :request, :reason', {
+			const data = await db.sequelize.query('EXEC dbo.sp_users_postuserrequest :userId, :email, :startDate, :endDate, :leaveType, :request, :reason', {
 				replacements: {
-					user_id: req.user.userId,
+					userId: req.user.userId,
 					email: request.email,
 					startDate: request.startDate,
 					endDate: request.endDate,
@@ -34,7 +34,7 @@ exports.postUserRequest = async (req, res) => {
 
 			const userData = await getUser(req.user.userId);
 			await createRequestNotification(req.user.userId);
-			send(req.io, userData.reports_to); // send notification to the user who approves the request
+			send(req.io, userData.reportsTo); // send notification to the user who approves the request
 
 			return res.status(201).json({ message: 'User request created successfully' });
 		} else {
@@ -77,9 +77,9 @@ exports.getUserSubordinatesRequests = async (req, res) => {
 exports.updateUserSubordinateRequest = async (req, res) => {
 	try {
 		const request = req.body;
-		const updatedData = await db.sequelize.query('EXEC dbo.sp_users_updateuserrequest :user_id, :id, :status', {
+		const updatedData = await db.sequelize.query('EXEC dbo.sp_users_updateuserrequest :userId, :id, :status', {
 			replacements: {
-				user_id: parseInt(request.userId),
+				userId: parseInt(request.userId),
 				id: parseInt(request.requestId),
 				status: request.status === 'Approve' ? 'Approved' : 'Rejected'
 			}
@@ -103,9 +103,9 @@ exports.updateUserSubordinateRequest = async (req, res) => {
 exports.updateUserRequest = async (req, res) => {
 	try {
 		const request = req.body;
-		const userRequestData = await db.sequelize.query('EXEC dbo.sp_users_updateuserrequest :user_id, :requestId, :status', {
+		const userRequestData = await db.sequelize.query('EXEC dbo.sp_users_updateuserrequest :userId, :requestId, :status', {
 			replacements: {
-				user_id: req.user.userId,
+				userId: req.user.userId,
 				id: request.requestId,
 				status: 'Cancelled'
 			}
@@ -113,7 +113,7 @@ exports.updateUserRequest = async (req, res) => {
 
 		const userData = await getUser(req.user.userId);
 		updateRequestNotification(req.user.userId);
-		send(req.io, userData.reports_to);
+		send(req.io, userData.reportsTo);
 
 		if (userRequestData[1] != 0) {
 			return res.status(201).json({ message: 'Request updated successfully' });
@@ -132,15 +132,15 @@ exports.resendUserRequest = async (req, res) => {
 		const userRequestData = await getUserRequestData.fetchCurrentRequest(request.userId, request.requestId);
 
 		if (new Date(userRequestData[0].startDate).getTime() > Date.now()) {
-			await db.sequelize.query('EXEC dbo.sp_users_deleteuserrequest :user_id, :id', {
+			await db.sequelize.query('EXEC dbo.sp_users_deleteuserrequest :userId, :id', {
 				replacements: {
-					user_id: request.userId,
+					userId: request.userId,
 					id: request.requestId
 				}
 			});
-			await db.sequelize.query('EXEC dbo.sp_users_postuserrequest :user_id, :email, :startDate, :endDate, :leaveType, :request, :reason', {
+			await db.sequelize.query('EXEC dbo.sp_users_postuserrequest :userId, :email, :startDate, :endDate, :leaveType, :request, :reason', {
 				replacements: {
-					user_id: userRequestData[0].user_id,
+					userId: userRequestData[0].userId,
 					email: userRequestData[0].email,
 					startDate: userRequestData[0].startDate,
 					endDate: userRequestData[0].endDate,
@@ -152,7 +152,7 @@ exports.resendUserRequest = async (req, res) => {
 
 			const userData = await getUser(req.user.userId);
 			createRequestNotification(req.user.userId);
-			send(req.io, userData.reports_to); // send notification to the user who approves the request
+			send(req.io, userData.reportsTo); // send notification to the user who approves the request
 
 			return res.status(201).json({ message: 'User request recreated successfully' });
 		} else {

@@ -14,7 +14,7 @@ const onConnection = (io) => async (socket) => {
 				if (currentAttendanceStatus === 'checked-out' || currentAttendanceStatus === 'not-checked-in') {
 					clearInterval(intervalId);
 				}
-				const timeDifference = getAttendanceTimeDifference(currentAttendance[0]?.check_in_time, currentAttendance[0]?.checkInDate);
+				const timeDifference = getAttendanceTimeDifference(currentAttendance[0]?.checkInTime, currentAttendance[0]?.checkInDate);
 				socket.emit('status', {
 					status: currentAttendanceStatus,
 					timeDifference: timeDifference

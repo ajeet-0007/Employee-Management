@@ -4,7 +4,7 @@ const getUserHierarchyData = require('../fetchData/userHierarchy');
 exports.getUserHierarchy = async (req, res) => {
 	try {
 		const userProfileData = await getUserProfileData.fetchProfile(req.query.userId);
-		const userReportingManagerData = await getUserHierarchyData.fetchSuperiorProfile(userProfileData[0].reports_to);
+		const userReportingManagerData = await getUserHierarchyData.fetchSuperiorProfile(userProfileData[0].reportsTo);
 		const userSubordinateData = await getUserHierarchyData.fetchSubordinateProfile(userProfileData[0].hrmid);
 		let chartData = [];
 		if (userReportingManagerData.length !== 0) {
@@ -13,7 +13,7 @@ exports.getUserHierarchy = async (req, res) => {
 				pid: 0,
 				name: userReportingManagerData[0].name,
 				role: userReportingManagerData[0].role,
-				profileImage: userReportingManagerData[0].profile_image
+				profileImage: userReportingManagerData[0].profileImage
 			};
 			chartData.push(superiorData);
 		}
@@ -22,7 +22,7 @@ exports.getUserHierarchy = async (req, res) => {
 			pid: 1,
 			name: userProfileData[0].name,
 			role: userProfileData[0].role,
-			profileImage: userProfileData[0].profile_image
+			profileImage: userProfileData[0].profileImage
 		};
 		chartData.push(userData);
 		let subordinateDataId = 3;
@@ -38,7 +38,7 @@ exports.getUserHierarchy = async (req, res) => {
 					stpid: 3,
 					name: userSubordinateData[i].name,
 					role: userSubordinateData[i].role,
-					profileImage: userSubordinateData[i].profile_image
+					profileImage: userSubordinateData[i].profileImage
 				};
 				chartData.push(subordinateData);
 				subordinateData = {};

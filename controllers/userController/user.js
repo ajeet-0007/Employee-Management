@@ -23,31 +23,28 @@ exports.putSignUp = async (req, res) => {
 				});
 
 				const userId = (await currentUser(request.email)).id;
-				const userData = await db.sequelize.query('EXEC dbo.sp_users_getuser :user_id', {
-					replacements: { user_id: userId }
+				const userData = await db.sequelize.query('EXEC dbo.sp_users_getuser :userId', {
+					replacements: { userId: userId }
 				});
 				const defaultImage = 'data:image/png;base64,' + fs.readFileSync('./assets/profile.png', 'base64');
-				const profileData = await db.sequelize.query(
-					'EXEC dbo.sp_users_postuserprofile :user_id, :profile_image, :hrmid, :name, :permanent_address, :city, :state, :country, :emergency_phone',
-					{
-						replacements: {
-							user_id: userId,
-							profile_image: defaultImage,
-							hrmid: userData[0][0].hrmid,
-							name: userData[0][0].name,
-							permanent_address: '',
-							city: '',
-							state: '',
-							country: '',
-							emergency_phone: ''
-						}
-					}
-				);
-				const skillsData = await db.sequelize.query('EXEC dbo.sp_users_postuserskills :user_id, :primary_skills, :secondary_skills, :certifications', {
+				const profileData = await db.sequelize.query('EXEC dbo.sp_users_postuserprofile :userId, :profileImage, :hrmid, :name, :permanentAddress, :city, :state, :country, :emergencyPhone', {
 					replacements: {
-						user_id: userId,
-						primary_skills: '',
-						secondary_skills: '',
+						userId: userId,
+						profileImage: defaultImage,
+						hrmid: userData[0][0].hrmid,
+						name: userData[0][0].name,
+						permanentAddress: '',
+						city: '',
+						state: '',
+						country: '',
+						emergencyPhone: ''
+					}
+				});
+				const skillsData = await db.sequelize.query('EXEC dbo.sp_users_postuserskills :userId, :primarySkills, :secondarySkills, :certifications', {
+					replacements: {
+						userId: userId,
+						primarySkills: '',
+						secondarySkills: '',
 						certifications: ''
 					}
 				});
@@ -91,12 +88,12 @@ exports.getSearchedUser = async (req, res) => {
 	try {
 		const userData = {};
 		const userProfileData = await getUserProfileData.fetchProfile(req.query.userId);
-		const userReportingManagerData = await getUserHierarchyData.fetchSuperiorProfile(userProfileData[0].reports_to);
+		const userReportingManagerData = await getUserHierarchyData.fetchSuperiorProfile(userProfileData[0].reportsTo);
 		const userSubordinateData = await getUserHierarchyData.fetchSubordinateProfile(userProfileData[0].hrmid);
-		userData.userId = userProfileData[0].user_id;
+		userData.userId = userProfileData[0].userId;
 		userData.hrmid = userProfileData[0].hrmid;
 		userData.name = userProfileData[0].name;
-		userData.profileImage = userProfileData[0].profile_image;
+		userData.profileImage = userProfileData[0].profileImage;
 		userData.phone = userProfileData[0].phone;
 		userData.email = userProfileData[0].email;
 		userData.role = userProfileData[0].role;

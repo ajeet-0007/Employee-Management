@@ -5,10 +5,10 @@ exports.updateUserNotification = async (req, res) => {
 	try {
 		const request = req.body;
 		const userData = await getUser(req.user.userId);
-		await db.sequelize.query('EXEC dbo.sp_users_updateusernotification :hrmid, :notification_id', {
+		await db.sequelize.query('EXEC dbo.sp_users_updateusernotification :hrmid, :notificationId', {
 			replacements: {
 				hrmid: userData.hrmid,
-				notification_id: request.notificationId
+				notificationId: request.notificationId
 			}
 		});
 		return res.status(201).json({ message: 'Notification read' });
