@@ -10,8 +10,8 @@ exports.getUserProjects = async (req, res) => {
 			return res.status(404).json({ message: 'No projects found' });
 		} else {
 			for (let i = 0; i < userProjects.length; i++) {
-				userProjects[i].team_head = (await fetchCurrentUserProfile(userProjects[i].team_head))[0];
-				userProjects[i].team_members = await findUserProfiles(userProjects[i].team_members.split(','));
+				userProjects[i].teamHead = (await fetchCurrentUserProfile(userProjects[i].teamHead))[0];
+				userProjects[i].teamMembers = await findUserProfiles(userProjects[i].teamMembers.split(','));
 			}
 			return res.status(200).json(userProjects);
 		}
@@ -27,8 +27,8 @@ exports.getProject = async (req, res) => {
 		if (userProjectData.length === 0) {
 			return res.status(404).json({ message: 'No projects found' });
 		} else {
-			userProjectData[0].team_head = (await fetchCurrentUserProfile(userProjectData[0].team_head))[0];
-			userProjectData[0].team_members = await findUserProfiles(userProjectData[0].team_members.split(','));
+			userProjectData[0].teamHead = (await fetchCurrentUserProfile(userProjectData[0].teamHead))[0];
+			userProjectData[0].teamMembers = await findUserProfiles(userProjectData[0].teamMembers.split(','));
 			return res.status(200).json(userProjectData[0]);
 		}
 	} catch (error) {
@@ -45,7 +45,7 @@ exports.getUserProjectsMinimalData = async (req, res) => {
 		} else {
 			let minimalData = [];
 			for (let i = 0; i < userProjects.length; i++) {
-				minimalData.push({ projectName: userProjects[i].project_name, clientName: userProjects[i].client_name });
+				minimalData.push({ projectName: userProjects[i].projectName, clientName: userProjects[i].clientName });
 			}
 			return res.status(200).json(minimalData);
 		}

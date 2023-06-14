@@ -1,24 +1,24 @@
 module.exports = (sequelize, DataTypes) => {
 	const USERTIMESHEET = sequelize.define('timesheets', {
-		user_id: {
+		userId: {
 			type: DataTypes.INTEGER
 		},
-		timesheet_id: {
+		timesheetId: {
 			type: DataTypes.STRING
 		},
-		timesheet_name: {
+		timesheetName: {
 			type: DataTypes.STRING
 		},
-		client_name: {
+		clientName: {
 			type: DataTypes.STRING
 		},
-		project_name: {
+		projectName: {
 			type: DataTypes.STRING
 		},
-		job_name: {
+		jobName: {
 			type: DataTypes.STRING
 		},
-		work_item: {
+		workItem: {
 			type: DataTypes.STRING
 		},
 		description: {
@@ -30,16 +30,16 @@ module.exports = (sequelize, DataTypes) => {
 		week: {
 			type: DataTypes.STRING
 		},
-		total_time: {
+		totalTime: {
 			type: DataTypes.TIME
 		},
-		billable_status: {
+		billableStatus: {
 			type: DataTypes.STRING
 		},
-		submitted_hours: {
+		submittedHours: {
 			type: DataTypes.STRING
 		},
-		approved_hours: {
+		approvedHours: {
 			type: DataTypes.STRING,
 			defaultValue: '00:00'
 		},

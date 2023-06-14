@@ -18,8 +18,8 @@ const currentAdmin = async (adminEmail) => {
 
 const getAdmin = async (adminId) => {
 	try {
-		const adminData = await db.sequelize.query('EXEC dbo.sp_admins_getadmin :admin_id', {
-			replacements: { admin_id: adminId }
+		const adminData = await db.sequelize.query('EXEC dbo.sp_admins_getadmin :adminId', {
+			replacements: { adminId: adminId }
 		});
 		return adminData[0][0];
 	} catch (error) {

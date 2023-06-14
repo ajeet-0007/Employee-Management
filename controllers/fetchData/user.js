@@ -18,8 +18,8 @@ const currentUser = async (userEmail) => {
 
 const getUser = async (userId) => {
 	try {
-		const userData = await db.sequelize.query('EXEC dbo.sp_users_getuser :user_id', {
-			replacements: { user_id: userId }
+		const userData = await db.sequelize.query('EXEC dbo.sp_users_getuser :userId', {
+			replacements: { userId: userId }
 		});
 		return userData[0][0];
 	} catch (error) {

@@ -6,7 +6,7 @@ exports.getUserProfile = async (req, res) => {
 	try {
 		const userData = {};
 		const userProfileData = await getUserProfileData.fetchProfile(req.user.userId);
-		const userReportingManagerData = await getUserHierarchyData.fetchSuperiorProfile(userProfileData[0].reports_to);
+		const userReportingManagerData = await getUserHierarchyData.fetchSuperiorProfile(userProfileData[0].reportsTo);
 		const userSubordinateData = await getUserHierarchyData.fetchSubordinateProfile(userProfileData[0].hrmid);
 		userData.profile = userProfileData[0];
 		if (userReportingManagerData.length !== 0) {
@@ -25,15 +25,15 @@ exports.getUserProfile = async (req, res) => {
 exports.updateUserProfile = async (req, res) => {
 	try {
 		const request = req.body;
-		const data = await db.sequelize.query('EXEC dbo.sp_users_updateuserprofile :user_id, profile_image, :permanent_address, :city, :state, :country, :emergency_phone', {
+		const data = await db.sequelize.query('EXEC dbo.sp_users_updateuserprofile :userId, profileImage, :permanentAddress, :city, :state, :country, :emergencyPhone', {
 			replacements: {
-				user_id: req.user.userId,
-				profile_image: request.profileImage,
-				permanent_address: request.permanentAddress,
+				userId: req.user.userId,
+				profileImage: request.profileImage,
+				permanentAddress: request.permanentAddress,
 				city: request.city,
 				state: request.state,
 				country: request.country,
-				emergency_phone: request.emergencyPhone
+				emergencyPhone: request.emergencyPhone
 			}
 		});
 		if (data[1] != 0) {
