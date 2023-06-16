@@ -26,6 +26,7 @@ const findUserProfiles = async (emailList) => {
 	for (let i = 0; i < emailList.length; i++) {
 		const profile = await fetchCurrentUserProfile(emailList[i].trim());
 		if (profile.length !== 0) {
+			profile[0].email = emailList[i].trim();
 			userProfiles.push(profile[0]);
 		}
 	}
