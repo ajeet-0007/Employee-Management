@@ -35,7 +35,9 @@ exports.getProjects = async (req, res) => {
 			return res.status(404).json({ message: 'No projects found' });
 		} else {
 			for (let i = 0; i < adminProjectData.length; i++) {
+				const teamHeadEmail = adminProjectData[i].teamHead;
 				adminProjectData[i].teamHead = (await fetchCurrentUserProfile(adminProjectData[i].teamHead))[0];
+				adminProjectData[i].teamHead.email = teamHeadEmail.trim();
 				adminProjectData[i].teamMembers = await findUserProfiles(adminProjectData[i].teamMembers.split(','));
 			}
 			return res.status(200).json(adminProjectData);
@@ -52,7 +54,9 @@ exports.getProject = async (req, res) => {
 		if (adminProjectData.length === 0) {
 			return res.status(404).json({ message: 'No projects found' });
 		} else {
+			const teamHeadEmail = adminProjectData[0].teamHead;
 			adminProjectData[0].teamHead = (await fetchCurrentUserProfile(adminProjectData[0].teamHead))[0];
+			adminProjectData[0].teamHead.email = teamHeadEmail.trim();
 			adminProjectData[0].teamMembers = await findUserProfiles(adminProjectData[0].teamMembers.split(','));
 			return res.status(200).json(adminProjectData[0]);
 		}
