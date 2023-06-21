@@ -1,9 +1,9 @@
 const db = require('../../models');
 
-const fetchMonthlyRequests = async (startDate) => {
+const fetchRangeRequests = async (startDate, endDate) => {
 	try {
-		const requestData = await db.sequelize.query('EXEC dbo.sp_admins_getmonthlyrequests :startDate', {
-			replacements: { startDate: startDate }
+		const requestData = await db.sequelize.query('EXEC dbo.sp_admins_getrangerequests :startDate, :endDate', {
+			replacements: { startDate: startDate, endDate: endDate }
 		});
 		return requestData[0];
 	} catch (error) {
@@ -12,4 +12,4 @@ const fetchMonthlyRequests = async (startDate) => {
 	}
 };
 
-module.exports = { fetchMonthlyRequests };
+module.exports = { fetchRangeRequests };
