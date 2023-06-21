@@ -1,6 +1,6 @@
 const db = require('../../models');
 
-const fetchRangeTimesheets = async (startDate) => {
+const fetchRangeTimesheets = async (startDate, endDate) => {
 	try {
 		const timesheetData = await db.sequelize.query('EXEC dbo.sp_admins_getrangetimesheets :startDate, :endDate', {
 			replacements: { startDate: startDate, endDate: endDate }
