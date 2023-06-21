@@ -1,8 +1,8 @@
-const { fetchMonthlyTimesheets } = require('../fetchData/adminTimesheet');
+const { fetchRangeTimesheets } = require('../fetchData/adminTimesheet');
 
-exports.getMonthlyTimesheets = async (req, res) => {
+exports.getRangeTimesheets = async (req, res) => {
 	try {
-		const timesheetData = await fetchMonthlyTimesheets(req.query.startDate);
+		const timesheetData = await fetchRangeTimesheets(req.query.startDate, req.query.endDate);
 		if (timesheetData.length === 0) {
 			return res.status(404).json({ message: 'No timesheets found' });
 		} else {
