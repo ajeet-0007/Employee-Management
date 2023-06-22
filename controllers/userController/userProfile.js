@@ -25,7 +25,7 @@ exports.getUserProfile = async (req, res) => {
 exports.updateUserProfile = async (req, res) => {
 	try {
 		const request = req.body;
-		const data = await db.sequelize.query('EXEC dbo.sp_users_updateuserprofile :userId, profileImage, :permanentAddress, :city, :state, :country, :emergencyPhone', {
+		const data = await db.sequelize.query('EXEC dbo.sp_users_updateuserprofile :userId, :profileImage, :permanentAddress, :city, :state, :country, :emergencyPhone', {
 			replacements: {
 				userId: req.user.userId,
 				profileImage: request.profileImage,

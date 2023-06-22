@@ -9,7 +9,11 @@ const findUserProjects = async (userEmail) => {
 			userProjects.push(userProjectData[i]);
 		} else {
 			const members = userProjectData[i].teamMembers.split(',');
-			if (members.includes(userEmail)) {
+			let teamMembers = [];
+			for (let j = 0; j < members.length; j++) {
+				teamMembers.push(members[j].trim());
+			}
+			if (teamMembers.includes(userEmail)) {
 				userProjects.push(userProjectData[i]);
 			}
 		}
@@ -20,8 +24,9 @@ const findUserProjects = async (userEmail) => {
 const findUserProfiles = async (emailList) => {
 	let userProfiles = [];
 	for (let i = 0; i < emailList.length; i++) {
-		const profile = await fetchCurrentUserProfile(emailList[i]);
+		const profile = await fetchCurrentUserProfile(emailList[i].trim());
 		if (profile.length !== 0) {
+			profile[0].email = emailList[i].trim();
 			userProfiles.push(profile[0]);
 		}
 	}

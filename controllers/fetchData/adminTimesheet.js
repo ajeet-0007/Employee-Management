@@ -1,9 +1,9 @@
 const db = require('../../models');
 
-const fetchMonthlyTimesheets = async (startDate) => {
+const fetchRangeTimesheets = async (startDate, endDate) => {
 	try {
-		const timesheetData = await db.sequelize.query('EXEC dbo.sp_admins_getmonthlytimesheets :startDate', {
-			replacements: { startDate: startDate }
+		const timesheetData = await db.sequelize.query('EXEC dbo.sp_admins_getrangetimesheets :startDate, :endDate', {
+			replacements: { startDate: startDate, endDate: endDate }
 		});
 		return timesheetData[0];
 	} catch (error) {
@@ -12,4 +12,4 @@ const fetchMonthlyTimesheets = async (startDate) => {
 	}
 };
 
-module.exports = { fetchMonthlyTimesheets };
+module.exports = { fetchRangeTimesheets };

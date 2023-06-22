@@ -1,8 +1,8 @@
-const { fetchMonthlyRequests } = require('../fetchData/adminRequest');
+const { fetchRangeRequests } = require('../fetchData/adminRequest');
 
-exports.getMonthlyRequests = async (req, res) => {
+exports.getRangeRequests = async (req, res) => {
 	try {
-		const requestData = await fetchMonthlyRequests(req.query.startDate);
+		const requestData = await fetchRangeRequests(req.query.startDate, req.query.endDate);
 		if (requestData.length === 0) {
 			return res.status(404).json({ message: 'No requests found' });
 		} else {

@@ -36,9 +36,9 @@ router.get('/get-hierarchy', adminAuthorize, userHierarchyController.getUserHier
 
 router.get('/projects/get-projects', adminAuthorize, adminProjectController.getProjects);
 
-router.get('/requests/get-monthly-requests', adminAuthorize, adminRequestController.getMonthlyRequests);
+router.get('/requests/get-range-requests', adminAuthorize, adminRequestController.getRangeRequests);
 
-router.get('/timesheets/get-monthly-timesheets', adminAuthorize, adminTimesheetController.getMonthlyTimesheets);
+router.get('/timesheets/get-range-timesheets', adminAuthorize, adminTimesheetController.getRangeTimesheets);
 
 router.get('/projects/get-project', adminAuthorize, adminProjectController.getProject);
 
