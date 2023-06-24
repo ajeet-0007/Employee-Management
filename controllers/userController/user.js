@@ -55,7 +55,7 @@ exports.putSignUp = async (req, res) => {
 				});
 			}
 		} else {
-			return res.status(403).json({
+			return res.status(404).json({
 				message: "User doesn't exist in the database"
 			});
 		}

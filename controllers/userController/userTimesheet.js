@@ -16,7 +16,7 @@ exports.postUserTimesheet = async (req, res) => {
 			send(req.io, userData.reportsTo); // send notification to the user who approves the request
 			return res.status(201).json({ message: 'User timesheet created successfully' });
 		} else {
-			return res.status(200).json({ message: 'User timesheet creation failed' });
+			return res.status(404).json({ message: 'User timesheet creation failed' });
 		}
 	} catch (error) {
 		console.log(error);
@@ -84,7 +84,7 @@ exports.updateUserSubordinateTimesheet = async (req, res) => {
 		if (updatedData[1] != 0) {
 			return res.status(201).json({ message: 'Timesheet updated successfully' });
 		} else {
-			return res.status(400).json({ message: 'Timesheet updation failed' });
+			return res.status(404).json({ message: 'Timesheet updation failed' });
 		}
 	} catch (error) {
 		console.log(error);
