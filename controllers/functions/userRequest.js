@@ -46,7 +46,7 @@ const getAvailableRequests = async (userId) => {
 		}
 	}
 	const availableRequests = {
-		totalcasualLeaves: new Date().getMonth() + 1,
+		totalCasualLeaves: new Date().getMonth() + 1,
 		remainingCasualLeaves: casualLeave,
 		totalLeaveWithoutPays: 30,
 		remainingLeaveWithoutPays: leaveWithoutPay,

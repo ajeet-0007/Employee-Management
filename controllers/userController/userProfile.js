@@ -10,7 +10,7 @@ exports.getUserProfile = async (req, res) => {
 		const userSubordinateData = await getUserHierarchyData.fetchSubordinateProfile(userProfileData[0].hrmid);
 		userData.profile = userProfileData[0];
 		if (userReportingManagerData.length !== 0) {
-			userData.reportingmanager = userReportingManagerData[0];
+			userData.reportingManager = userReportingManagerData[0];
 		}
 		if (userSubordinateData.length !== 0) {
 			userData.subordinates = userSubordinateData;
