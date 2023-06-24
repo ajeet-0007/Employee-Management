@@ -6,22 +6,22 @@ exports.postCheckIn = async (req, res) => {
 	try {
 		const request = req.body;
 		const checkInStatus = getCheckInStatus(request.checkInTime, request.checkInDate);
-		// const currentAttendance = await getCurrentAttendance(req.user.userId);
-		// if (currentAttendance.length > 0) {
-		//   return res.status(409).json({ message: "User already checked-in" });
-		// } else {
-		const data = await db.sequelize.query('EXEC dbo.sp_users_postusercheckin :userId, :checkInLocation, :status', {
-			replacements: {
-				userId: req.user.userId,
-				checkInLocation: request.checkInLocation,
-				status: 'checked-in'
-			}
-		});
-		return res.status(201).json({
-			message: 'User checked-in successfully',
-			checkInStatusMessage: checkInStatus
-		});
-		// }
+		const currentAttendance = await getCurrentAttendance(req.user.userId);
+		if (currentAttendance.length > 0) {
+			return res.status(409).json({ message: 'User already checked-in' });
+		} else {
+			const data = await db.sequelize.query('EXEC dbo.sp_users_postusercheckin :userId, :checkInLocation, :status', {
+				replacements: {
+					userId: req.user.userId,
+					checkInLocation: request.checkInLocation,
+					status: 'checked-in'
+				}
+			});
+			return res.status(201).json({
+				message: 'User checked-in successfully',
+				checkInStatusMessage: checkInStatus
+			});
+		}
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: 'Internal Server Error' });
