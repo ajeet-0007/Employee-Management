@@ -81,7 +81,7 @@ exports.putProject = async (req, res) => {
 		if (data[1] != 0) {
 			return res.status(201).json({ message: 'Project updated successfully' });
 		} else {
-			return res.status(400).json({ message: 'Project updation failed' });
+			return res.status(404).json({ message: 'Project updation failed' });
 		}
 	} catch (error) {
 		console.log(error);

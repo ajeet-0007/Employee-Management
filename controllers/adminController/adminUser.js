@@ -61,7 +61,7 @@ exports.postUser = async (req, res) => {
 		if (userData[1] != 0) {
 			return res.status(201).json({ message: 'User added successfully' });
 		} else {
-			return res.status(200).json({ message: 'User already exists' });
+			return res.status(404).json({ message: 'User already exists' });
 		}
 	} catch (error) {
 		console.log(error);
@@ -83,7 +83,7 @@ exports.putUser = async (req, res) => {
 		if (userData[1] != 0) {
 			return res.status(201).json({ message: 'User updated successfully' });
 		} else {
-			return res.status(200).json({ message: 'User updation failed' });
+			return res.status(404).json({ message: 'User updation failed' });
 		}
 	} catch (error) {
 		console.log(error);
