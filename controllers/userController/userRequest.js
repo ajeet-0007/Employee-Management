@@ -103,7 +103,7 @@ exports.updateUserSubordinateRequest = async (req, res) => {
 exports.updateUserRequest = async (req, res) => {
 	try {
 		const request = req.body;
-		const userRequestData = await db.sequelize.query('EXEC dbo.sp_users_updateuserrequest :userId, :requestId, :status', {
+		const userRequestData = await db.sequelize.query('EXEC dbo.sp_users_updateuserrequest :userId, :id, :status', {
 			replacements: {
 				userId: req.user.userId,
 				id: request.requestId,
