@@ -10,7 +10,7 @@ exports.getUserProfile = async (req, res) => {
 		const userSubordinateData = await getUserHierarchyData.fetchSubordinateProfile(userProfileData[0].hrmid);
 		userData.profile = userProfileData[0];
 		if (userReportingManagerData.length !== 0) {
-			userData.reportingmanager = userReportingManagerData[0];
+			userData.reportingManager = userReportingManagerData[0];
 		}
 		if (userSubordinateData.length !== 0) {
 			userData.subordinates = userSubordinateData;
@@ -39,7 +39,7 @@ exports.updateUserProfile = async (req, res) => {
 		if (data[1] != 0) {
 			return res.status(201).json({ message: 'User profile updated successfully' });
 		} else {
-			return res.status(400).json({ message: 'User profile updation failed' });
+			return res.status(404).json({ message: 'User profile updation failed' });
 		}
 	} catch (error) {
 		console.log(error);

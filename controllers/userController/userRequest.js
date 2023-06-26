@@ -38,7 +38,7 @@ exports.postUserRequest = async (req, res) => {
 
 			return res.status(201).json({ message: 'User request created successfully' });
 		} else {
-			return res.status(200).json({ message: `${request.request} request cannot be created, insufficient balance` });
+			return res.status(404).json({ message: `${request.request} request cannot be created, insufficient balance` });
 		}
 	} catch (error) {
 		console.log(error);
@@ -92,7 +92,7 @@ exports.updateUserSubordinateRequest = async (req, res) => {
 		if (updatedData[1] != 0) {
 			return res.status(201).json({ message: 'Request updated successfully' });
 		} else {
-			return res.status(400).json({ message: 'Request updation failed' });
+			return res.status(404).json({ message: 'Request updation failed' });
 		}
 	} catch (error) {
 		console.log(error);
@@ -118,7 +118,7 @@ exports.updateUserRequest = async (req, res) => {
 		if (userRequestData[1] != 0) {
 			return res.status(201).json({ message: 'Request updated successfully' });
 		} else {
-			return res.status(400).json({ message: 'Request updation failed' });
+			return res.status(404).json({ message: 'Request updation failed' });
 		}
 	} catch (error) {
 		console.log(error);
@@ -156,7 +156,7 @@ exports.resendUserRequest = async (req, res) => {
 
 			return res.status(201).json({ message: 'User request recreated successfully' });
 		} else {
-			return res.status(200).json({ message: 'Please create a new request' });
+			return res.status(404).json({ message: 'Please create a new request' });
 		}
 	} catch (error) {
 		console.log(error);

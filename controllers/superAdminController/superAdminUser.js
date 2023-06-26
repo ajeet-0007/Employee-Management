@@ -15,7 +15,7 @@ exports.postAdmin = async (req, res) => {
 		if (adminData[1] != 0) {
 			return res.status(201).json({ message: 'Admin added successfully' });
 		} else {
-			return res.status(200).json({ message: 'Admin already exists' });
+			return res.status(404).json({ message: 'Admin already exists' });
 		}
 	} catch (error) {
 		console.log(error);
